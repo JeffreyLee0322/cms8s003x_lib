@@ -64,20 +64,40 @@ void TIM2_OCInit(TIM2_OC_Init_TypeDef* TIM2_OCTpye)
 	switch((uint8_t)(TIM2_OCTpye->OC_Channel))
 	{
 		case TIM2_OC_Channel_0:
+				/* Set OC0 data register value */
 				RCRL = (uint8_t)(TIM2_OCTpye->OC_Init_Value);
 				RCRH = (uint8_t)(TIM2_OCTpye->OC_Init_Value >> 8);
+				
+				/* Clear and Set CCEN CML0 */
+				CCEN &= ~0x03;
+				CCEN |= (uint8_t)(TIM2_OCTpye->OC_CMLx);
 				break;
 		case TIM2_OC_Channel_1:
+				/* Set OC1 data register value */
 				CCL1 = (uint8_t)(TIM2_OCTpye->OC_Init_Value);
 				CCH1 = (uint8_t)(TIM2_OCTpye->OC_Init_Value >> 8);
+		
+				/* Clear and Set CCEN CML1 */
+				CCEN &= ~0x0C;
+				CCEN |= (uint8_t)(TIM2_OCTpye->OC_CMLx);
 				break;
 		case TIM2_OC_Channel_2:
+				/* Set OC2 data register value */
 				CCL2 = (uint8_t)(TIM2_OCTpye->OC_Init_Value);
 				CCH2 = (uint8_t)(TIM2_OCTpye->OC_Init_Value >> 8);
+		
+				/* Clear and Set CCEN CML2 */
+				CCEN &= ~0x30;
+				CCEN |= (uint8_t)(TIM2_OCTpye->OC_CMLx);
 				break;
 		case TIM2_OC_Channel_3:
+				/* Set OC3 data register value */
 				CCL3 = (uint8_t)(TIM2_OCTpye->OC_Init_Value);
 				CCH3 = (uint8_t)(TIM2_OCTpye->OC_Init_Value >> 8);
+		
+				/* Clear and Set CCEN CML3 */
+				CCEN &= ~0xC0;
+				CCEN |= (uint8_t)(TIM2_OCTpye->OC_CMLx);
 				break;
 		default: break;
 	}

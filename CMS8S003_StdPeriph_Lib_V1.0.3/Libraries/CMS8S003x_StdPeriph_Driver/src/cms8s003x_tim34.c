@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file    cms8s003x_tim1.c
+  * @file    cms8s003x_tim34.c
   * @author  LI WEI
-  * @version V1.0.0
+  * @version V1.0.3
   * @date    04/24/2018
   * @brief   This file provides all the TIM1 firmware functions.
   ******************************************************************************
@@ -19,7 +19,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "cms8s003x_tim01.h"
+#include "cms8s003x_tim34.h"
 
 /** @addtogroup CMS8S003x_StdPeriph_Driver
   * @{
@@ -41,19 +41,19 @@
   * @param  None
   * @retval None
   */
-void TIM0_DeInit(void)
+void TIM3_DeInit(void)
 {
 	TMOD &= 0xf0; //timer0 gate set 0
 	TCON &= 0xCF; //timer0  control register clear
 }
 
-void TIM1_DeInit(void)
+void TIM4_DeInit(void)
 {
 	TMOD &= 0xf; //timer1 gate set 0
 	TCON &= 0x3F; //timer1  control register clear
 }
 
-void TIM0_Init(TIM01_Init_TypeDef *TIM0_InitDef)
+void TIM3_Init(TIM34_Init_TypeDef *TIM3_InitDef)
 {
 	TMOD &= 0xf0; //GATE0/CT0/TOM0 clear 0-3 bit
 
@@ -64,86 +64,86 @@ void TIM0_Init(TIM01_Init_TypeDef *TIM0_InitDef)
 	//TMOD |= 0x08;
 
 	//Set
-	TMOD |= (((uint8_t)((TIM0_InitDef->Timer_Function) << 2)) | ((uint8_t)(TIM0_InitDef->Timer_Mode)));
-	CKCON |= ((uint8_t)((TIM0_InitDef->Timer_Clock) << 3));
+	TMOD |= (((uint8_t)((TIM3_InitDef->Timer_Function) << 2)) | ((uint8_t)(TIM3_InitDef->Timer_Mode)));
+	CKCON |= ((uint8_t)((TIM3_InitDef->Timer_Clock) << 3));
 
-	if((TIM0_InitDef->Timer_Mode) == Mode0_13Bit_Timer_Counter)
+	if((TIM3_InitDef->Timer_Mode) == TIM34_Mode0_13Bit_Timer_Counter)
 	{
-		TH0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)>>5);
-		TL0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)&0x1f);
-	}else if((TIM0_InitDef->Timer_Mode) == Mode1_16Bit_Timer_Counter)
+		TH3 = (uint8_t)((TIM3_InitDef->Timer_InitValue)>>5);
+		TL3 = (uint8_t)((TIM3_InitDef->Timer_InitValue)&0x1f);
+	}else if((TIM3_InitDef->Timer_Mode) == TIM34_Mode1_16Bit_Timer_Counter)
 	{
-		TH0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)>>8);
-		TL0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)&0xff);
-	}else if((TIM0_InitDef->Timer_Mode) == Mode2_8Bit_AutoLoad_Timer_Counter)
+		TH3 = (uint8_t)((TIM3_InitDef->Timer_InitValue)>>8);
+		TL3 = (uint8_t)((TIM3_InitDef->Timer_InitValue)&0xff);
+	}else if((TIM3_InitDef->Timer_Mode) == TIM34_Mode2_8Bit_AutoLoad_Timer_Counter)
 	{
-		TH0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)&0xff);
-		TL0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)&0xff);
+		TH3 = (uint8_t)((TIM3_InitDef->Timer_InitValue)&0xff);
+		TL3 = (uint8_t)((TIM3_InitDef->Timer_InitValue)&0xff);
 	}else
 	{
 
 	}
 }
 
-void TIM1_Init(TIM01_Init_TypeDef *TIM1_InitDef)
+void TIM4_Init(TIM34_Init_TypeDef *TIM4_InitDef)
 {
 
 }
 
-void TIM0_Cmd(FunctionalState NewState)
-{
-	if (NewState != _DISABLE)
-	{
-		TCON |= TIMER0_START_BIT; /* Enable the TIMER0*/
-	}
-	else
-	{
-		TCON &= (uint8_t)(~TIMER0_START_BIT); /* Disable the TIMER0*/
-	}
-}
-
-void TIM1_Cmd(FunctionalState NewState)
+void TIM3_Cmd(FunctionalState NewState)
 {
 	if (NewState != _DISABLE)
 	{
-		TCON |= TIMER1_START_BIT; /* Enable the TIMER0*/
+		TCON |= TIMER3_START_BIT; /* Enable the TIMER0*/
 	}
 	else
 	{
-		TCON &= (uint8_t)(~TIMER1_START_BIT); /* Disable the TIMER0*/
+		TCON &= (uint8_t)(~TIMER3_START_BIT); /* Disable the TIMER0*/
+	}
+}
+
+void TIM4_Cmd(FunctionalState NewState)
+{
+	if (NewState != _DISABLE)
+	{
+		TCON |= TIMER4_START_BIT; /* Enable the TIMER0*/
+	}
+	else
+	{
+		TCON &= (uint8_t)(~TIMER4_START_BIT); /* Disable the TIMER0*/
 	}
 }
 
 
-void TIM0_ITConfig(TIM_PriorityTypeDef TIM0_Priority, FunctionalState NewState)
+void TIM3_ITConfig(TIM34_PriorityTypeDef TIM34_Priority, FunctionalState NewState)
 {
 	IP &= 0xfd;	//clear bit 1
-	IP |= (TIM0_Priority<<1);
+	IP |= (TIM34_Priority<<1);
 	
 	/* Set the SPI IT mask Register */
 	if (NewState != _DISABLE)
 	{
-	  IE |= TIME0_INTERRUPT_ENABLE_BIT; /* Enable the SPI IT */
+	  IE |= TIME3_INTERRUPT_ENABLE_BIT; /* Enable the SPI IT */
 	}
 	else
 	{
-	  IE &= (uint8_t)(~TIME0_INTERRUPT_ENABLE_BIT); /* Disable the SPI IT */
+	  IE &= (uint8_t)(~TIME3_INTERRUPT_ENABLE_BIT); /* Disable the SPI IT */
 	}
 }
 
-void TIM1_ITConfig(TIM_PriorityTypeDef TIM1_Priority, FunctionalState NewState)
+void TIM4_ITConfig(TIM34_PriorityTypeDef TIM34_Priority, FunctionalState NewState)
 {
 	IP &= 0xf7;	//clear bit 3
-	IP |= (TIM1_Priority<<3);
+	IP |= (TIM34_Priority<<3);
 	
 	/* Set the SPI IT mask Register */
 	if (NewState != _DISABLE)
 	{
-	  IE |= TIME1_INTERRUPT_ENABLE_BIT; /* Enable the SPI IT */
+	  IE |= TIME4_INTERRUPT_ENABLE_BIT; /* Enable the SPI IT */
 	}
 	else
 	{
-	  IE &= (uint8_t)(~TIME1_INTERRUPT_ENABLE_BIT); /* Disable the SPI IT */
+	  IE &= (uint8_t)(~TIME4_INTERRUPT_ENABLE_BIT); /* Disable the SPI IT */
 	}
 }
 
@@ -152,14 +152,14 @@ void TIM1_ITConfig(TIM_PriorityTypeDef TIM1_Priority, FunctionalState NewState)
   * @param  None
   * @retval Counter Register value.
   */
-uint16_t TIM0_GetCounter(void)
+uint16_t TIM3_GetCounter(void)
 {
   /* Get the Counter Register value */
   uint16_t tmpcntr = 0;
   uint8_t tmpcntrl = 0, tmpcntrh = 0;
 
-  tmpcntrh = TH0;
-  tmpcntrl = TL0;
+  tmpcntrh = TH3;
+  tmpcntrl = TL3;
 
   tmpcntr  = (uint16_t)(tmpcntrl);
   tmpcntr |= (uint16_t)((uint16_t)tmpcntrh << 8);
@@ -168,14 +168,14 @@ uint16_t TIM0_GetCounter(void)
   return (uint16_t)tmpcntr;
 }
 
-uint16_t TIM1_GetCounter(void)
+uint16_t TIM4_GetCounter(void)
 {
 	/* Get the Counter Register value */
   uint16_t tmpcntr = 0;
   uint8_t tmpcntrl = 0, tmpcntrh = 0;
 
-  tmpcntrh = TH1;
-  tmpcntrl = TL1;
+  tmpcntrh = TH4;
+  tmpcntrl = TL4;
 
   tmpcntr  = (uint16_t)(tmpcntrl);
   tmpcntr |= (uint16_t)((uint16_t)tmpcntrh << 8);
@@ -190,18 +190,18 @@ uint16_t TIM1_GetCounter(void)
   * @retval ITStatus The new state of the TIM1_IT(SET or RESET).
   */
 
-ITStatus TIM0_GetITStatus(void)
+ITStatus TIM3_GetITStatus(void)
 {
   ITStatus bitstatus = _RESET;
 
-  uint8_t TIM0_itStatus = 0x0;
+  uint8_t TIM3_itStatus = 0x0;
 
   /* Check the parameters */
   //assert_param(IS_TIM1_GET_IT(TIM1_IT));
 
-  TIM0_itStatus = (uint8_t)(TCON & 0x20);
+  TIM3_itStatus = (uint8_t)(TCON & 0x20);
 
-  if (TIM0_itStatus != (uint8_t)_RESET )
+  if (TIM3_itStatus != (uint8_t)_RESET )
   {
     bitstatus = _SET;
   }
@@ -212,18 +212,18 @@ ITStatus TIM0_GetITStatus(void)
   return (ITStatus)(bitstatus);
 }
 
-ITStatus TIM1_GetITStatus(void)
+ITStatus TIM4_GetITStatus(void)
 {
 	ITStatus bitstatus = _RESET;
 
-  uint8_t TIM0_itStatus = 0x0;
+  uint8_t TIM4_itStatus = 0x0;
 
   /* Check the parameters */
   //assert_param(IS_TIM1_GET_IT(TIM1_IT));
 
-  TIM0_itStatus = (uint8_t)(TCON & 0x80);
+  TIM4_itStatus = (uint8_t)(TCON & 0x80);
 
-  if (TIM0_itStatus != (uint8_t)_RESET )
+  if (TIM4_itStatus != (uint8_t)_RESET )
   {
     bitstatus = _SET;
   }
@@ -240,12 +240,12 @@ ITStatus TIM1_GetITStatus(void)
   *   This parameter can be one of the @ref TIM1_IT_TypeDef enumeration.
   * @retval None.
   */
-void TIM0_ClearITPendingBit(void)
+void TIM3_ClearITPendingBit(void)
 {
 	TCON &= 0xdf;
 }
 
-void TIM1_ClearITPendingBit(void)
+void TIM4_ClearITPendingBit(void)
 {
 	TCON &= 0x7f;
 }

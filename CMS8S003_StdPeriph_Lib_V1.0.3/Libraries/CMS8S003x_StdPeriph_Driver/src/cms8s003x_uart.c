@@ -1,8 +1,8 @@
 /**
   ********************************************************************************
-  * @file    cms8s003x_usart.c
+  * @file    cms8s003x_uart.c
   * @author  LI WEI
-  * @version V1.0.0
+  * @version V1.0.3
   * @date    04/24/2018
   * @brief   This file provides all the USART firmware functions.
   ******************************************************************************
@@ -19,7 +19,9 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "cms8s003x_usart.h"
+#include "cms8s003x_uart.h"
+#include "cms8s003x_tim01.h"
+#include "cms8s003x_tim34.h"
 
 /** @addtogroup CMS8S003x_StdPeriph_Driver
   * @{
@@ -34,30 +36,18 @@
 /* Public functions ----------------------------------------------------------*/
 
 /** @}
-  * @addtogroup USART_Public_Functions
+  * @addtogroup UART_Public_Functions
   * @{
   */
 
 /**
   * @brief   Deinitializes the USART peripheral.
-  * @param  USARTx : where x can be 1, 2 or 3 to select the specified USART peripheral.
+  * @param  UARTx : where x can be 1, 2 or 3 to select the specified USART peripheral.
   * @retval None
   */
-void USART_DeInit(USART_TypeDef* USARTx)
+void USART_DeInit(UART_TypeDef UARTx)
 {
 
-  /* Clear the Idle Line Detected bit in the status rerister by a read
-      to the USART_SR register followed by a Read to the USART_DR register */
-  (void) USARTx->SR;
-  (void) USARTx->DR;
-
-  USARTx->BRR2 = USART_BRR2_RESET_VALUE;  /* Set USART_BRR2 to reset value 0x00 */
-  USARTx->BRR1 = USART_BRR1_RESET_VALUE;  /* Set USART_BRR1 to reset value 0x00 */
-
-  USARTx->CR1 = USART_CR1_RESET_VALUE;  /* Set USART_CR1 to reset value 0x00 */
-  USARTx->CR2 = USART_CR2_RESET_VALUE;  /* Set USART_CR2 to reset value 0x00 */
-  USARTx->CR3 = USART_CR3_RESET_VALUE;  /* Set USART_CR3 to reset value 0x00 */
-  USARTx->CR4 = USART_CR4_RESET_VALUE;  /* Set USART_CR4 to reset value 0x00 */
 }
 
 /**
@@ -76,42 +66,86 @@ void USART_DeInit(USART_TypeDef* USARTx)
   * @param  USART_Mode : This parameter can be any of the @ref USART_Mode_TypeDef values
   * @retval None
   */
-void UART_Init(UART_TypeDef UARTx, UART_InitTypeDef* UART_InitDef)
+void UART_Init(UART_TypeDef UARTx, UART_Init_TypeDef* UART_InitDef)
 {
   uint32_t BaudRate_Mantissa = 0;
 
   /* Check the parameters */
-  /*assert_param(IS_USART_BAUDRATE(BaudRate));
-
-  assert_param(IS_USART_WORDLENGTH(USART_WordLength));
-
-  assert_param(IS_USART_STOPBITS(USART_StopBits));
-
-  assert_param(IS_USART_PARITY(USART_Parity));
-
-  assert_param(IS_USART_MODE(USART_Mode));*/
 
   if(UARTx == UART0)
   {
-	SCON0 |= ((uint8_t)(UART_InitDef->DataBit) | ((uint8_t)(UART_InitDef->MutiDevices) << 5) | ((uint8_t)(UART_InitDef->IsReceive) << 4) | ((uint8_t)(UART_InitDef->SendData9Bit) << 3) | ((uint8_t)(UART_InitDef->ReceiveData9Bit) << 2));
-	PCON |= ((uint8_t)(UART_InitDef->Uart0Double) << 7);
-	
-	if((Data_8Bit_Unsettled_Freq == UART_InitDef->DataBit) || (Data_9Bit_Unsettled_Freq == UART_InitDef->DataBit))
-	{
-		if(Timer1_Select == UART_InitDef->UartClkSource)
+		SCON0 &= 0;
+		SCON0 |= ((uint8_t)(UART_InitDef->Mode) | ((uint8_t)(UART_InitDef->MutiDevices) << 5) | ((uint8_t)(UART_InitDef->IsReceive) << 4) | ((uint8_t)(UART_InitDef->SendData9Bit) << 3) | ((uint8_t)(UART_InitDef->ReceiveData9Bit) << 2));
+		
+		PCON &= ~0x80;
+		PCON |= ((uint8_t)(UART_InitDef->UartBaudrateDouble) << 7);
+		
+		if((Mode_8Bit_Unsettled_Freq == UART_InitDef->Mode) || (Mode_9Bit_Unsettled_Freq == UART_InitDef->Mode))
 		{
-			FUNCCR &= 0xfe; 
-			//setup timer1
-		}else if(Timer4_Select == UART_InitDef->UartClkSource)
-		{
-			FUNCCR |= 0x01;
-			//setup timer4
+			if(Timer1_Select == UART_InitDef->UartClkSource)
+			{
+				/* Set Timer1 as uart0`s clock source */
+				FUNCCR &= 0xfe; 
+				//setup timer1
+				/* Timer1 TMOD Clear and Set */
+				TMOD &= 0x0f;
+				TMOD |= 0x20; //GATE1 disable, Timer select, Mode2: 8bit auto reload
+				//CKCON |= 0x10; //Timer1 clock source: sys/4 (systerm clock is 8MHz/16MHz, if not CLKDIV)
+				/*if systerm clock is 16MHz, 16/4=4MHz --> T=0.25us
+				if baudrate is 9600bps->T=1/9600s=104.166us
+				if baudrate is 57600bps->T=1/57600s=17.361us
+				if baudrate is 115200bps->T=1/115200s=8.680us
+				*/
+				//TL1 = 256 - (uint16_t)(1000000.0/(UART_InitDef->UartBaurdrate) / 0.25);
+				//TH1 = 256 - (uint16_t)(1000000.0/(UART_InitDef->UartBaurdrate) / 0.25);
+				
+				CKCON &= ~0x10; //Timer1 clock source: sys/12 (systerm clock is 8MHz/16MHz, if not CLKDIV)
+				TL1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 0.75);
+				TH1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 0.75);
+				IE |= 0x88; //Enable Timer1 interrupt
+				TCON |= 0x40; //Timer1 start
+			}
+			else if(Timer4_Select == UART_InitDef->UartClkSource)
+			{
+				/* Set Timer4 as uart0`s clock source */
+				FUNCCR |= 0x01;
+				//setup timer4
+				/* Timer4 T34MOD Clear and Set */
+				T34MOD &= 0x0f;
+				T34MOD |= 0x60; //Timer4 clock select:sys/4, Mode2: 8bit auto reload
+				/*if systerm clock is 16MHz, 16/4=4MHz --> T=0.25us
+				if baudrate is 9600bps->T=1/9600s=104.166us
+				if baudrate is 57600bps->T=1/57600s=17.361us
+				if baudrate is 115200bps->T=1/115200s=8.680us
+				*/
+				TL4 = 256 - (uint8_t)(1000000.0/(UART_InitDef->UartBaurdrate) * 0.25);
+				TH4 = 256 - (uint8_t)(1000000.0/(UART_InitDef->UartBaurdrate) * 0.25);
+				T34MOD |= 0x80; //Timer4 start
+			}
 		}
-	}
-  }else if(UARTx == UART1)
+  }
+	else if(UARTx == UART1)
   {
-	SCON1 |= ((uint8_t)(UART_InitDef->DataBit) | ((uint8_t)(UART_InitDef->MutiDevices) << 5) | ((uint8_t)(UART_InitDef->IsReceive) << 4) | ((uint8_t)(UART_InitDef->SendData9Bit) << 3) | ((uint8_t)(UART_InitDef->ReceiveData9Bit) << 2));
-	PCON |= ((uint8_t)(UART_InitDef->Uart1Double) << 6);
+		SCON1 &= 0;
+		SCON1 |= ((uint8_t)(UART_InitDef->Mode) | ((uint8_t)(UART_InitDef->MutiDevices) << 5) | ((uint8_t)(UART_InitDef->IsReceive) << 4) | ((uint8_t)(UART_InitDef->SendData9Bit) << 3) | ((uint8_t)(UART_InitDef->ReceiveData9Bit) << 2));
+		
+		PCON &= ~0x40;
+		PCON |= ((uint8_t)(UART_InitDef->UartBaudrateDouble) << 6);
+		
+		if((Mode_8Bit_Unsettled_Freq == UART_InitDef->Mode) || (Mode_9Bit_Unsettled_Freq == UART_InitDef->Mode))
+		{
+			if(Timer1_Select == UART_InitDef->UartClkSource)
+			{
+				FUNCCR &= 0xfd; 
+				//setup timer1
+				
+			}
+			else if(Timer4_Select == UART_InitDef->UartClkSource)
+			{
+				FUNCCR |= 0x02;
+				//setup timer4
+			}
+		}
   }
 
 }
@@ -130,29 +164,9 @@ void UART_Init(UART_TypeDef UARTx, UART_InitTypeDef* UART_InitDef)
   * @retval None
   */
 
-void USART_ClockInit(USART_TypeDef* USARTx, USART_Clock_TypeDef USART_Clock,
-                     USART_CPOL_TypeDef USART_CPOL, USART_CPHA_TypeDef USART_CPHA,
-                     USART_LastBit_TypeDef USART_LastBit)
+void USART_ClockInit()
 {
-  /* Check the parameters */
-  assert_param(IS_USART_CLOCK(USART_Clock));
-  assert_param(IS_USART_CPOL(USART_CPOL));
-  assert_param(IS_USART_CPHA(USART_CPHA));
-  assert_param(IS_USART_LASTBIT(USART_LastBit));
 
-  /* Clear the Clock Polarity, lock Phase, Last Bit Clock pulse */
-  USARTx->CR3 &= (uint8_t)~(USART_CR3_CPOL | USART_CR3_CPHA | USART_CR3_LBCL);
-  /* Set the Clock Polarity, lock Phase, Last Bit Clock pulse */
-  USARTx->CR3 |= (uint8_t)((uint8_t)((uint8_t)(USART_CPOL | (uint8_t)USART_CPHA ) | USART_LastBit));
-
-  if (USART_Clock != USART_Clock_Disable)
-  {
-    USARTx->CR3 |= (uint8_t)(USART_CR3_CLKEN); /* Set the Clock Enable bit */
-  }
-  else
-  {
-    USARTx->CR3 &= (uint8_t)(~USART_CR3_CLKEN); /* Clear the Clock Enable bit */
-  }
 }
 
 /**
@@ -162,18 +176,12 @@ void USART_ClockInit(USART_TypeDef* USARTx, USART_Clock_TypeDef USART_Clock,
   *         This parameter can be any of the @ref FunctionalState enumeration.
   * @retval None
   */
-void USART_Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
+void USART_Cmd(UART_TypeDef USARTx, FunctionalState NewState)
 {
-  if (NewState != DISABLE)
-  {
-    USARTx->CR1 &= (uint8_t)(~USART_CR1_USARTD); /**< USART Enable */
-  }
-  else
-  {
-    USARTx->CR1 |= USART_CR1_USARTD;  /**< USART Disable (for low power consumption) */
-  }
+
 }
 
+#if 0
 /**
   * @brief  Enables or disables the specified USART interrupts.
   * @param  USARTx : where x can be 1 to select the specified USART peripheral.
@@ -191,49 +199,7 @@ void USART_Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
   */
 void USART_ITConfig(USART_TypeDef* USARTx, USART_IT_TypeDef USART_IT, FunctionalState NewState)
 {
-  uint8_t usartreg, itpos = 0x00;
-  assert_param(IS_USART_CONFIG_IT(USART_IT));
-  assert_param(IS_FUNCTIONAL_STATE(NewState));
-
-  /* Get the USART register index */
-  usartreg = (uint8_t)((uint16_t)USART_IT >> 0x08);
-  /* Get the USART IT index */
-  itpos = (uint8_t)((uint8_t)1 << (uint8_t)((uint8_t)USART_IT & (uint8_t)0x0F));
-
-  if (NewState != DISABLE)
-  {
-    /**< Enable the Interrupt bits according to USART_IT mask */
-    if (usartreg == 0x01)
-    {
-      USARTx->CR1 |= itpos;
-    }
-    else if (usartreg == 0x05)
-    {
-      USARTx->CR5 |= itpos;
-    }
-    /*uartreg =0x02*/
-    else
-    {
-      USARTx->CR2 |= itpos;
-    }
-  }
-  else
-  {
-    /**< Disable the interrupt bits according to USART_IT mask */
-    if (usartreg == 0x01)
-    {
-      USARTx->CR1 &= (uint8_t)(~itpos);
-    }
-    else if (usartreg == 0x05)
-    {
-      USARTx->CR5 &= (uint8_t)(~itpos);
-    }
-    /*uartreg =0x02*/
-    else
-    {
-      USARTx->CR2 &= (uint8_t)(~itpos);
-    }
-  }
+  
 
 }
 /**
@@ -245,16 +211,7 @@ void USART_ITConfig(USART_TypeDef* USARTx, USART_IT_TypeDef USART_IT, Functional
   */
 void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
-  assert_param(IS_FUNCTIONAL_STATE(NewState));
-
-  if (NewState != DISABLE)
-  {
-    USARTx->CR5 |= USART_CR5_HDSEL;  /**< USART Half Duplex Enable  */
-  }
-  else
-  {
-    USARTx->CR5 &= (uint8_t)~USART_CR5_HDSEL; /**< USART Half Duplex Disable */
-  }
+ 
 }
 
 /**
@@ -266,8 +223,7 @@ void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   */
 void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime)
 {
-  /* Set the USART guard time */
-  USARTx->GTR = USART_GuardTime;
+
 }
 
 /**
@@ -295,8 +251,7 @@ void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime)
   */
 void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler)
 {
-  /* Load the USART prescaler value*/
-  USARTx->PSCR = USART_Prescaler;
+
 }
 
 /**
@@ -306,7 +261,7 @@ void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler)
   */
 uint8_t USART_ReceiveData8(USART_TypeDef* USARTx)
 {
-  return USARTx->DR;
+
 }
 
 
@@ -317,10 +272,7 @@ uint8_t USART_ReceiveData8(USART_TypeDef* USARTx)
   */
 uint16_t USART_ReceiveData9(USART_TypeDef* USARTx)
 {
-  uint16_t temp = 0;
 
-  temp = ((uint16_t)(((uint16_t)((uint16_t)USARTx->CR1 & (uint16_t)USART_CR1_R8)) << 1));
-  return (uint16_t)( ((uint16_t)((uint16_t)USARTx->DR) | temp) & ((uint16_t)0x01FF));
 }
 
 /**
@@ -332,18 +284,7 @@ uint16_t USART_ReceiveData9(USART_TypeDef* USARTx)
   */
 void USART_ReceiverWakeUpCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
-  assert_param(IS_FUNCTIONAL_STATE(NewState));
 
-  if (NewState != DISABLE)
-  {
-    /* Enable the mute mode USART by setting the RWU bit in the CR2 register */
-    USARTx->CR2 |= USART_CR2_RWU;
-  }
-  else
-  {
-    /* Disable the mute mode USART by clearing the RWU bit in the CR1 register */
-    USARTx->CR2 &= ((uint8_t)~USART_CR2_RWU);
-  }
 }
 
 /**
@@ -353,7 +294,7 @@ void USART_ReceiverWakeUpCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   */
 void USART_SendBreak(USART_TypeDef* USARTx)
 {
-  USARTx->CR2 |= USART_CR2_SBK;
+
 }
 
 /**
@@ -363,8 +304,7 @@ void USART_SendBreak(USART_TypeDef* USARTx)
   */
 void USART_SendData8(USART_TypeDef* USARTx, uint8_t Data)
 {
-  /* Transmit Data */
-  USARTx->DR = Data;
+
 }
 
 /**
@@ -376,16 +316,7 @@ void USART_SendData8(USART_TypeDef* USARTx, uint8_t Data)
   */
 void USART_SendData9(USART_TypeDef* USARTx, uint16_t Data)
 {
-  assert_param(IS_USART_DATA_9BITS(Data));
 
-  /* Clear the transmit data bit 8     */
-  USARTx->CR1 &= ((uint8_t)~USART_CR1_T8);
-
-  /* Write the transmit data bit [8]   */
-  USARTx->CR1 |= (uint8_t)(((uint8_t)(Data >> 2)) & USART_CR1_T8);
-
-  /* Write the transmit data bit [0:7] */
-  USARTx->DR   = (uint8_t)(Data);
 }
 
 /**
@@ -397,28 +328,9 @@ void USART_SendData9(USART_TypeDef* USARTx, uint16_t Data)
   */
 void USART_SetAddress(USART_TypeDef* USARTx, uint8_t USART_Address)
 {
-  /* assert_param for USART_Address */
-  assert_param(IS_USART_ADDRESS(USART_Address));
 
-  /* Clear the USART address */
-  USARTx->CR4 &= ((uint8_t)~USART_CR4_ADD);
-  /* Set the USART address node */
-  USARTx->CR4 |= USART_Address;
 }
 
-/**
-  * @brief  Selects the USART WakeUp method.
-  * @param  USART_WakeUp : Specifies the USART wakeup method.
-  *         This parameter can be any of the @ref USART_WakeUp_TypeDef values
-  * @retval None
-  */
-void USART_WakeUpConfig(USART_TypeDef* USARTx, USART_WakeUp_TypeDef USART_WakeUp)
-{
-  assert_param(IS_USART_WAKEUP(USART_WakeUp));
-
-  USARTx->CR1 &= ((uint8_t)~USART_CR1_WAKE);
-  USARTx->CR1 |= (uint8_t)USART_WakeUp;
-}
 
 /**
   * @brief  Checks whether the specified USART flag is set or not.
@@ -431,35 +343,7 @@ FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, USART_FLAG_TypeDef USART_F
 {
   FlagStatus status = RESET;
 
-  /* Check parameters */
-  assert_param(IS_USART_FLAG(USART_FLAG));
-
-  if (USART_FLAG == USART_FLAG_SBK)
-  {
-    if ((USARTx->CR2 & (uint8_t)USART_FLAG) != (uint8_t)0x00)
-    {
-      /* USART_FLAG is set*/
-      status = SET;
-    }
-    else
-    {
-      /* USART_FLAG is reset*/
-      status = RESET;
-    }
-  }
-  else
-  {
-    if ((USARTx->SR & (uint8_t)USART_FLAG) != (uint8_t)0x00)
-    {
-      /* USART_FLAG is set*/
-      status = SET;
-    }
-    else
-    {
-      /* USART_FLAG is reset*/
-      status = RESET;
-    }
-  }
+  
   /* Return the USART_FLAG status*/
   return status;
 }
@@ -494,10 +378,7 @@ FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, USART_FLAG_TypeDef USART_F
   */
 void USART_ClearFlag(USART_TypeDef* USARTx, USART_FLAG_TypeDef USART_FLAG)
 {
-  /* Check the parameters */
-  assert_param(IS_USART_CLEAR_FLAG(USART_FLAG));
-  /*< Clear RXNE or TC flags */
-  USARTx->SR = (uint8_t)((uint16_t)~((uint16_t)USART_FLAG));
+  
 }
 
 /**
@@ -518,77 +399,7 @@ void USART_ClearFlag(USART_TypeDef* USARTx, USART_FLAG_TypeDef USART_FLAG)
 ITStatus USART_GetITStatus(USART_TypeDef* USARTx, USART_IT_TypeDef USART_IT)
 {
   ITStatus pendingbitstatus = RESET;
-  uint8_t temp = 0;
-  uint8_t itpos = 0;
-  uint8_t itmask1 = 0;
-  uint8_t itmask2 = 0;
-  uint8_t enablestatus = 0;
-
-  /* Check parameters */
-  assert_param(IS_USART_GET_IT(USART_IT));
-
-  /* Get the USART IT index */
-  itpos = (uint8_t)((uint8_t)1 << (uint8_t)((uint8_t)USART_IT & (uint8_t)0x0F));
-  /* Get the USART IT index */
-  itmask1 = (uint8_t)((uint8_t)USART_IT >> (uint8_t)4);
-  /* Set the IT mask*/
-  itmask2 = (uint8_t)((uint8_t)1 << itmask1);
-
-  /* Check the status of the specified USART pending bit*/
-  if (USART_IT == USART_IT_PE)
-  {
-    /* Get the USART_IT enable bit status*/
-    enablestatus = (uint8_t)((uint8_t)USARTx->CR1 & itmask2);
-    /* Check the status of the specified USART interrupt*/
-
-    if (((USARTx->SR & itpos) != (uint8_t)0x00) && enablestatus)
-    {
-      /* Interrupt occurred*/
-      pendingbitstatus = SET;
-    }
-    else
-    {
-      /* Interrupt not occurred*/
-      pendingbitstatus = RESET;
-    }
-  }
-
-  else if (USART_IT == USART_IT_OR)
-  {
-    /* Get the USART_IT enable bit status*/
-    enablestatus = (uint8_t)((uint8_t)USARTx->CR2 & itmask2);
-    /* Check the status of the specified USART interrupt*/
-
-    temp = (uint8_t)(USARTx->CR5 & USART_CR5_EIE);
-
-    if (( (USARTx->SR & itpos) != 0x00) && ((enablestatus || temp)))
-    {
-      /* Interrupt occurred*/
-      pendingbitstatus = SET;
-    }
-    else
-    {
-      /* Interrupt not occurred*/
-      pendingbitstatus = RESET;
-    }
-  }
-
-  else
-  {
-    /* Get the USART_IT enable bit status*/
-    enablestatus = (uint8_t)((uint8_t)USARTx->CR2 & itmask2);
-    /* Check the status of the specified USART interrupt*/
-    if (((USARTx->SR & itpos) != (uint8_t)0x00) && enablestatus)
-    {
-      /* Interrupt occurred*/
-      pendingbitstatus = SET;
-    }
-    else
-    {
-      /* Interrupt not occurred*/
-      pendingbitstatus = RESET;
-    }
-  }
+  
 
   /* Return the USART_IT status*/
   return  pendingbitstatus;
@@ -624,14 +435,9 @@ ITStatus USART_GetITStatus(USART_TypeDef* USARTx, USART_IT_TypeDef USART_IT)
   */
 void USART_ClearITPendingBit(USART_TypeDef* USARTx, USART_IT_TypeDef USART_IT)
 {
-  uint8_t bitpos = 0x00, itmask = 0x00;
-  assert_param(IS_USART_CLEAR_IT(USART_IT));
-  bitpos = (uint8_t)( (uint8_t)((uint8_t)USART_IT & (uint8_t)0xF0) >> 0x04);
-  itmask = (uint8_t)( (uint8_t)0x01 << bitpos);
-  /*< Clear RXNE or TC pending bit */
-  USARTx->SR = (uint8_t)~itmask;
+ 
 }
-
+#endif
 
 /**
   * @}

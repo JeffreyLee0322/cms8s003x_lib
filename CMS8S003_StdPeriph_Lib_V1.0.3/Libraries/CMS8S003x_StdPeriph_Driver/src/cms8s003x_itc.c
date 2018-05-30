@@ -35,6 +35,8 @@
 /* Private variables ---------------------------------------------------------*/
 uint32_t timer0Count = 0;
 uint32_t timer1Count = 0;
+
+uint16_t readCount_TIM0 = 0, readCount_TIM1 = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -95,6 +97,7 @@ void timer0_int (void) interrupt 1
 {
 	//这里不需要判断中断标志位，且中断标志位硬件自动清零
 	uint32_t counter = 0;
+	readCount_TIM0 = TIM0_GetCounter();
 	timer0Count++;
 	if(timer0Count > 100) timer0Count = 0;
 	if(timer0Count%2) GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_5, 1);
@@ -104,6 +107,9 @@ void timer0_int (void) interrupt 1
 
 void timer1_int (void) interrupt 3
 {
+	//TH1 = (uint8_t)((8192 - (uint16_t)(1000000.0 / 9600 / 0.25))>>5);
+	//TL1 = (uint8_t)((8192 - (uint16_t)(1000000.0 / 9600 / 0.25))&0xFF);
+	readCount_TIM1 = TIM1_GetCounter();
 	timer1Count++;
 	if(timer1Count > 100) timer1Count = 0;
 	if(timer1Count%2) GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_6, 1);

@@ -29,8 +29,8 @@
 
 //#define TEST_SPI
 //#define TEST_GPIO
-//#define TEST_TIMER01
-#define TEST_TIMER2
+#define TEST_TIMER01
+//#define TEST_TIMER2
 //#define TEST_TIMER34
 //#define TEST_UART
 
@@ -109,22 +109,26 @@ void test_timer01_init(void)
 {
 	TIM01_Init_TypeDef TIM0_InitStructure, TIM1_InitStructure;
 	
-	TIM0_InitStructure.Timer_Function 		= TIM_Function_Timer;
-	TIM0_InitStructure.Timer_Mode 				= Mode0_13Bit_Timer_Counter;
-	TIM0_InitStructure.Timer_Clock 				= SYSCLK_Prescaler_4;//timer frequency is 8/4 MHz = 2MHz --> T=0.5us
-	TIM0_InitStructure.Timer_InitValue 		= 0;
-	TIM0_Init(&TIM0_InitStructure);
+	TIM0_InitStructure.Timer_Function 		= TIM01_Function_Timer;
+	TIM0_InitStructure.Timer_Mode 				= TIM01_Mode2_8Bit_AutoLoad_Timer_Counter;
+	TIM0_InitStructure.Timer_Clock 				= TIM01_SYSCLK_Prescaler_4;
+	TIM0_InitStructure.Timer_InitValue 		= 100;
+	//TIM0_Init(&TIM0_InitStructure);
 	
-	TIM1_InitStructure.Timer_Function 		= TIM_Function_Timer;
-	TIM1_InitStructure.Timer_Mode 				= Mode2_8Bit_AutoLoad_Timer_Counter;
-	TIM1_InitStructure.Timer_Clock 				= SYSCLK_Prescaler_4;//timer frequency is 8/4 MHz = 2MHz --> T=0.5us
-	TIM1_InitStructure.Timer_InitValue 		= 0;
+	TIM1_InitStructure.Timer_Function 		= TIM01_Function_Timer;
+	//TIM1_InitStructure.Timer_Mode 				= TIM01_Mode0_13Bit_Timer_Counter;
+	//TIM1_InitStructure.Timer_Clock 				= TIM01_SYSCLK_Prescaler_4;//timer frequency is 16/4 MHz = 4MHz --> T=0.25us
+	//TIM1_InitStructure.Timer_InitValue 		= 8192 - (uint16_t)(1000000.0 / 9600 / 0.25);
+	TIM1_InitStructure.Timer_Mode 				= TIM01_Mode2_8Bit_AutoLoad_Timer_Counter;
+	TIM1_InitStructure.Timer_Clock 				= TIM01_SYSCLK_Prescaler_12;//timer frequency is 16/12 MHz --> T=0.75us
+	TIM1_InitStructure.Timer_InitValue 		= 256 - (uint8_t)(1000000.0 / 9600 / 0.75);
+	
 	TIM1_Init(&TIM1_InitStructure);
 	
-	TIM0_ITConfig(TIM_HIGH_Priority, _ENABLE);
-	TIM1_ITConfig(TIM_LOW_Priority, _ENABLE);
+	//TIM0_ITConfig(TIM01_HIGH_Priority, _ENABLE);
+	TIM1_ITConfig(TIM01_LOW_Priority, _ENABLE);
 	
-	TIM0_Cmd(_ENABLE);
+	//TIM0_Cmd(_ENABLE);
 	TIM1_Cmd(_ENABLE);
 	
 	MCU_ITConfig(_ENABLE);
@@ -142,7 +146,7 @@ void test_timer2_init(void)
 	TIM2_InitStructure.Clock_Source 		= TIM2_SysClock_Prescaler;  	 //Timer2的时钟输入选择：系统时钟的分频
 	TIM2_InitStructure.Clock_Prescaler 	= TIM2_SysClock_Prescaler_12;  //Timer2时钟预分频选择
 	TIM2_InitStructure.Reload_Mode 			= TIM2_Overflow_Auto_Reload;   //Timer2加载模式选择
-	TIM2_InitStructure.Init_Value 			= 0;                         //Timer2 数据寄存器初始值
+	TIM2_InitStructure.Init_Value 			= 0;                         		//Timer2 数据寄存器初始值
 	
 	TIM2_DeInit();
 	TIM2_TimeBaseInit(&TIM2_InitStructure);
@@ -162,24 +166,46 @@ void test_timer2_init(void)
 	GPIO_Init(GPIO_PORT_2, &GPIO_InitStructure);
 	
 	//Output Compare Register setup
-	TIM2_OC_InitStructure.OC_Channel			= TIM2_OC_Channel_1;
+	/*TIM2_OC_InitStructure.OC_Channel			= TIM2_OC_Channel_1;
 	TIM2_OC_InitStructure.OC_INT_Edge   	= TIM2_OC_Falling_Edge_INT;
 	TIM2_OC_InitStructure.OC_Mode       	= TIM2_OC_Mode_0;
 	TIM2_OC_InitStructure.OC_CMLx					= TIM2_OC_CML1_Enable;
 	TIM2_OC_InitStructure.OC_Init_Value		= 0x8000;
 	
-	TIM2_OCInit(&TIM2_OC_InitStructure);
-/*	
+	TIM2_OCInit(&TIM2_OC_InitStructure);*/
+
 	TIM2_IC_InitStructure.IC_Channel      = TIM2_IC_Channel_0;
 	TIM2_IC_InitStructure.IC_INT_Edge     = TIM2_IC_Falling_Edge_INT;
 	TIM2_IC_InitStructure.IC_Select      	= TIM2_IC_Channel0_IC0;
 	
-	TIM2_ICInit(&TIM2_IC_InitStructure);*/
+	TIM2_ICInit(&TIM2_IC_InitStructure);
 	
 	//Tim2 timer/oc/ic setup
 	//TIM2_ITConfig(TIM2_Overflow_IT_Enable | TIM2_All_IT_Enable, TIM2_LOW_Priority, _ENABLE);
 	TIM2_ITConfig(TIM2_Overflow_IT_Enable | TIM2_OOC1_IT_Enable | TIM2_All_IT_Enable, TIM2_HIGH_Priority, _ENABLE);
 	MCU_ITConfig(_ENABLE);
+}
+#endif
+
+#ifdef TEST_UART
+void test_uart_init()
+{
+	UART_Init_TypeDef UART_InitStructure;
+	UART_InitStructure.Mode 							= Mode_8Bit_Unsettled_Freq; 
+	UART_InitStructure.MutiDevices 				= _DISABLE;
+	UART_InitStructure.IsReceive 					= _ENABLE;
+	UART_InitStructure.SendData9Bit 			= Data_9Bit_Is1;
+	UART_InitStructure.ReceiveData9Bit 		= Data_9Bit_Is1;
+	UART_InitStructure.UartBaudrateDouble = Baudrate_Normal;
+	UART_InitStructure.UartClkSource 			= Timer_SysClk_Select;
+	UART_InitStructure.UartBaurdrate 			= Baudrate_9600;
+	
+	UART_Init(UART0, &UART_InitStructure);
+}
+
+void test_uart1_init()
+{
+
 }
 #endif
 
@@ -219,6 +245,10 @@ void main(void)
 	test_gpio_init();
 	GPIO_Write(GPIO_PORT_1, 0);
 	test_timer2_init();
+#endif
+	
+#ifdef TEST_UART
+	test_uart_init();
 #endif
 
 	while(1);

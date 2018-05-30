@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   CMS8S003X_ITC                                                     05/29/2018 18:09:10 PAGE 1   
+C51 COMPILER V9.56.0.0   CMS8S003X_ITC                                                     05/30/2018 17:19:55 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE CMS8S003X_ITC
@@ -46,152 +46,158 @@ line level    source
   35          /* Private variables ---------------------------------------------------------*/
   36          uint32_t timer0Count = 0;
   37          uint32_t timer1Count = 0;
-  38          /* Private function prototypes -----------------------------------------------*/
-  39          /* Private functions ---------------------------------------------------------*/
-  40          
-  41          /** @addtogroup ITC_Private_Functions
-  42            * @{
-  43            */
-  44          
-  45          
+  38          
+  39          uint16_t readCount_TIM0 = 0, readCount_TIM1 = 0;
+  40          /* Private function prototypes -----------------------------------------------*/
+  41          /* Private functions ---------------------------------------------------------*/
+  42          
+  43          /** @addtogroup ITC_Private_Functions
+  44            * @{
+  45            */
   46          
-  47          /**
-  48            * @}
-  49            */
-  50          
-  51          /** @addtogroup ITC_Public_Functions
-  52            * @{
-  53            */
-C51 COMPILER V9.56.0.0   CMS8S003X_ITC                                                     05/29/2018 18:09:10 PAGE 2   
+  47          
+  48          
+  49          /**
+  50            * @}
+  51            */
+  52          
+  53          /** @addtogroup ITC_Public_Functions
+C51 COMPILER V9.56.0.0   CMS8S003X_ITC                                                     05/30/2018 17:19:55 PAGE 2   
 
-  54          
-  55          /**
-  56            * @brief  Deinitializes the ITC registers to their default reset value.
-  57            * @param  None
-  58            * @retval None
-  59           */
-  60          void ITC_DeInit(void)
-  61          {
-  62   1      
-  63   1      }
-  64          
-  65          //unsigned int times = 0;   
-  66          void SPI_ISR() interrupt 22
-  67          {
-  68   1        FlagStatus status = 0;
-  69   1        ITStatus  itS = 0;
-  70   1        if(SPI_GetFlagStatus(Peripheral_SPI_Interrupt)) //SPI总中断指示位  清除具体的中断标志位后 此位自动清除
-  71   1        {
-  72   2          if(SPI_GetITStatus(SPI_FLAG_SPISIF))        //SPI传输完毕中断标志位 先读SPSR 再度写SPDR后清0
-  73   2          {
-  74   3             /*if(times<5)
-  75   3             {
-  76   3               Master_Received[times] = SPI_ReceiveData();
-  77   3              
-  78   3               if(times < 4)
-  79   3                 SPI_SendData(0x40);
-  80   3             }
-  81   3             times++;*/
-  82   3          }
-  83   2          else if(SPI_GetITStatus(SPI_FLAG_WCOL))   //SPI 写冲突中断标志位 先读SPSR 再读写SPDR后清0
-  84   2          {
-  85   3      
-  86   3          }
-  87   2          else if(SPI_GetITStatus(SPI_FLAG_MODF))   //SPI模式错误中断标志 先读SPSR 再读写SPCR后清0
-  88   2          {
-  89   3          }
-  90   2        }
-  91   1      }
-  92          
-  93          
-  94          void timer0_int (void) interrupt 1
-  95          {
-  96   1        //这里不需要判断中断标志位，且中断标志位硬件自动清零
-  97   1        uint32_t counter = 0;
-  98   1        timer0Count++;
-  99   1        if(timer0Count > 100) timer0Count = 0;
- 100   1        if(timer0Count%2) GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_5, 1);
- 101   1        else GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_5, 0);
- 102   1        //counter = TIM0_GetCounter();
- 103   1      }
- 104          
- 105          void timer1_int (void) interrupt 3
- 106          {
- 107   1        timer1Count++;
- 108   1        if(timer1Count > 100) timer1Count = 0;
- 109   1        if(timer1Count%2) GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_6, 1);
- 110   1        else GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_6, 0);
- 111   1      }
- 112          
- 113          void timer2_int (void) interrupt 5
- 114          {
- 115   1        P1_5 =~ P1_5;
-C51 COMPILER V9.56.0.0   CMS8S003X_ITC                                                     05/29/2018 18:09:10 PAGE 3   
+  54            * @{
+  55            */
+  56          
+  57          /**
+  58            * @brief  Deinitializes the ITC registers to their default reset value.
+  59            * @param  None
+  60            * @retval None
+  61           */
+  62          void ITC_DeInit(void)
+  63          {
+  64   1      
+  65   1      }
+  66          
+  67          //unsigned int times = 0;   
+  68          void SPI_ISR() interrupt 22
+  69          {
+  70   1        FlagStatus status = 0;
+  71   1        ITStatus  itS = 0;
+  72   1        if(SPI_GetFlagStatus(Peripheral_SPI_Interrupt)) //SPI总中断指示位  清除具体的中断标志位后 此位自动清除
+  73   1        {
+  74   2          if(SPI_GetITStatus(SPI_FLAG_SPISIF))        //SPI传输完毕中断标志位 先读SPSR 再度写SPDR后清0
+  75   2          {
+  76   3             /*if(times<5)
+  77   3             {
+  78   3               Master_Received[times] = SPI_ReceiveData();
+  79   3              
+  80   3               if(times < 4)
+  81   3                 SPI_SendData(0x40);
+  82   3             }
+  83   3             times++;*/
+  84   3          }
+  85   2          else if(SPI_GetITStatus(SPI_FLAG_WCOL))   //SPI 写冲突中断标志位 先读SPSR 再读写SPDR后清0
+  86   2          {
+  87   3      
+  88   3          }
+  89   2          else if(SPI_GetITStatus(SPI_FLAG_MODF))   //SPI模式错误中断标志 先读SPSR 再读写SPCR后清0
+  90   2          {
+  91   3          }
+  92   2        }
+  93   1      }
+  94          
+  95          
+  96          void timer0_int (void) interrupt 1
+  97          {
+  98   1        //这里不需要判断中断标志位，且中断标志位硬件自动清零
+  99   1        uint32_t counter = 0;
+ 100   1        readCount_TIM0 = TIM0_GetCounter();
+ 101   1        timer0Count++;
+ 102   1        if(timer0Count > 100) timer0Count = 0;
+ 103   1        if(timer0Count%2) GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_5, 1);
+ 104   1        else GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_5, 0);
+ 105   1        //counter = TIM0_GetCounter();
+ 106   1      }
+ 107          
+ 108          void timer1_int (void) interrupt 3
+ 109          {
+ 110   1        //TH1 = (uint8_t)((8192 - (uint16_t)(1000000.0 / 9600 / 0.25))>>5);
+ 111   1        //TL1 = (uint8_t)((8192 - (uint16_t)(1000000.0 / 9600 / 0.25))&0xFF);
+ 112   1        readCount_TIM1 = TIM1_GetCounter();
+ 113   1        timer1Count++;
+ 114   1        if(timer1Count > 100) timer1Count = 0;
+ 115   1        if(timer1Count%2) GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_6, 1);
+C51 COMPILER V9.56.0.0   CMS8S003X_ITC                                                     05/30/2018 17:19:55 PAGE 3   
 
- 116   1        if(TIM2_GetITStatus(TIM2_Overflow_Flag))
- 117   1        {
- 118   2            TIM2_ClearITPendingBit(TIM2_Overflow_Flag);
- 119   2        }
- 120   1        
- 121   1        if(TIM2_GetITStatus(TIM2_Reload_Flag))
- 122   1        {
- 123   2            TIM2_ClearITPendingBit(TIM2_Reload_Flag);
- 124   2        }
- 125   1        
- 126   1        if(TIM2_GetITStatus(TIM2_OOC3_Flag))
- 127   1        {
- 128   2            TIM2_ClearITPendingBit(TIM2_OOC3_Flag);
- 129   2        }
- 130   1        
- 131   1        if(TIM2_GetITStatus(TIM2_OOC2_Flag))
- 132   1        {
- 133   2            TIM2_ClearITPendingBit(TIM2_OOC2_Flag);
- 134   2        }
- 135   1        
- 136   1        if(TIM2_GetITStatus(TIM2_OOC1_Flag))
- 137   1        {
- 138   2            TIM2_ClearITPendingBit(TIM2_OOC1_Flag);
- 139   2        }
- 140   1        
- 141   1        if(TIM2_GetITStatus(TIM2_OOC0_Flag))
- 142   1        {
- 143   2            TIM2_ClearITPendingBit(TIM2_OOC0_Flag);
- 144   2        }
- 145   1      }
- 146          
- 147          void timer3_int (void) interrupt 15
- 148          {
- 149   1      
- 150   1      }
- 151          
- 152          void timer4_int (void) interrupt 16
- 153          {
- 154   1      
- 155   1      }
- 156          
+ 116   1        else GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_6, 0);
+ 117   1      }
+ 118          
+ 119          void timer2_int (void) interrupt 5
+ 120          {
+ 121   1        P1_5 =~ P1_5;
+ 122   1        if(TIM2_GetITStatus(TIM2_Overflow_Flag))
+ 123   1        {
+ 124   2            TIM2_ClearITPendingBit(TIM2_Overflow_Flag);
+ 125   2        }
+ 126   1        
+ 127   1        if(TIM2_GetITStatus(TIM2_Reload_Flag))
+ 128   1        {
+ 129   2            TIM2_ClearITPendingBit(TIM2_Reload_Flag);
+ 130   2        }
+ 131   1        
+ 132   1        if(TIM2_GetITStatus(TIM2_OOC3_Flag))
+ 133   1        {
+ 134   2            TIM2_ClearITPendingBit(TIM2_OOC3_Flag);
+ 135   2        }
+ 136   1        
+ 137   1        if(TIM2_GetITStatus(TIM2_OOC2_Flag))
+ 138   1        {
+ 139   2            TIM2_ClearITPendingBit(TIM2_OOC2_Flag);
+ 140   2        }
+ 141   1        
+ 142   1        if(TIM2_GetITStatus(TIM2_OOC1_Flag))
+ 143   1        {
+ 144   2            TIM2_ClearITPendingBit(TIM2_OOC1_Flag);
+ 145   2        }
+ 146   1        
+ 147   1        if(TIM2_GetITStatus(TIM2_OOC0_Flag))
+ 148   1        {
+ 149   2            TIM2_ClearITPendingBit(TIM2_OOC0_Flag);
+ 150   2        }
+ 151   1      }
+ 152          
+ 153          void timer3_int (void) interrupt 15
+ 154          {
+ 155   1      
+ 156   1      }
  157          
- 158          /**
- 159            * @}
- 160            */
- 161          
- 162          /**
- 163            * @}
- 164            */
- 165          
- 166          /******************* (C) COPYRIGHT 2018 CMSemicon *****END OF FILE****/
+ 158          void timer4_int (void) interrupt 16
+ 159          {
+ 160   1      
+ 161   1      }
+ 162          
+ 163          
+ 164          /**
+ 165            * @}
+ 166            */
+ 167          
+ 168          /**
+ 169            * @}
+ 170            */
+ 171          
+ 172          /******************* (C) COPYRIGHT 2018 CMSemicon *****END OF FILE****/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    526    ----
+   CODE SIZE        =    540    ----
    CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.56.0.0   CMS8S003X_ITC                                                     05/30/2018 17:19:55 PAGE 4   
+
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      8       6
+   DATA SIZE        =     12       6
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
    EDATA SIZE       =   ----    ----
-C51 COMPILER V9.56.0.0   CMS8S003X_ITC                                                     05/29/2018 18:09:10 PAGE 4   
-
    HDATA SIZE       =   ----    ----
    XDATA CONST SIZE =   ----    ----
    FAR CONST SIZE   =   ----    ----

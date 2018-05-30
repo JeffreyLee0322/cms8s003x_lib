@@ -408,6 +408,26 @@
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_tim2.c</FilePath>
             </File>
+            <File>
+              <FileName>cms8s003x_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>cms8s003x_comp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_comp.c</FilePath>
+            </File>
+            <File>
+              <FileName>cms8s003x_op.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_op.c</FilePath>
+            </File>
+            <File>
+              <FileName>cms8s003x_tim34.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_tim34.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

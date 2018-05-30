@@ -106,40 +106,48 @@ typedef enum
 
 typedef enum
 {
-	Data_8Bit_Settled_Freq 	 = 	(uint8_t)0x00,//Fsys/12
-	Data_8Bit_Unsettled_Freq = 	(uint8_t)0x40,//variable
-	Data_9Bit_Settled_Freq 	 = 	(uint8_t)0x80,//Fsys/32 or /64
-	Data_9Bit_Unsettled_Freq = 	(uint8_t)0xC0//variable
-} UART_DataBit_TypeDef;
+	Mode_8Bit_Settled_Freq 	 = 	(uint8_t)0x00,//Fsys/12 /* Master control synchronize mode 0 */
+	Mode_8Bit_Unsettled_Freq = 	(uint8_t)0x40,//variable /* 8 bit asynchronize mode 1 */
+	Mode_9Bit_Settled_Freq 	 = 	(uint8_t)0x80,//Fsys/32 or /64 /* 9 bit asynchronize mode 2 */
+	Mode_9Bit_Unsettled_Freq = 	(uint8_t)0xC0//variable  /* 9 bit asynchronize mode 3 */
+} UART_Mode_TypeDef;
 
 typedef enum
 {
-	Data_9Bit_Is0 = (uint8_t)0x00,
-	Data_9Bit_Is1 = (uint8_t)0x01,
+	Data_9Bit_Is0 = (uint8_t)0x00, /* Data ninth bi is 0 */
+	Data_9Bit_Is1 = (uint8_t)0x01, /* Data ninth bi is 1 */
 } UART_Data_9Bit_TypeDef;
 
 typedef enum
 {
-	Baudrate_Normal = (uint8_t)0x00,
-	Baudrate_Double = (uint8_t)0x01,
+	Baudrate_Normal = (uint8_t)0x00, /* Baudrate is not double */
+	Baudrate_Double = (uint8_t)0x01, /* Baudrate is double */
 } UART_Baudrate_Double_TypeDef;
 
 typedef enum
 {
-	Timer1_Select = (uint8_t)0x00,
-	Timer4_Select = (uint8_t)0x01,
+	Timer1_Select 			= (uint8_t)0x00, /* Uart clock source is timer1 */
+	Timer4_Select 			= (uint8_t)0x01, /* Uart clock source is timer4 */
+	Timer_SysClk_Select = (uint8_t)0x01, /* Uart clock source is systerm clock */
 } UART_CLK_Source_TypeDef;
+
+typedef enum
+{
+	Baudrate_9600 		= (uint16_t)9600, /* Baudrate is 9600 */
+	Baudrate_57600 		= (uint16_t)57600, /* Baudrate is 57600 */
+	Baudrate_115200 	= (uint16_t)115200, /* Baudrate is 115200 */
+} UART_Baudrate_TypeDef;
 
 typedef struct UART_INIT
 {
-	UART_DataBit_TypeDef 			DataBit;
-	uint8_t 						MutiDevices;
-	uint8_t 						IsReceive;
-	UART_Data_9Bit_TypeDef 			SendData9Bit;
-	UART_Data_9Bit_TypeDef 			ReceiveData9Bit;
-	UART_Baudrate_Double_TypeDef 	Uart0Double;
-	UART_Baudrate_Double_TypeDef 	Uart1Double;
-	UART_CLK_Source_TypeDef 		UartClkSource;
+	UART_Mode_TypeDef 						Mode;
+	FunctionalState 							MutiDevices;
+	FunctionalState 							IsReceive;
+	UART_Data_9Bit_TypeDef 				SendData9Bit;
+	UART_Data_9Bit_TypeDef 				ReceiveData9Bit;
+	UART_Baudrate_Double_TypeDef 	UartBaudrateDouble;
+	UART_CLK_Source_TypeDef 			UartClkSource;
+	UART_Baudrate_TypeDef         UartBaurdrate;
 } UART_Init_TypeDef;
 /**
   * @}
@@ -185,8 +193,8 @@ typedef struct UART_INIT
 void USART_DeInit(UART_TypeDef USARTx);
 void UART_Init(UART_TypeDef UARTx, UART_Init_TypeDef* UART_InitDef);
 void USART_ClockInit();
-void USART_Cmd(UART_TypeDef USARTx, FunctionalState NewState);
-/*void USART_ITConfig(USART_TypeDef USARTx, USART_IT_TypeDef USART_IT, FunctionalState NewState);
+void USART_Cmd(UART_TypeDef UARTx, FunctionalState NewState);
+/*void USART_ITConfig(USART_TypeDef UARTx, USART_IT_TypeDef USART_IT, FunctionalState NewState);
 void USART_HalfDuplexCmd(USART_TypeDef USARTx, FunctionalState NewState);
 void USART_SetPrescaler(USART_TypeDef USARTx, uint8_t USART_Prescaler);
 uint8_t USART_ReceiveData8(USART_TypeDef USARTx);

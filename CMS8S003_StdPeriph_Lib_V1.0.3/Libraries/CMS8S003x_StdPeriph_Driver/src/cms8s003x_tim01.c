@@ -43,13 +43,13 @@
   */
 void TIM0_DeInit(void)
 {
-	TMOD &= 0xf0; //timer0 gate set 0
+	TMOD &= 0xF0; //timer0 gate set 0
 	TCON &= 0xCF; //timer0  control register clear
 }
 
 void TIM1_DeInit(void)
 {
-	TMOD &= 0xf; //timer1 gate set 0
+	TMOD &= 0x0F; //timer1 gate set 0
 	TCON &= 0x3F; //timer1  control register clear
 }
 
@@ -67,15 +67,15 @@ void TIM0_Init(TIM01_Init_TypeDef *TIM0_InitDef)
 	TMOD |= (((uint8_t)((TIM0_InitDef->Timer_Function) << 2)) | ((uint8_t)(TIM0_InitDef->Timer_Mode)));
 	CKCON |= ((uint8_t)((TIM0_InitDef->Timer_Clock) << 3));
 
-	if((TIM0_InitDef->Timer_Mode) == Mode0_13Bit_Timer_Counter)
+	if((TIM0_InitDef->Timer_Mode) == TIM01_Mode0_13Bit_Timer_Counter)
 	{
 		TH0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)>>5);
 		TL0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)&0x1f);
-	}else if((TIM0_InitDef->Timer_Mode) == Mode1_16Bit_Timer_Counter)
+	}else if((TIM0_InitDef->Timer_Mode) == TIM01_Mode1_16Bit_Timer_Counter)
 	{
 		TH0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)>>8);
 		TL0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)&0xff);
-	}else if((TIM0_InitDef->Timer_Mode) == Mode2_8Bit_AutoLoad_Timer_Counter)
+	}else if((TIM0_InitDef->Timer_Mode) == TIM01_Mode2_8Bit_AutoLoad_Timer_Counter)
 	{
 		TH0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)&0xff);
 		TL0 = (uint8_t)((TIM0_InitDef->Timer_InitValue)&0xff);
@@ -87,7 +87,31 @@ void TIM0_Init(TIM01_Init_TypeDef *TIM0_InitDef)
 
 void TIM1_Init(TIM01_Init_TypeDef *TIM1_InitDef)
 {
+	TMOD &= 0x0f; //GATE1/CT1/T1M1 clear 4~7 bit
+	
+	//CKCON clear 4 bit
+	CKCON &= 0xEF;
+	
+	//Set TMOD/CKCON
+	TMOD |= (((uint8_t)((TIM1_InitDef->Timer_Function) << 6)) | ((uint8_t)(TIM1_InitDef->Timer_Mode << 4)));
+	CKCON |= ((uint8_t)((TIM1_InitDef->Timer_Clock) << 4));
+	
+	if((TIM1_InitDef->Timer_Mode) == TIM01_Mode0_13Bit_Timer_Counter)
+	{
+		TH1 = (uint8_t)((TIM1_InitDef->Timer_InitValue)>>5);
+		TL1 = (uint8_t)((TIM1_InitDef->Timer_InitValue)&0x1f);
+	}else if((TIM1_InitDef->Timer_Mode) == TIM01_Mode1_16Bit_Timer_Counter)
+	{
+		TH1 = (uint8_t)((TIM1_InitDef->Timer_InitValue)>>8);
+		TL1 = (uint8_t)((TIM1_InitDef->Timer_InitValue)&0xff);
+	}else if((TIM1_InitDef->Timer_Mode) == TIM01_Mode2_8Bit_AutoLoad_Timer_Counter)
+	{
+		TH1 = (uint8_t)((TIM1_InitDef->Timer_InitValue)&0xff);
+		TL1 = (uint8_t)((TIM1_InitDef->Timer_InitValue)&0xff);
+	}else
+	{
 
+	}
 }
 
 void TIM0_Cmd(FunctionalState NewState)
@@ -115,7 +139,7 @@ void TIM1_Cmd(FunctionalState NewState)
 }
 
 
-void TIM0_ITConfig(TIM_PriorityTypeDef TIM0_Priority, FunctionalState NewState)
+void TIM0_ITConfig(TIM01_PriorityTypeDef TIM0_Priority, FunctionalState NewState)
 {
 	IP &= 0xfd;	//clear bit 1
 	IP |= (TIM0_Priority<<1);
@@ -131,7 +155,7 @@ void TIM0_ITConfig(TIM_PriorityTypeDef TIM0_Priority, FunctionalState NewState)
 	}
 }
 
-void TIM1_ITConfig(TIM_PriorityTypeDef TIM1_Priority, FunctionalState NewState)
+void TIM1_ITConfig(TIM01_PriorityTypeDef TIM1_Priority, FunctionalState NewState)
 {
 	IP &= 0xf7;	//clear bit 3
 	IP |= (TIM1_Priority<<3);

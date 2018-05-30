@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file    cms8s003x_tim1.h
+  * @file    cms8s003x_tim34.h
   * @author  LI WEI
-  * @version V1.0.0
+  * @version V1.0.3
   * @date    04/24/2018
   * @brief   This file contains all the functions prototypes for the TIM1 firmware
   *          library.
@@ -20,8 +20,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __CMS8S003x_TIM01_H
-#define __CMS8S003x_TIM01_H
+#ifndef __CMS8S003x_TIM34_H
+#define __CMS8S003x_TIM34_H
 
 /* Includes ------------------------------------------------------------------*/
 #include <CMS\CMS8S003.H>
@@ -31,56 +31,56 @@
   * @{
   */
 
-/** @addtogroup TIM0_Exported_Types
+/** @addtogroup TIM34_Exported_Types
  * @{
  */
 typedef enum
 {
-	TIM0   =   ((uint8_t)0x00),
-	TIM1   =   ((uint8_t)0x01)
-}TIM_TypeDef;
+	TIM3   =   ((uint8_t)0x00),
+	TIM4   =   ((uint8_t)0x01)
+}TIM34_TypeDef;
 
 typedef enum
 {
-	TIM_Function_Timer               = ((uint8_t)0x00),
-	TIM_Function_Counter             = ((uint8_t)0x01),
-}TIM_Function_TypeDef;
+	TIM34_Function_Timer               = ((uint8_t)0x00),
+	TIM34_Function_Counter             = ((uint8_t)0x01),
+}TIM34_Function_TypeDef;
 
 typedef enum
 {
-	Mode0_13Bit_Timer_Counter               = ((uint8_t)0x00),
-	Mode1_16Bit_Timer_Counter               = ((uint8_t)0x01),
-	Mode2_8Bit_AutoLoad_Timer_Counter       = ((uint8_t)0x02),
-	Mode3_Stop_Counter               	    	= ((uint8_t)0x03),
-}TIM_Mode_TypeDef;
+	TIM34_Mode0_13Bit_Timer_Counter               = ((uint8_t)0x00),
+	TIM34_Mode1_16Bit_Timer_Counter               = ((uint8_t)0x01),
+	TIM34_Mode2_8Bit_AutoLoad_Timer_Counter       = ((uint8_t)0x02),
+	TIM34_Mode3_Stop_Counter               	    	= ((uint8_t)0x03),
+}TIM34_Mode_TypeDef;
 
 typedef enum
 {
-	SYSCLK_Prescaler_12 = ((uint8_t)0x00),
-	SYSCLK_Prescaler_4  = ((uint8_t)0x01)
-}TIM_CLOCK_SOURCE_TypeDef;
+	TIM34_SYSCLK_Prescaler_12 = ((uint8_t)0x00),
+	TIM34_SYSCLK_Prescaler_4  = ((uint8_t)0x01)
+}TIM34_CLOCK_SOURCE_TypeDef;
 
 
-typedef struct TIM0_InitDef
+typedef struct TIM34_InitDef
 {
-	TIM_Function_TypeDef 				Timer_Function;
-	TIM_Mode_TypeDef 						Timer_Mode;
-	TIM_CLOCK_SOURCE_TypeDef 		Timer_Clock;
+	TIM34_Function_TypeDef 				Timer_Function;
+	TIM34_Mode_TypeDef 						Timer_Mode;
+	TIM34_CLOCK_SOURCE_TypeDef 		Timer_Clock;
 	uint32_t 										Timer_InitValue;
-}TIM01_Init_TypeDef;
+}TIM34_Init_TypeDef;
 
 typedef enum
 {
-	TIM_HIGH_Priority = ((uint8_t)0x01),
-	TIM_LOW_Priority =  ((uint8_t)0x00),
-}TIM_PriorityTypeDef;
+	TIM34_HIGH_Priority = ((uint8_t)0x01),
+	TIM34_LOW_Priority =  ((uint8_t)0x00),
+}TIM34_PriorityTypeDef;
 
 
-#define TIMER0_START_BIT 	0x10
-#define TIMER1_START_BIT 	0x40
+#define TIMER3_START_BIT 	0x10
+#define TIMER4_START_BIT 	0x40
 
-#define TIME0_INTERRUPT_ENABLE_BIT  0x02
-#define TIME1_INTERRUPT_ENABLE_BIT  0x08
+#define TIME3_INTERRUPT_ENABLE_BIT  0x02
+#define TIME4_INTERRUPT_ENABLE_BIT  0x08
 
 /**
   * @}
@@ -91,26 +91,26 @@ typedef enum
   */
 
 
-void TIM0_DeInit(void);
-void TIM1_DeInit(void);
-void TIM0_Init(TIM01_Init_TypeDef *TIM0_InitDef);
-void TIM1_Init(TIM01_Init_TypeDef *TIM1_InitDef);
-void TIM0_Cmd(FunctionalState NewState);
-void TIM1_Cmd(FunctionalState NewState);
-void TIM0_ITConfig(TIM_PriorityTypeDef TIM0_Priority, FunctionalState NewState);
-void TIM1_ITConfig(TIM_PriorityTypeDef TIM1_Priority, FunctionalState NewState);
-uint16_t TIM0_GetCounter(void);
-uint16_t TIM1_GetCounter(void);
-ITStatus TIM0_GetITStatus(void);
-ITStatus TIM1_GetITStatus(void);
-void TIM0_ClearITPendingBit();
-void TIM1_ClearITPendingBit();
+void TIM3_DeInit(void);
+void TIM4_DeInit(void);
+void TIM3_Init(TIM34_Init_TypeDef *TIM3_InitDef);
+void TIM4_Init(TIM34_Init_TypeDef *TIM4_InitDef);
+void TIM3_Cmd(FunctionalState NewState);
+void TIM4_Cmd(FunctionalState NewState);
+void TIM3_ITConfig(TIM34_PriorityTypeDef TIM3_Priority, FunctionalState NewState);
+void TIM4_ITConfig(TIM34_PriorityTypeDef TIM4_Priority, FunctionalState NewState);
+uint16_t TIM3_GetCounter(void);
+uint16_t TIM4_GetCounter(void);
+ITStatus TIM3_GetITStatus(void);
+ITStatus TIM4_GetITStatus(void);
+void TIM3_ClearITPendingBit();
+void TIM4_ClearITPendingBit();
 
 /**
   * @}
   */
 
-#endif /* __CMS8S003x_TIM1_H */
+#endif /* __CMS8S003x_TIM34_H */
 
 /**
   * @}
