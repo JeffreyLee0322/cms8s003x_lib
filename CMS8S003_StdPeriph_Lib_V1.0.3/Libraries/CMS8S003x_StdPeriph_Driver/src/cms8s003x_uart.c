@@ -4,7 +4,7 @@
   * @author  LI WEI
   * @version V1.0.3
   * @date    04/24/2018
-  * @brief   This file provides all the USART firmware functions.
+  * @brief   This file provides all the UART firmware functions.
   ******************************************************************************
   * @copy
   *
@@ -15,13 +15,12 @@
   * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
   * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
   *
-  * <h2><center>&copy; COPYRIGHT 2010 CMSemicon</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2018 CMSemicon</center></h2>
   */
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdio.h>
 #include "cms8s003x_uart.h"
-#include "cms8s003x_tim01.h"
-#include "cms8s003x_tim34.h"
 
 /** @addtogroup CMS8S003x_StdPeriph_Driver
   * @{
@@ -29,6 +28,8 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+//#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
@@ -197,12 +198,17 @@ void USART_Cmd(UART_TypeDef USARTx, FunctionalState NewState)
   *         This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
-void USART_ITConfig(USART_TypeDef UARTx, UART_Priority_TypeDef USART_Priority, FunctionalState NewState);
+
+void UART_ITConfig(UART_TypeDef UARTx, UART_Priority_TypeDef UART_Priority, FunctionalState NewState)
 {
 	if(UART0 == UARTx)
 	{
 		if (NewState != _DISABLE)
 		{
+			/*Clear and Set uart0 IT priority */
+			IP &= ~0x10;
+			IP |= (UART_Priority << 4);
+			
 			IE |= UART0_INTERRUPT_ENABLE_BIT; /* Enable the UART0 IT */
 		}
 		else
@@ -214,6 +220,10 @@ void USART_ITConfig(USART_TypeDef UARTx, UART_Priority_TypeDef USART_Priority, F
 	{
 		if (NewState != _DISABLE)
 		{
+			/*Clear and Set uart1 IT priority */
+			IP &= ~0x40;
+			IP |= (UART_Priority << 6);
+			
 			IE |= UART1_INTERRUPT_ENABLE_BIT; /* Enable the UART1 IT */
 		}
 		else
@@ -222,27 +232,90 @@ void USART_ITConfig(USART_TypeDef UARTx, UART_Priority_TypeDef USART_Priority, F
 		}
 	}
 }
-#if 0
+
 /**
-  * @brief  Enables or disables the USART’s Half Duplex communication.
+  * @brief  Returns the most recent received data by the USART peripheral.
   * @param  USARTx : where x can be 1 to select the specified USART peripheral.
-  * @param  NewState new state of the USART Communication.
-  *         This parameter can be: ENABLE or DISABLE.
-  * @retval None
+  * @retval The received data.
   */
-void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState)
+uint8_t UART_ReceiveData8(UART_TypeDef UARTx)
 {
- 
+	/*uint8_t returnData = 0;
+	if(UART0 == UARTx)
+	{
+			returnData = SBUF0;
+	}
+	else if(UART1 == UARTx)
+	{
+			returnData = SBUF1;
+	}
+	
+	return returnData;*/
+	return ((UARTx == UART0)?(uint8_t)SBUF0:(uint8_t)SBUF1);
+}
+
+
+/**
+  * @brief  Returns the most recent received data by the USART peripheral.
+  * @param  USARTx : where x can be 1 to select the specified USART peripheral.
+  * @retval The received data.
+  */
+uint16_t UART_ReceiveData9(UART_TypeDef UARTx)
+{
+	/*if(UART0 == UARTx)
+	{
+	
+	}
+	else if(UART1 == UARTx)
+	{
+	
+	}*/
+	return ((UARTx == UART0)?(uint8_t)SBUF0:(uint8_t)SBUF1);
 }
 
 /**
-  * @brief  Sets the specified USART guard time.
-  * @note   SmartCard Mode should be Enabled
-  * @param  USARTx : where x can be 1 to select the specified USART peripheral.
-  * @param  USART_GuardTime: specifies the guard time.
+  * @brief  Transmits 8 bit data through the USART peripheral.
+  * @param  Data: The data to transmit.
   * @retval None
   */
-void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime)
+void UART_SendData8(UART_TypeDef UARTx, uint8_t Data)
+{
+	if(UART0 == UARTx)
+	{
+			SBUF0 = Data;
+	}
+	else if(UART1 == UARTx)
+	{
+			SBUF1 = Data;
+	}
+}
+
+/**
+  * @brief  Transmits 9 bit data through the USART peripheral.
+  * @param  USARTx: Select the USARTx peripheral.
+  * @param  Data : The data to transmit.
+  *         This parameter should be lower than 0x1FF.
+  * @retval None
+  */
+void UART_SendData9(UART_TypeDef UARTx, uint16_t Data)
+{
+	if(UART0 == UARTx)
+	{
+			SBUF0 = Data;
+	}
+	else if(UART1 == UARTx)
+	{
+			SBUF1 = Data;
+	}
+}
+
+#if 0
+/**
+  * @brief  Transmits break characters.
+  * @param  USARTx : where x can be 1 to select the specified USART peripheral.
+  * @retval None
+  */
+void USART_SendBreak(USART_TypeDef* USARTx)
 {
 
 }
@@ -276,71 +349,6 @@ void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler)
 }
 
 /**
-  * @brief  Returns the most recent received data by the USART peripheral.
-  * @param  USARTx : where x can be 1 to select the specified USART peripheral.
-  * @retval The received data.
-  */
-uint8_t USART_ReceiveData8(USART_TypeDef* USARTx)
-{
-
-}
-
-
-/**
-  * @brief  Returns the most recent received data by the USART peripheral.
-  * @param  USARTx : where x can be 1 to select the specified USART peripheral.
-  * @retval The received data.
-  */
-uint16_t USART_ReceiveData9(USART_TypeDef* USARTx)
-{
-
-}
-
-/**
-  * @brief  Determines if the USART is in mute mode or not.
-  * @param  USARTx : where x can be 1 to select the specified USART peripheral.
-  * @param  NewState : The new state of the USART mode.
-  *         This parameter can be any of the @ref FunctionalState enumeration.
-  * @retval None
-  */
-void USART_ReceiverWakeUpCmd(USART_TypeDef* USARTx, FunctionalState NewState)
-{
-
-}
-
-/**
-  * @brief  Transmits break characters.
-  * @param  USARTx : where x can be 1 to select the specified USART peripheral.
-  * @retval None
-  */
-void USART_SendBreak(USART_TypeDef* USARTx)
-{
-
-}
-
-/**
-  * @brief  Transmits 8 bit data through the USART peripheral.
-  * @param  Data: The data to transmit.
-  * @retval None
-  */
-void USART_SendData8(USART_TypeDef* USARTx, uint8_t Data)
-{
-
-}
-
-/**
-  * @brief  Transmits 9 bit data through the USART peripheral.
-  * @param  USARTx: Select the USARTx peripheral.
-  * @param  Data : The data to transmit.
-  *         This parameter should be lower than 0x1FF.
-  * @retval None
-  */
-void USART_SendData9(USART_TypeDef* USARTx, uint16_t Data)
-{
-
-}
-
-/**
   * @brief  Sets the address of the USART node.
   * @param  USARTx: Select the USARTx peripheral.
   * @param  Address : Indicates the address of the USART node.
@@ -351,7 +359,6 @@ void USART_SetAddress(USART_TypeDef* USARTx, uint8_t USART_Address)
 {
 
 }
-
 
 /**
   * @brief  Checks whether the specified USART flag is set or not.
@@ -401,6 +408,7 @@ void USART_ClearFlag(USART_TypeDef* USARTx, USART_FLAG_TypeDef USART_FLAG)
 {
   
 }
+#endif
 
 /**
   * @brief  Checks whether the specified USART interrupt has occurred or not.
@@ -417,13 +425,31 @@ void USART_ClearFlag(USART_TypeDef* USARTx, USART_FLAG_TypeDef USART_FLAG)
   *         - USART_IT_NF: Noise Flag Error interrupt
   * @retval ITStatus The new state of USART_IT (SET or RESET).
   */
-ITStatus USART_GetITStatus(USART_TypeDef* USARTx, USART_IT_TypeDef USART_IT)
+ITStatus UART_GetITStatus(UART_TypeDef UARTx, UART_IT_Status_TypeDef UART_IT)
 {
-  ITStatus pendingbitstatus = RESET;
+  ITStatus bitstatus = _RESET;
+	uint8_t UART_itStatus = 0x0;
   
+	if(UART0 == UARTx)
+	{
+		UART_itStatus = SCON0 & UART_IT;
+	}
+	else if(UART1 == UARTx)
+	{
+		UART_itStatus = SCON1 & UART_IT;
+	}
+	
+	if (UART_itStatus != (uint8_t)_RESET )
+  {
+    bitstatus = _SET;
+  }
+  else
+  {
+    bitstatus = _RESET;
+  }
 
   /* Return the USART_IT status*/
-  return  pendingbitstatus;
+  return  bitstatus;
 }
 
 /**
@@ -454,11 +480,38 @@ ITStatus USART_GetITStatus(USART_TypeDef* USARTx, USART_IT_TypeDef USART_IT)
   *
   * @retval None
   */
-void USART_ClearITPendingBit(USART_TypeDef* USARTx, USART_IT_TypeDef USART_IT)
+void UART_ClearITPendingBit(UART_TypeDef UARTx, UART_IT_Status_TypeDef UART_IT)
 {
- 
+	if(UART0 == UARTx)
+	{
+		SCON0 = (~UART_IT);
+	}
+	else if(UART1 == UARTx)
+	{
+		SCON1 = (~UART_IT);
+	}
 }
-#endif
+
+/**
+  * @brief  Retargets the C library printf function to the USART.
+  * @param  None
+  * @retval None
+  */
+//PUTCHAR_PROTOTYPE
+//int fputc(int ch, FILE *f)
+int fputc(int ch, const char *f)
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the UART0 */
+  UART_SendData8(UART0, (uint8_t) ch);
+	
+  /* Loop until the end of transmission */
+  //while (USART_GetFlagStatus(UART0, USART_FLAG_TC) == RESET)
+  //{}
+
+  return ch;
+}
+
 
 /**
   * @}

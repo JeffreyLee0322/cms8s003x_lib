@@ -18,6 +18,7 @@
   * <h2><center>&copy; COPYRIGHT 2018 CMSemicon</center></h2>
   */
 
+#include <stdio.h>
 #include <CMS\CMS8S003.H>
 #include "cms8s003x_spi.h"
 #include "cms8s003x_syscon.h"
@@ -33,6 +34,16 @@
 //#define TEST_TIMER2
 //#define TEST_TIMER34
 #define TEST_UART
+
+//#define TEST_ADC
+//#define TEST_IIC
+//#define TEST_PWM
+//#define TEST_WDG
+//#define TEST_OP
+//#define TEST_COMP
+
+
+typedef struct __FILE _Filet;
 
 #ifdef TEST_SPI
 void SPIMaster_Config(void)
@@ -191,6 +202,11 @@ void test_timer2_init(void)
 void test_uart_init()
 {
 	UART_Init_TypeDef UART_InitStructure;
+	
+	//Uart0 IO setup
+	SYS_GPIO_Alternate_Config(GPIO_NUM_P25, P25_ALT_TXD0);
+	SYS_GPIO_Alternate_Config(GPIO_NUM_P26, P26_ALT_RXD0);
+	
 	UART_InitStructure.Mode 							= Mode_8Bit_Unsettled_Freq; 
 	UART_InitStructure.MutiDevices 				= _DISABLE;
 	UART_InitStructure.IsReceive 					= _ENABLE;
@@ -202,13 +218,12 @@ void test_uart_init()
 	
 	UART_Init(UART0, &UART_InitStructure);
 	
-	USART_ITConfig(UART0, HIGH_Priority, _ENABLE);
+	UART_ITConfig(UART0, HIGH_Priority, _ENABLE);
+	
+	//UART_SendData8(UART0, 0x12);
+	printf("<<----UART0 test---->>");
 }
 
-void test_uart1_init()
-{
-
-}
 #endif
 
 void Delay_Time(int time)

@@ -112,15 +112,15 @@ typedef enum
 
 typedef enum
 {
-	HIGH_Priority 	= 	((uint8_t)0x01),
-	LOW_Priority 		=  	((uint8_t)0x00),
+	HIGH_Priority 	= 	(uint8_t)0x01,
+	LOW_Priority 		=  	(uint8_t)0x00,
 } UART_Priority_TypeDef;
 
 typedef enum
 {
-	Send_IT_Flag     	=   (uint8_t)0x02),
-	Receive_IT_Flag   =   (uint8_t)0x01),
-} UART_IT_Flag_TypeDef;
+	Send_IT_Status     	=   (uint8_t)0x02,
+	Receive_IT_Status   =   (uint8_t)0x01,
+} UART_IT_Status_TypeDef;
 
 typedef struct UART_INIT
 {
@@ -177,22 +177,23 @@ typedef struct UART_INIT
   * @{
   */
 
-void USART_DeInit(UART_TypeDef USARTx);
+void UART_DeInit(UART_TypeDef UARTx);
 void UART_Init(UART_TypeDef UARTx, UART_Init_TypeDef* UART_InitDef);
-void USART_ClockInit();
-void USART_Cmd(UART_TypeDef UARTx, FunctionalState NewState);
-void USART_ITConfig(USART_TypeDef UARTx, UART_Priority_TypeDef USART_Priority, FunctionalState NewState);
-/*void USART_HalfDuplexCmd(USART_TypeDef USARTx, FunctionalState NewState);
+void UART_ClockInit();
+void UART_Cmd(UART_TypeDef UARTx, FunctionalState NewState);
+void UART_ITConfig(UART_TypeDef UARTx, UART_Priority_TypeDef UART_Priority, FunctionalState NewState);
+uint8_t UART_ReceiveData8(UART_TypeDef UARTx);
+uint16_t UART_ReceiveData9(UART_TypeDef UARTx);
+void UART_SendData8(UART_TypeDef UARTx, uint8_t Data);
+void UART_SendData9(UART_TypeDef UARTx, uint16_t Data);
+/*
 void USART_SetPrescaler(USART_TypeDef USARTx, uint8_t USART_Prescaler);
-uint8_t USART_ReceiveData8(USART_TypeDef USARTx);
-uint16_t USART_ReceiveData9(USART_TypeDef USARTx);
 void USART_SendBreak(USART_TypeDef USARTx);
-void USART_SendData8(USART_TypeDef USARTx, uint8_t Data);
-void USART_SendData9(USART_TypeDef USARTx, uint16_t Data);
-FlagStatus USART_GetFlagStatus(USART_TypeDef USARTx, USART_FLAG_TypeDef USART_FLAG);
-void USART_ClearFlag(USART_TypeDef USARTx, USART_FLAG_TypeDef USART_FLAG);
-ITStatus USART_GetITStatus(USART_TypeDef USARTx, USART_IT_TypeDef USART_IT);
-void USART_ClearITPendingBit(USART_TypeDef USARTx, USART_IT_TypeDef USART_IT);*/
+*/
+//FlagStatus UART_GetFlagStatus(UART_TypeDef USARTx, USART_FLAG_TypeDef USART_FLAG);
+//void USART_ClearFlag(USART_TypeDef USARTx, USART_FLAG_TypeDef USART_FLAG);
+ITStatus UART_GetITStatus(UART_TypeDef UARTx, UART_IT_Status_TypeDef UART_IT);
+void UART_ClearITPendingBit(UART_TypeDef UARTx, UART_IT_Status_TypeDef UART_IT);
 /**
   * @}
   */

@@ -3,7 +3,7 @@
   * @file    cms8s003x_itc.c
   * @author  LI WEI
   * @version V1.0.3
-  * @date    04/24/2010
+  * @date    04/24/2018
   * @brief   This file provides all the ITC firmware functions.
   ******************************************************************************
   * @copy
@@ -24,6 +24,7 @@
 #include "cms8s003x_tim01.h"
 #include "cms8s003x_tim2.h"
 #include "cms8s003x_gpio.h"
+#include "cms8s003x_uart.h"
 
 /** @addtogroup CMS8S003x_StdPeriph_Driver
   * @{
@@ -158,6 +159,32 @@ void timer3_int (void) interrupt 15
 void timer4_int (void) interrupt 16
 {
 
+}
+
+void uart0_int (void) interrupt 4
+{
+	if(UART_GetITStatus(UART0, Send_IT_Status))
+	{
+			UART_ClearITPendingBit(UART0, Send_IT_Status);
+	}
+	
+	if(UART_GetITStatus(UART0, Receive_IT_Status))
+	{
+			UART_ClearITPendingBit(UART0, Send_IT_Status);
+	}
+}
+
+void uart1_int (void) interrupt 6
+{
+	if(UART_GetITStatus(UART1, Send_IT_Status))
+	{
+			UART_ClearITPendingBit(UART1, Send_IT_Status);
+	}
+	
+	if(UART_GetITStatus(UART1, Receive_IT_Status))
+	{
+			UART_ClearITPendingBit(UART1, Send_IT_Status);
+	}
 }
 
 
