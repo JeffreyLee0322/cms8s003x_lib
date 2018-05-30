@@ -64,36 +64,6 @@ typedef enum
   USART_Mode_Tx    = (uint8_t)0x08   /*!< Transmit Enable */
 } USART_Mode_TypeDef;
 
-
-
-
-/**
-  * @brief USART Clock possible values
-  */
-typedef enum
-{
-  USART_Clock_Disable    = (uint8_t)0x00,  /*!< CK pin disabled */
-  USART_Clock_Enable     = (uint8_t)0x08   /*!< CK pin enabled */
-} USART_Clock_TypeDef;
-
-/**
-  * @brief USART Clock Polarity possible values
-  */
-typedef enum
-{
-  USART_CPOL_Low      = (uint8_t)0x00,  /*!< CK to 0 when idle */
-  USART_CPOL_High     = (uint8_t)0x04   /*!< CK to 1 when idle.*/
-} USART_CPOL_TypeDef;
-
-/**
-  * @brief USART Clock Phase possible values
-  */
-typedef enum
-{
-  USART_CPHA_1Edge     = (uint8_t)0x00,  /*!< The first clock transition is the first data capture edge*/
-  USART_CPHA_2Edge     = (uint8_t)0x02   /*!< The second clock transition is the first data capture edge*/
-} USART_CPHA_TypeDef;
-
 /**
   * @brief USART Last Bit possible values
   */
@@ -102,6 +72,8 @@ typedef enum
   USART_LastBit_Disable  = (uint8_t)0x00,  /*!< The clock pulse of the last data bit is not output to the SCLK pin.*/
   USART_LastBit_Enable   = (uint8_t)0x01   /*!< The clock pulse of the last data bit is output to the SCLK pin.*/
 } USART_LastBit_TypeDef;
+
+
 
 
 typedef enum
@@ -138,6 +110,18 @@ typedef enum
 	Baudrate_115200 	= (uint16_t)115200, /* Baudrate is 115200 */
 } UART_Baudrate_TypeDef;
 
+typedef enum
+{
+	HIGH_Priority 	= 	((uint8_t)0x01),
+	LOW_Priority 		=  	((uint8_t)0x00),
+} UART_Priority_TypeDef;
+
+typedef enum
+{
+	Send_IT_Flag     	=   (uint8_t)0x02),
+	Receive_IT_Flag   =   (uint8_t)0x01),
+} UART_IT_Flag_TypeDef;
+
 typedef struct UART_INIT
 {
 	UART_Mode_TypeDef 						Mode;
@@ -149,6 +133,7 @@ typedef struct UART_INIT
 	UART_CLK_Source_TypeDef 			UartClkSource;
 	UART_Baudrate_TypeDef         UartBaurdrate;
 } UART_Init_TypeDef;
+
 /**
   * @}
   */
@@ -156,6 +141,8 @@ typedef struct UART_INIT
 /* Exported constants --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
+#define UART0_INTERRUPT_ENABLE_BIT  0x10
+#define UART1_INTERRUPT_ENABLE_BIT  0x40
 
 /** @addtogroup USART_Private_Macros
   * @{
@@ -194,8 +181,8 @@ void USART_DeInit(UART_TypeDef USARTx);
 void UART_Init(UART_TypeDef UARTx, UART_Init_TypeDef* UART_InitDef);
 void USART_ClockInit();
 void USART_Cmd(UART_TypeDef UARTx, FunctionalState NewState);
-/*void USART_ITConfig(USART_TypeDef UARTx, USART_IT_TypeDef USART_IT, FunctionalState NewState);
-void USART_HalfDuplexCmd(USART_TypeDef USARTx, FunctionalState NewState);
+void USART_ITConfig(USART_TypeDef UARTx, UART_Priority_TypeDef USART_Priority, FunctionalState NewState);
+/*void USART_HalfDuplexCmd(USART_TypeDef USARTx, FunctionalState NewState);
 void USART_SetPrescaler(USART_TypeDef USARTx, uint8_t USART_Prescaler);
 uint8_t USART_ReceiveData8(USART_TypeDef USARTx);
 uint16_t USART_ReceiveData9(USART_TypeDef USARTx);

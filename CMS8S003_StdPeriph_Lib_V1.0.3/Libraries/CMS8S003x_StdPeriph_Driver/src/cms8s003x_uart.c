@@ -181,7 +181,7 @@ void USART_Cmd(UART_TypeDef USARTx, FunctionalState NewState)
 
 }
 
-#if 0
+
 /**
   * @brief  Enables or disables the specified USART interrupts.
   * @param  USARTx : where x can be 1 to select the specified USART peripheral.
@@ -197,11 +197,32 @@ void USART_Cmd(UART_TypeDef USARTx, FunctionalState NewState)
   *         This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
-void USART_ITConfig(USART_TypeDef* USARTx, USART_IT_TypeDef USART_IT, FunctionalState NewState)
+void USART_ITConfig(USART_TypeDef UARTx, UART_Priority_TypeDef USART_Priority, FunctionalState NewState);
 {
-  
-
+	if(UART0 == UARTx)
+	{
+		if (NewState != _DISABLE)
+		{
+			IE |= UART0_INTERRUPT_ENABLE_BIT; /* Enable the UART0 IT */
+		}
+		else
+		{
+			IE &= (uint8_t)(~UART0_INTERRUPT_ENABLE_BIT); /* Disable the UART0 IT */
+		}
+	}
+	else if(UART1 == UARTx)
+	{
+		if (NewState != _DISABLE)
+		{
+			IE |= UART1_INTERRUPT_ENABLE_BIT; /* Enable the UART1 IT */
+		}
+		else
+		{
+			IE &= (uint8_t)(~UART1_INTERRUPT_ENABLE_BIT); /* Disable the UART1 IT */
+		}
+	}
 }
+#if 0
 /**
   * @brief  Enables or disables the USART’s Half Duplex communication.
   * @param  USARTx : where x can be 1 to select the specified USART peripheral.

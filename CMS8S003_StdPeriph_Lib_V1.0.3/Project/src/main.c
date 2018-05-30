@@ -29,10 +29,10 @@
 
 //#define TEST_SPI
 //#define TEST_GPIO
-#define TEST_TIMER01
+//#define TEST_TIMER01
 //#define TEST_TIMER2
 //#define TEST_TIMER34
-//#define TEST_UART
+#define TEST_UART
 
 #ifdef TEST_SPI
 void SPIMaster_Config(void)
@@ -201,6 +201,8 @@ void test_uart_init()
 	UART_InitStructure.UartBaurdrate 			= Baudrate_9600;
 	
 	UART_Init(UART0, &UART_InitStructure);
+	
+	USART_ITConfig(UART0, HIGH_Priority, _ENABLE);
 }
 
 void test_uart1_init()
