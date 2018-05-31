@@ -106,6 +106,8 @@ typedef enum
 typedef enum
 {
 	Baudrate_9600 		= (uint16_t)9600, /* Baudrate is 9600 */
+	Baudrate_14400 		= (uint16_t)14400, /* Baudrate is 14400 */
+	Baudrate_38400 		= (uint16_t)38400, /* Baudrate is 38400 */
 	Baudrate_57600 		= (uint16_t)57600, /* Baudrate is 57600 */
 	Baudrate_115200 	= (uint16_t)115200, /* Baudrate is 115200 */
 } UART_Baudrate_TypeDef;

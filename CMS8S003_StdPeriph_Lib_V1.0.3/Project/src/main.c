@@ -43,8 +43,6 @@
 //#define TEST_COMP
 
 
-typedef struct __FILE _Filet;
-
 #ifdef TEST_SPI
 void SPIMaster_Config(void)
 {
@@ -201,27 +199,39 @@ void test_timer2_init(void)
 #ifdef TEST_UART
 void test_uart_init()
 {
+	GPIO_Init_TypeDef GPIO_InitStructure;
 	UART_Init_TypeDef UART_InitStructure;
 	
 	//Uart0 IO setup
 	SYS_GPIO_Alternate_Config(GPIO_NUM_P25, P25_ALT_TXD0);
-	SYS_GPIO_Alternate_Config(GPIO_NUM_P26, P26_ALT_RXD0);
+	//SYS_GPIO_Alternate_Config(GPIO_NUM_P26, P26_ALT_RXD0);
+	
+	GPIO_InitStructure.Mode 			= GPIO_ALT;
+	GPIO_InitStructure.Pin 				= GPIO_PIN_5;
+	GPIO_InitStructure.Direction 	= GPIO_OUTPUT;
+	GPIO_InitStructure.Analog 		= GPIO_Digital_Sel;
+	GPIO_InitStructure.OType 			= GPIO_Pushpull_Sel;
+	GPIO_InitStructure.Up 				= GPIO_Up_Enable;
+	GPIO_InitStructure.Down 			= GPIO_Down_Enable;
+	GPIO_InitStructure.Driver 		= GPIO_Driver_Weak;
+	GPIO_InitStructure.Slope 			= GPIO_Slope_Slow;
+	GPIO_Init(GPIO_PORT_2, &GPIO_InitStructure);
 	
 	UART_InitStructure.Mode 							= Mode_8Bit_Unsettled_Freq; 
 	UART_InitStructure.MutiDevices 				= _DISABLE;
-	UART_InitStructure.IsReceive 					= _ENABLE;
+	UART_InitStructure.IsReceive 					= _DISABLE;
 	UART_InitStructure.SendData9Bit 			= Data_9Bit_Is1;
 	UART_InitStructure.ReceiveData9Bit 		= Data_9Bit_Is1;
-	UART_InitStructure.UartBaudrateDouble = Baudrate_Normal;
-	UART_InitStructure.UartClkSource 			= Timer_SysClk_Select;
+	UART_InitStructure.UartBaudrateDouble = Baudrate_Double;
+	UART_InitStructure.UartClkSource 			= Timer1_Select;//Timer_SysClk_Select;
 	UART_InitStructure.UartBaurdrate 			= Baudrate_9600;
 	
 	UART_Init(UART0, &UART_InitStructure);
 	
-	UART_ITConfig(UART0, HIGH_Priority, _ENABLE);
+	//UART_ITConfig(UART0, HIGH_Priority, _ENABLE);
 	
 	//UART_SendData8(UART0, 0x12);
-	printf("<<----UART0 test---->>");
+	//printf("<<----UART0 test---->>");
 }
 
 #endif
@@ -265,7 +275,16 @@ void main(void)
 #endif
 	
 #ifdef TEST_UART
+	test_gpio_init();
 	test_uart_init();
+	while(1)
+	{
+		//Delay_Time(2000);
+		UART_SendData8(UART0, 0x12);
+		UART_SendData8(UART0, 0x13);
+		UART_SendData8(UART0, 0x14);
+		UART_SendData8(UART0, 0x15);
+	}
 #endif
 
 	while(1);

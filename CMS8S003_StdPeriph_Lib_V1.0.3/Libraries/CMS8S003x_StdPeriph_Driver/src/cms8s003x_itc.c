@@ -108,18 +108,19 @@ void timer0_int (void) interrupt 1
 
 void timer1_int (void) interrupt 3
 {
+	P1_5 =~ P1_5;
 	//TH1 = (uint8_t)((8192 - (uint16_t)(1000000.0 / 9600 / 0.25))>>5);
 	//TL1 = (uint8_t)((8192 - (uint16_t)(1000000.0 / 9600 / 0.25))&0xFF);
-	readCount_TIM1 = TIM1_GetCounter();
+	/*readCount_TIM1 = TIM1_GetCounter();
 	timer1Count++;
 	if(timer1Count > 100) timer1Count = 0;
 	if(timer1Count%2) GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_6, 1);
-	else GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_6, 0);
+	else GPIO_WriteBit(GPIO_PORT_1, GPIO_PIN_6, 0);*/
 }
 
 void timer2_int (void) interrupt 5
 {
-	P1_5 =~ P1_5;
+	//P1_5 =~ P1_5;
 	if(TIM2_GetITStatus(TIM2_Overflow_Flag))
 	{
 			TIM2_ClearITPendingBit(TIM2_Overflow_Flag);
@@ -163,6 +164,7 @@ void timer4_int (void) interrupt 16
 
 void uart0_int (void) interrupt 4
 {
+	
 	if(UART_GetITStatus(UART0, Send_IT_Status))
 	{
 			UART_ClearITPendingBit(UART0, Send_IT_Status);

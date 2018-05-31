@@ -36,14 +36,11 @@
   * @addtogroup CLK_Private_Constants
   * @{
   */
-uint32_t SystemClock = 0;
-#define HSI_CLOCK_FREQUENCY 16000000
-const uint8_t SYSDivFactor[5] =
-  {
-    1, 2, 4, 8, 16
-  }
-  ; /*!< Holds the different Master clock Divider factors */
+#define HSI_CLOCK_FREQUENCY_8MHZ    8000000
+#define HSI_CLOCK_FREQUENCY_16MHZ   16000000
+#define HSI_CLOCK_FREQUENCY_24MHZ   24000000
 
+uint32_t SystemClock = HSI_CLOCK_FREQUENCY_8MHZ;
 /**
   * @}
   */
@@ -68,7 +65,7 @@ void CLK_SYSCLKDivConfig(uint16_t Prescaler)
 	CLKDIV_Value = Prescaler/2;
 	
 	CLKDIV = (uint8_t)CLKDIV_Value;
-	SystemClock = HSI_CLOCK_FREQUENCY / Prescaler;
+	SystemClock = HSI_CLOCK_FREQUENCY_16MHZ / Prescaler;
 }
 
 /**

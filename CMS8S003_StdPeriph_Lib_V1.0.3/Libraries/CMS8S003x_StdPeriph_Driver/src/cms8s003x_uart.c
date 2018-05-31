@@ -32,6 +32,8 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+extern uint32_t SystemClock;
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 /* Public functions ----------------------------------------------------------*/
@@ -101,8 +103,10 @@ void UART_Init(UART_TypeDef UARTx, UART_Init_TypeDef* UART_InitDef)
 				//TH1 = 256 - (uint16_t)(1000000.0/(UART_InitDef->UartBaurdrate) / 0.25);
 				
 				CKCON &= ~0x10; //Timer1 clock source: sys/12 (systerm clock is 8MHz/16MHz, if not CLKDIV)
-				TL1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 0.75);
-				TH1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 0.75);
+				TL1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 0.75 / 8);
+				TH1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 0.75 / 8);
+				//TL1 = 256 - (uint8_t)(SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / (UART_InitDef->UartBaurdrate));
+				//TH1 = 256 - (uint8_t)(SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / (UART_InitDef->UartBaurdrate));
 				IE |= 0x88; //Enable Timer1 interrupt
 				TCON |= 0x40; //Timer1 start
 			}
@@ -177,7 +181,7 @@ void USART_ClockInit()
   *         This parameter can be any of the @ref FunctionalState enumeration.
   * @retval None
   */
-void USART_Cmd(UART_TypeDef USARTx, FunctionalState NewState)
+void UART_Cmd(UART_TypeDef UARTx, FunctionalState NewState)
 {
 
 }
@@ -282,11 +286,17 @@ void UART_SendData8(UART_TypeDef UARTx, uint8_t Data)
 {
 	if(UART0 == UARTx)
 	{
+			while(1 == ((SCON0 & 0x02)>>1));
 			SBUF0 = Data;
+			while(0 == ((SCON0 & 0x02)>>1));
+			SCON0 &= (~0x02);
 	}
 	else if(UART1 == UARTx)
 	{
+			while(1 == ((SCON1 & 0x02)>>1));
 			SBUF1 = Data;
+			while(0 == ((SCON1 & 0x02)>>1));
+			SCON1 &= (~0x02);
 	}
 }
 
@@ -497,6 +507,7 @@ void UART_ClearITPendingBit(UART_TypeDef UARTx, UART_IT_Status_TypeDef UART_IT)
   * @param  None
   * @retval None
   */
+#if 0
 //PUTCHAR_PROTOTYPE
 //int fputc(int ch, FILE *f)
 int fputc(int ch, const char *f)
@@ -511,7 +522,7 @@ int fputc(int ch, const char *f)
 
   return ch;
 }
-
+#endif
 
 /**
   * @}
