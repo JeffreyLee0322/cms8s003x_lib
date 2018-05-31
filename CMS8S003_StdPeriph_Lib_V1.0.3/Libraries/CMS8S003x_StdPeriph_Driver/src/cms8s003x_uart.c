@@ -103,8 +103,8 @@ void UART_Init(UART_TypeDef UARTx, UART_Init_TypeDef* UART_InitDef)
 				//TH1 = 256 - (uint16_t)(1000000.0/(UART_InitDef->UartBaurdrate) / 0.25);
 				
 				CKCON &= ~0x10; //Timer1 clock source: sys/12 (systerm clock is 8MHz/16MHz, if not CLKDIV)
-				TL1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 0.75 / 8);
-				TH1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 0.75 / 8);
+				TL1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.75);
+				TH1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.75);
 				//TL1 = 256 - (uint8_t)(SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / (UART_InitDef->UartBaurdrate));
 				//TH1 = 256 - (uint8_t)(SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / (UART_InitDef->UartBaurdrate));
 				IE |= 0x88; //Enable Timer1 interrupt

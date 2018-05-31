@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   CMS8S003X_OP                                                      05/31/2018 15:40:01 PAGE 1   
+C51 COMPILER V9.56.0.0   CMS8S003X_OP                                                      05/31/2018 18:29:01 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE CMS8S003X_OP
@@ -62,7 +62,7 @@ line level    source
                 * @brief  Initializes the comparator inverting input, output and speed.
                 * @note   This function configures only COMP2.
                 * @param  COMP_InvertingInput : selects the comparator inverting input and can
-C51 COMPILER V9.56.0.0   CMS8S003X_OP                                                      05/31/2018 15:40:01 PAGE 2   
+C51 COMPILER V9.56.0.0   CMS8S003X_OP                                                      05/31/2018 18:29:01 PAGE 2   
 
                 *         be any of the @ref COMP_InvertingInput_Typedef enumeration.
                 * @param  COMP_OutputSelect : selects the comparator output and can be any of
@@ -126,7 +126,7 @@ line level    source
               {
                 
               }
-C51 COMPILER V9.56.0.0   CMS8S003X_OP                                                      05/31/2018 15:40:01 PAGE 3   
+C51 COMPILER V9.56.0.0   CMS8S003X_OP                                                      05/31/2018 18:29:01 PAGE 3   
 
               
               /**
@@ -190,7 +190,7 @@ line level    source
               FlagStatus COMP_GetFlagStatus(COMP_Selection_TypeDef COMP_Selection)
               {
                 FlagStatus bitstatus = RESET;
-C51 COMPILER V9.56.0.0   CMS8S003X_OP                                                      05/31/2018 15:40:01 PAGE 4   
+C51 COMPILER V9.56.0.0   CMS8S003X_OP                                                      05/31/2018 18:29:01 PAGE 4   
 
               
                
@@ -254,7 +254,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.56.0.0   CMS8S003X_OP                                                      05/31/2018 15:40:01 PAGE 5   
+C51 COMPILER V9.56.0.0   CMS8S003X_OP                                                      05/31/2018 18:29:01 PAGE 5   
 
    BIT SIZE         =   ----    ----
    EDATA SIZE       =   ----    ----

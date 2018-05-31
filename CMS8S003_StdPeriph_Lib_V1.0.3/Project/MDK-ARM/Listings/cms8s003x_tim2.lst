@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   CMS8S003X_TIM2                                                    05/31/2018 15:40:01 PAGE 1   
+C51 COMPILER V9.56.0.0   CMS8S003X_TIM2                                                    05/31/2018 18:29:01 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE CMS8S003X_TIM2
@@ -62,7 +62,7 @@ line level    source
   51   1        T2CON &= 0x00; 
   52   1        T2CON |= (uint8_t)(TIM2_InitDef->Clock_Source) | (uint8_t)((TIM2_InitDef->Clock_Prescaler) << 7) | (uint8
              -_t)((TIM2_InitDef->Reload_Mode) << 3);
-C51 COMPILER V9.56.0.0   CMS8S003X_TIM2                                                    05/31/2018 15:40:01 PAGE 2   
+C51 COMPILER V9.56.0.0   CMS8S003X_TIM2                                                    05/31/2018 18:29:01 PAGE 2   
 
   53   1        
   54   1        TH2 = ((TIM2_InitDef->Init_Value) >> 8)&0xFF;
@@ -126,7 +126,7 @@ line level    source
  112   1        switch((uint8_t)(TIM2_ICTpye->IC_Channel))
  113   1        {
  114   2          case TIM2_IC_Channel_0:
-C51 COMPILER V9.56.0.0   CMS8S003X_TIM2                                                    05/31/2018 15:40:01 PAGE 3   
+C51 COMPILER V9.56.0.0   CMS8S003X_TIM2                                                    05/31/2018 18:29:01 PAGE 3   
 
  115   2              CAPCR0 &= 0xF0;
  116   2              CAPCR0 |= ((uint8_t)(TIM2_ICTpye->IC_Select));
@@ -190,7 +190,7 @@ line level    source
  167          
  168          void TIM2_ClearFlag(TIM2_FLAG_TypeDef TIM2_FLAG)
  169          {
-C51 COMPILER V9.56.0.0   CMS8S003X_TIM2                                                    05/31/2018 15:40:01 PAGE 4   
+C51 COMPILER V9.56.0.0   CMS8S003X_TIM2                                                    05/31/2018 18:29:01 PAGE 4   
 
  170   1      
  171   1      }
