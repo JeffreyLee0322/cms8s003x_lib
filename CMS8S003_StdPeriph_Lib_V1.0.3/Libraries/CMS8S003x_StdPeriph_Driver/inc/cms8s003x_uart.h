@@ -78,10 +78,10 @@ typedef enum
 
 typedef enum
 {
-	Mode_8Bit_Settled_Freq 	 = 	(uint8_t)0x00,//Fsys/12 /* Master control synchronize mode 0 */
-	Mode_8Bit_Unsettled_Freq = 	(uint8_t)0x40,//variable /* 8 bit asynchronize mode 1 */
-	Mode_9Bit_Settled_Freq 	 = 	(uint8_t)0x80,//Fsys/32 or /64 /* 9 bit asynchronize mode 2 */
-	Mode_9Bit_Unsettled_Freq = 	(uint8_t)0xC0//variable  /* 9 bit asynchronize mode 3 */
+	Mode_8Bit_Settled_Freq 	 = 	(uint8_t)0x00,	//Fsys/12 					/* Master control synchronize mode 0 */
+	Mode_8Bit_Unsettled_Freq = 	(uint8_t)0x40,	//variable 					/* 8 bit asynchronize mode 1 */
+	Mode_9Bit_Settled_Freq 	 = 	(uint8_t)0x80,	//Fsys/32 or /64 		/* 9 bit asynchronize mode 2 */
+	Mode_9Bit_Unsettled_Freq = 	(uint8_t)0xC0		//variable  				/* 9 bit asynchronize mode 3 */
 } UART_Mode_TypeDef;
 
 typedef enum
@@ -103,14 +103,16 @@ typedef enum
 	Timer_SysClk_Select = (uint8_t)0x01, /* Uart clock source is systerm clock */
 } UART_CLK_Source_TypeDef;
 
+#if 0
 typedef enum
 {
-	Baudrate_9600 		= (uint16_t)9600, /* Baudrate is 9600 */
-	Baudrate_14400 		= (uint16_t)14400, /* Baudrate is 14400 */
-	Baudrate_38400 		= (uint16_t)38400, /* Baudrate is 38400 */
-	Baudrate_57600 		= (uint16_t)57600, /* Baudrate is 57600 */
-	Baudrate_115200 	= (uint16_t)115200, /* Baudrate is 115200 */
+	Baudrate_9600 		= (uint32_t)9600, /* Baudrate is 9600 */
+	Baudrate_14400 		= (uint32_t)14400, /* Baudrate is 14400 */
+	Baudrate_38400 		= (uint32_t)38400, /* Baudrate is 38400 */
+	Baudrate_57600 		= (uint32_t)57600, /* Baudrate is 57600 */
+	//Baudrate_115200 	= (uint32_t)115200, /* Baudrate is 115200 */
 } UART_Baudrate_TypeDef;
+#endif
 
 typedef enum
 {
@@ -124,6 +126,7 @@ typedef enum
 	Receive_IT_Status   =   (uint8_t)0x01,
 } UART_IT_Status_TypeDef;
 
+
 typedef struct UART_INIT
 {
 	UART_Mode_TypeDef 						Mode;
@@ -133,7 +136,7 @@ typedef struct UART_INIT
 	UART_Data_9Bit_TypeDef 				ReceiveData9Bit;
 	UART_Baudrate_Double_TypeDef 	UartBaudrateDouble;
 	UART_CLK_Source_TypeDef 			UartClkSource;
-	UART_Baudrate_TypeDef         UartBaurdrate;
+	uint32_t         							UartBaurdrate;
 } UART_Init_TypeDef;
 
 /**

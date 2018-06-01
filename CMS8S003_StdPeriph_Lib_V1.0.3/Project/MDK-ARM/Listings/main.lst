@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MAIN                                                              05/31/2018 18:29:01 PAGE 1   
+C51 COMPILER V9.56.0.0   MAIN                                                              06/01/2018 18:01:59 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
                 SPI_InitStructure.SPI_CPHA      = SPI_CPHA_1Edge;               //SPI时钟极性选择0 
                 SPI_InitStructure.SPI_Frequency = SPI_BaudRatePrescaler_32;     //SPI的时钟选择
               
-C51 COMPILER V9.56.0.0   MAIN                                                              05/31/2018 18:29:01 PAGE 2   
+C51 COMPILER V9.56.0.0   MAIN                                                              06/01/2018 18:01:59 PAGE 2   
 
                 SPI_Init(&SPI_InitStructure);
                 //SPI_NSSInternalSoftwareCmd(SPI_SSCR_SSO0, _ENABLE);
@@ -126,7 +126,7 @@ line level    source
                 //CLK_SYSCLKDivConfig(8);//sys clk is 8/4=2MHz
               }
               
-C51 COMPILER V9.56.0.0   MAIN                                                              05/31/2018 18:29:01 PAGE 3   
+C51 COMPILER V9.56.0.0   MAIN                                                              06/01/2018 18:01:59 PAGE 3   
 
               void test_timer01_init(void)
               {
@@ -145,8 +145,8 @@ line level    source
                 //TIM1_InitStructure.Timer_InitValue    = 8192 - (uint16_t)(1000000.0 / 9600 / 0.25);
                 TIM1_InitStructure.Timer_Mode         = TIM01_Mode2_8Bit_AutoLoad_Timer_Counter;
                 TIM1_InitStructure.Timer_Clock        = TIM01_SYSCLK_Prescaler_12;//timer frequency is 16/12 MHz --> T=0.75u
-             -s
-                TIM1_InitStructure.Timer_InitValue    = 256 - (uint8_t)(1000000.0 / 9600 / 0.75);
+             -s//T=12/24=0.5us
+                TIM1_InitStructure.Timer_InitValue    = 100;//256 - (uint8_t)(1000000.0 / 9600 / 0.75);
                 
                 TIM1_Init(&TIM1_InitStructure);
                 
@@ -190,7 +190,7 @@ line level    source
                 GPIO_InitStructure.Slope      = GPIO_Slope_Slow;
                 GPIO_Init(GPIO_PORT_2, &GPIO_InitStructure);
                 
-C51 COMPILER V9.56.0.0   MAIN                                                              05/31/2018 18:29:01 PAGE 4   
+C51 COMPILER V9.56.0.0   MAIN                                                              06/01/2018 18:01:59 PAGE 4   
 
                 //Output Compare Register setup
                 /*TIM2_OC_InitStructure.OC_Channel      = TIM2_OC_Channel_1;
@@ -241,9 +241,10 @@ line level    source
  222   1        UART_InitStructure.IsReceive          = _DISABLE;
  223   1        UART_InitStructure.SendData9Bit       = Data_9Bit_Is1;
  224   1        UART_InitStructure.ReceiveData9Bit    = Data_9Bit_Is1;
- 225   1        UART_InitStructure.UartBaudrateDouble = Baudrate_Double;
- 226   1        UART_InitStructure.UartClkSource      = Timer1_Select;//Timer_SysClk_Select;
- 227   1        UART_InitStructure.UartBaurdrate      = Baudrate_9600;
+ 225   1        UART_InitStructure.UartBaudrateDouble = Baudrate_Double;//目前测试：这里必须是Double,结果和timer1计算值才
+             -相符合!!!
+ 226   1        UART_InitStructure.UartClkSource      = Timer4_Select;//Timer_SysClk_Select;
+ 227   1        UART_InitStructure.UartBaurdrate      = 9600;
  228   1        
  229   1        UART_Init(UART0, &UART_InitStructure);
  230   1        
@@ -253,9 +254,9 @@ line level    source
  234   1        //printf("<<----UART0 test---->>");
  235   1      }
  236          
- 237          #endif
-C51 COMPILER V9.56.0.0   MAIN                                                              05/31/2018 18:29:01 PAGE 5   
+C51 COMPILER V9.56.0.0   MAIN                                                              06/01/2018 18:01:59 PAGE 5   
 
+ 237          #endif
  238          
  239          void Delay_Time(int time)
  240          {
@@ -267,7 +268,8 @@ line level    source
  246          
  247          void main(void)
  248          {
- 249   1      #ifdef TEST_SPI
+ 249   1        int Uart_Test_Count = 0x00;
+ 250   1      #ifdef TEST_SPI
                 SPI_IO_Config();
                 SPIMaster_Config();
                 while(1)
@@ -276,35 +278,34 @@ line level    source
                   Delay_Time(100);
                 }
               #endif
- 258   1      
- 259   1      #ifdef TEST_GPIO
+ 259   1      
+ 260   1      #ifdef TEST_GPIO
                   test_gpio_init();
                   //GPIO_Write(GPIO_PORT_1, 0x20);
               #endif
- 263   1      
- 264   1      #ifdef TEST_TIMER01
+ 264   1      
+ 265   1      #ifdef TEST_TIMER01
                 test_sysClock_init();
                 test_gpio_init();
                 GPIO_Write(GPIO_PORT_1, 0);
                 test_timer01_init();
               #endif
- 270   1        
- 271   1      #ifdef TEST_TIMER2
+ 271   1        
+ 272   1      #ifdef TEST_TIMER2
                 test_gpio_init();
                 GPIO_Write(GPIO_PORT_1, 0);
                 test_timer2_init();
               #endif
- 276   1        
- 277   1      #ifdef TEST_UART
- 278   1        test_gpio_init();
- 279   1        test_uart_init();
- 280   1        while(1)
- 281   1        {
- 282   2          //Delay_Time(2000);
- 283   2          UART_SendData8(UART0, 0x12);
- 284   2          UART_SendData8(UART0, 0x13);
- 285   2          UART_SendData8(UART0, 0x14);
- 286   2          UART_SendData8(UART0, 0x15);
+ 277   1        
+ 278   1      #ifdef TEST_UART
+ 279   1        test_gpio_init();
+ 280   1        test_uart_init();
+ 281   1        while(1)
+ 282   1        {
+ 283   2          //Delay_Time(2000);
+ 284   2          UART_SendData8(UART0, 0xa5);
+ 285   2          //Uart_Test_Count++;
+ 286   2          //if(Uart_Test_Count > 100) Uart_Test_Count = 0;
  287   2        }
  288   1      #endif
  289   1      
@@ -317,14 +318,14 @@ line level    source
  296          
 
 
-MODULE INFORMATION:   STATIC OVERLAYABLE
-C51 COMPILER V9.56.0.0   MAIN                                                              05/31/2018 18:29:01 PAGE 6   
+C51 COMPILER V9.56.0.0   MAIN                                                              06/01/2018 18:01:59 PAGE 6   
 
-   CODE SIZE        =    183    ----
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    172    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----      27
+   DATA SIZE        =   ----      31
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
    EDATA SIZE       =   ----    ----

@@ -93,21 +93,60 @@ void UART_Init(UART_TypeDef UARTx, UART_Init_TypeDef* UART_InitDef)
 				/* Timer1 TMOD Clear and Set */
 				TMOD &= 0x0f;
 				TMOD |= 0x20; //GATE1 disable, Timer select, Mode2: 8bit auto reload
-				//CKCON |= 0x10; //Timer1 clock source: sys/4 (systerm clock is 8MHz/16MHz, if not CLKDIV)
-				/*if systerm clock is 16MHz, 16/4=4MHz --> T=0.25us
-				if baudrate is 9600bps->T=1/9600s=104.166us
-				if baudrate is 57600bps->T=1/57600s=17.361us
-				if baudrate is 115200bps->T=1/115200s=8.680us
-				*/
-				//TL1 = 256 - (uint16_t)(1000000.0/(UART_InitDef->UartBaurdrate) / 0.25);
-				//TH1 = 256 - (uint16_t)(1000000.0/(UART_InitDef->UartBaurdrate) / 0.25);
-				
-				CKCON &= ~0x10; //Timer1 clock source: sys/12 (systerm clock is 8MHz/16MHz, if not CLKDIV)
-				TL1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.75);
-				TH1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.75);
-				//TL1 = 256 - (uint8_t)(SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / (UART_InitDef->UartBaurdrate));
-				//TH1 = 256 - (uint8_t)(SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / (UART_InitDef->UartBaurdrate));
-				IE |= 0x88; //Enable Timer1 interrupt
+				CKCON |= 0x10; //Timer1 clock source: sys/4 (systerm clock is 8MHz/16MHz, if not CLKDIV)  
+				TL1 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				TH1 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				/**0. SystemClock=24MHz T=4/24=0.16us
+					*	a: UartBaurdrate=9600
+					*		TL1 = TH1 = 104/16/0.16 = 40.62
+					*	b:UartBaurdrate=14400
+					*		TL1 = TH1 = 69.4/16/0.16 = 27.10
+					*	c:UartBaurdrate=19200
+					*		TL1 = TH1 = 52.0/16/0.16 = 20.31
+					*	d:UartBaurdrate=38400
+					*		TL1 = TH1 = 26.0/16/0.16 = 10.15
+					*	e:UartBaurdrate=56000
+					*		TL1 = TH1 = 17.85/16/0.16 = 6.97
+					*	f:UartBaurdrate=57600 X
+					*		TL1 = TH1 = 17.36/16/0.16 = 6.78
+					*	g:UartBaurdrate=115200 X
+					*		TL1 = TH1 = 8.68/16/0.16 = 3.39
+				**/
+				//TL1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.16);
+				//TH1 = 256 - (uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.16);
+				//TL1 = 256 - 24000000 * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				//TH1 = 256 - 24000000 * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				/**1. SystemClock=16MHz T=4/16=0.25us
+					*	a: UartBaurdrate=9600 ¡Ì
+					*		TL1 = TH1 = 104/16/0.25 = 26
+					*	b:UartBaurdrate=14400 ¡Ì
+					*		TL1 = TH1 = 69.4/16/0.25 = 17.3
+					*	c:UartBaurdrate=19200 ¡Ì
+					*		TL1 = TH1 = 52.0/16/0.25 = 13.0
+					*	d:UartBaurdrate=38400 X
+					*		TL1 = TH1 = 26.0/16/0.25 = 6.5
+					*	e:UartBaurdrate=115200 X
+					*		TL1 = TH1 = 8.68/16/0.25 = 2.1
+				**/
+				//TL1 = 256 - 6;//(uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.25);
+				//TH1 = 256 - 6;//(uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.25);
+				//TL1 = 256 - 16000000 * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				//TH1 = 256 - 16000000 * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				/**2. SystemClock=8MHz T=4/8=0.5us
+					*	a: UartBaurdrate=9600 ¡Ì
+					*		TL1 = TH1 = 104/16/0.5 = 13
+					*	b:UartBaurdrate=14400 X
+					*		TL1 = TH1 = 69.4/16/0.5 = 8.6
+					*	c:UartBaurdrate=38400 X
+					*		TL1 = TH1 = 26.0/16/0.5 = 3.2
+					*	d:UartBaurdrate=115200 X
+					*		TL1 = TH1 = 8.68/16/0.5 = 1.1
+				**/
+				//TL1 = 256 - 13;//(uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.5);
+				//TH1 = 256 - 13;//(uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.5);
+				//TL1 = 256 - 8000000 * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				//TH1 = 256 - 8000000 * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				//IE |= 0x88; //Enable Timer1 interrupt
 				TCON |= 0x40; //Timer1 start
 			}
 			else if(Timer4_Select == UART_InitDef->UartClkSource)
@@ -118,13 +157,8 @@ void UART_Init(UART_TypeDef UARTx, UART_Init_TypeDef* UART_InitDef)
 				/* Timer4 T34MOD Clear and Set */
 				T34MOD &= 0x0f;
 				T34MOD |= 0x60; //Timer4 clock select:sys/4, Mode2: 8bit auto reload
-				/*if systerm clock is 16MHz, 16/4=4MHz --> T=0.25us
-				if baudrate is 9600bps->T=1/9600s=104.166us
-				if baudrate is 57600bps->T=1/57600s=17.361us
-				if baudrate is 115200bps->T=1/115200s=8.680us
-				*/
-				TL4 = 256 - (uint8_t)(1000000.0/(UART_InitDef->UartBaurdrate) * 0.25);
-				TH4 = 256 - (uint8_t)(1000000.0/(UART_InitDef->UartBaurdrate) * 0.25);
+				TL4 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				TH4 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
 				T34MOD |= 0x80; //Timer4 start
 			}
 		}
@@ -143,12 +177,30 @@ void UART_Init(UART_TypeDef UARTx, UART_Init_TypeDef* UART_InitDef)
 			{
 				FUNCCR &= 0xfd; 
 				//setup timer1
-				
+				/* Set Timer1 as uart0`s clock source */
+				FUNCCR &= 0xfe; 
+				//setup timer1
+				/* Timer1 TMOD Clear and Set */
+				TMOD &= 0x0f;
+				TMOD |= 0x20; //GATE1 disable, Timer select, Mode2: 8bit auto reload
+				CKCON |= 0x10; //Timer1 clock source: sys/4 (systerm clock is 8MHz/16MHz, if not CLKDIV)  
+				TL1 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				TH1 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				TCON |= 0x40; //Timer1 start
 			}
 			else if(Timer4_Select == UART_InitDef->UartClkSource)
 			{
 				FUNCCR |= 0x02;
 				//setup timer4
+				/* Set Timer4 as uart0`s clock source */
+				FUNCCR |= 0x01;
+				//setup timer4
+				/* Timer4 T34MOD Clear and Set */
+				T34MOD &= 0x0f;
+				T34MOD |= 0x60; //Timer4 clock select:sys/4, Mode2: 8bit auto reload
+				TL4 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				TH4 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
+				T34MOD |= 0x80; //Timer4 start
 			}
 		}
   }

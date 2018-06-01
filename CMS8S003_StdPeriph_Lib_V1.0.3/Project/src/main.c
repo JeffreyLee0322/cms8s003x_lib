@@ -129,8 +129,8 @@ void test_timer01_init(void)
 	//TIM1_InitStructure.Timer_Clock 				= TIM01_SYSCLK_Prescaler_4;//timer frequency is 16/4 MHz = 4MHz --> T=0.25us
 	//TIM1_InitStructure.Timer_InitValue 		= 8192 - (uint16_t)(1000000.0 / 9600 / 0.25);
 	TIM1_InitStructure.Timer_Mode 				= TIM01_Mode2_8Bit_AutoLoad_Timer_Counter;
-	TIM1_InitStructure.Timer_Clock 				= TIM01_SYSCLK_Prescaler_12;//timer frequency is 16/12 MHz --> T=0.75us
-	TIM1_InitStructure.Timer_InitValue 		= 256 - (uint8_t)(1000000.0 / 9600 / 0.75);
+	TIM1_InitStructure.Timer_Clock 				= TIM01_SYSCLK_Prescaler_12;//timer frequency is 16/12 MHz --> T=0.75us//T=12/24=0.5us
+	TIM1_InitStructure.Timer_InitValue 		= 100;//256 - (uint8_t)(1000000.0 / 9600 / 0.75);
 	
 	TIM1_Init(&TIM1_InitStructure);
 	
@@ -222,9 +222,9 @@ void test_uart_init()
 	UART_InitStructure.IsReceive 					= _DISABLE;
 	UART_InitStructure.SendData9Bit 			= Data_9Bit_Is1;
 	UART_InitStructure.ReceiveData9Bit 		= Data_9Bit_Is1;
-	UART_InitStructure.UartBaudrateDouble = Baudrate_Double;
-	UART_InitStructure.UartClkSource 			= Timer1_Select;//Timer_SysClk_Select;
-	UART_InitStructure.UartBaurdrate 			= Baudrate_9600;
+	UART_InitStructure.UartBaudrateDouble = Baudrate_Double;//目前测试：这里必须是Double,结果和timer1计算值才相符合!!!
+	UART_InitStructure.UartClkSource 			= Timer4_Select;//Timer_SysClk_Select;
+	UART_InitStructure.UartBaurdrate 			= 9600;
 	
 	UART_Init(UART0, &UART_InitStructure);
 	
@@ -246,6 +246,7 @@ void Delay_Time(int time)
 
 void main(void)
 {
+	int Uart_Test_Count = 0x00;
 #ifdef TEST_SPI
 	SPI_IO_Config();
 	SPIMaster_Config();
@@ -280,10 +281,9 @@ void main(void)
 	while(1)
 	{
 		//Delay_Time(2000);
-		UART_SendData8(UART0, 0x12);
-		UART_SendData8(UART0, 0x13);
-		UART_SendData8(UART0, 0x14);
-		UART_SendData8(UART0, 0x15);
+		UART_SendData8(UART0, 0xa5);
+		//Uart_Test_Count++;
+		//if(Uart_Test_Count > 100) Uart_Test_Count = 0;
 	}
 #endif
 
