@@ -1,11 +1,11 @@
-C51 COMPILER V9.56.0.0   CMS8S003X_UART                                                    06/01/2018 18:01:59 PAGE 1   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 1   
 
 
-C51 COMPILER V9.56.0.0, COMPILATION OF MODULE CMS8S003X_UART
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE CMS8S003X_UART
 OBJECT MODULE PLACED IN .\Objects\cms8s003x_uart.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c OMF2 OPT
-                    -IMIZE(8,SPEED) BROWSE INCDIR(..\..\Libraries\CMS8S003x_StdPeriph_Driver\inc) DEBUG PRINT(.\Listings\cms8s003x_uart.lst) 
-                    -TABS(2) OBJECT(.\Objects\cms8s003x_uart.obj)
+COMPILER INVOKED BY: D:\Install software\keil5\C51\BIN\C51.EXE ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_
+                    -uart.c OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Libraries\CMS8S003x_StdPeriph_Driver\inc) DEBUG PRINT(.\Listings\cms8s
+                    -003x_uart.lst) TABS(2) OBJECT(.\Objects\cms8s003x_uart.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   51          void USART_DeInit(UART_TypeDef UARTx)
   52          {
   53   1      
-C51 COMPILER V9.56.0.0   CMS8S003X_UART                                                    06/01/2018 18:01:59 PAGE 2   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 2   
 
   54   1      }
 *** WARNING C280 IN LINE 51 OF ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c: 'UARTx': unreferenced lo
@@ -126,7 +126,7 @@ line level    source
  107   4                *   TL1 = TH1 = 26.0/16/0.16 = 10.15
  108   4                * e:UartBaurdrate=56000
  109   4                *   TL1 = TH1 = 17.85/16/0.16 = 6.97
-C51 COMPILER V9.56.0.0   CMS8S003X_UART                                                    06/01/2018 18:01:59 PAGE 3   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 3   
 
  110   4                * f:UartBaurdrate=57600 X
  111   4                *   TL1 = TH1 = 17.36/16/0.16 = 6.78
@@ -171,7 +171,7 @@ line level    source
  146   4              //TH1 = 256 - 13;//(uint8_t)(1000000.0 / (UART_InitDef->UartBaurdrate) / 16 / 0.5);
  147   4              //TL1 = 256 - 8000000 * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
  148   4              //TH1 = 256 - 8000000 * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrate;
- 149   4              IE |= 0x88; //Enable Timer1 interrupt
+ 149   4              //IE |= 0x88; //Enable Timer1 interrupt
  150   4              TCON |= 0x40; //Timer1 start
  151   4            }
  152   3            else if(Timer4_Select == UART_InitDef->UartClkSource)
@@ -190,7 +190,7 @@ line level    source
  163   4            }
  164   3          }
  165   2        }
-C51 COMPILER V9.56.0.0   CMS8S003X_UART                                                    06/01/2018 18:01:59 PAGE 4   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 4   
 
  166   1        else if(UARTx == UART1)
  167   1        {
@@ -208,193 +208,215 @@ line level    source
  177   3            {
  178   4              FUNCCR &= 0xfd; 
  179   4              //setup timer1
- 180   4              
- 181   4            }
- 182   3            else if(Timer4_Select == UART_InitDef->UartClkSource)
- 183   3            {
- 184   4              FUNCCR |= 0x02;
- 185   4              //setup timer4
- 186   4            }
- 187   3          }
- 188   2        }
- 189   1      
- 190   1      }
- 191          
- 192          /**
- 193            * @brief  Initializes the USART Clock according to the specified parameters.
- 194            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
- 195            * @param  USART_Clock : This parameter can be any of the @ref USART_Clock_TypeDef
- 196            *         enumeration.
- 197            * @param  USART_CPOL : This parameter can be any of the @ref USART_CPOL_TypeDef
- 198            *         enumeration.
- 199            * @param  USART_CPHA : This parameter can be any of the @ref USART_CPHA_TypeDef
- 200            *         enumeration.
- 201            * @param  USART_LastBit : This parameter can be any of the @ref USART_LastBit_TypeDef
- 202            *         enumeration.
- 203            * @retval None
- 204            */
- 205          
- 206          void USART_ClockInit()
- 207          {
- 208   1      
- 209   1      }
- 210          
- 211          /**
- 212            * @brief  Enable the USART peripheral.
- 213            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
- 214            * @param  NewState : The new state of the USART Communication.
- 215            *         This parameter can be any of the @ref FunctionalState enumeration.
- 216            * @retval None
- 217            */
- 218          void UART_Cmd(UART_TypeDef UARTx, FunctionalState NewState)
- 219          {
- 220   1      
- 221   1      }
-*** WARNING C280 IN LINE 218 OF ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c: 'UARTx': unreferenced l
-             -ocal variable
-*** WARNING C280 IN LINE 218 OF ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c: 'NewState': unreference
-             -d local variable
-C51 COMPILER V9.56.0.0   CMS8S003X_UART                                                    06/01/2018 18:01:59 PAGE 5   
+ 180   4              /* Set Timer1 as uart0`s clock source */
+ 181   4              FUNCCR &= 0xfe; 
+ 182   4              //setup timer1
+ 183   4              /* Timer1 TMOD Clear and Set */
+ 184   4              TMOD &= 0x0f;
+ 185   4              TMOD |= 0x20; //GATE1 disable, Timer select, Mode2: 8bit auto reload
+ 186   4              CKCON |= 0x10; //Timer1 clock source: sys/4 (systerm clock is 8MHz/16MHz, if not CLKDIV)  
+ 187   4              TL1 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrat
+             -e;
+ 188   4              TH1 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrat
+             -e;
+ 189   4              TCON |= 0x40; //Timer1 start
+ 190   4            }
+ 191   3            else if(Timer4_Select == UART_InitDef->UartClkSource)
+ 192   3            {
+ 193   4              FUNCCR |= 0x02;
+ 194   4              //setup timer4
+ 195   4              /* Set Timer4 as uart0`s clock source */
+ 196   4              FUNCCR |= 0x01;
+ 197   4              //setup timer4
+ 198   4              /* Timer4 T34MOD Clear and Set */
+ 199   4              T34MOD &= 0x0f;
+ 200   4              T34MOD |= 0x60; //Timer4 clock select:sys/4, Mode2: 8bit auto reload
+ 201   4              TL4 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrat
+             -e;
+ 202   4              TH4 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrat
+             -e;
+ 203   4              T34MOD |= 0x80; //Timer4 start
+ 204   4            }
+ 205   3          }
+ 206   2        }
+ 207   1      
+ 208   1      }
+ 209          
+ 210          /**
+ 211            * @brief  Initializes the USART Clock according to the specified parameters.
+ 212            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
+ 213            * @param  USART_Clock : This parameter can be any of the @ref USART_Clock_TypeDef
+ 214            *         enumeration.
+ 215            * @param  USART_CPOL : This parameter can be any of the @ref USART_CPOL_TypeDef
+ 216            *         enumeration.
+ 217            * @param  USART_CPHA : This parameter can be any of the @ref USART_CPHA_TypeDef
+ 218            *         enumeration.
+ 219            * @param  USART_LastBit : This parameter can be any of the @ref USART_LastBit_TypeDef
+ 220            *         enumeration.
+ 221            * @retval None
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 5   
 
- 222          
+ 222            */
  223          
- 224          /**
- 225            * @brief  Enables or disables the specified USART interrupts.
- 226            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
- 227            * @param  USART_IT specifies the USART interrupt sources to be enabled or disabled.
- 228            *         This parameter can be one of the following values:
- 229            *         - USART_IT_TXE:  Tansmit Data Register empty interrupt
- 230            *         - USART_IT_TC:   Transmission complete interrupt
- 231            *         - USART_IT_RXNE: Receive Data register not empty interrupt
- 232            *         - USART_IT_OR: Overrun error interrupt
- 233            *         - USART_IT_IDLE: Idle line detection interrupt
- 234            *         - USART_IT_ERR:  Error interrupt
- 235            * @param  NewState new state of the specified USART interrupts.
- 236            *         This parameter can be: ENABLE or DISABLE.
- 237            * @retval None
- 238            */
- 239          
- 240          void UART_ITConfig(UART_TypeDef UARTx, UART_Priority_TypeDef UART_Priority, FunctionalState NewState)
- 241          {
- 242   1        if(UART0 == UARTx)
- 243   1        {
- 244   2          if (NewState != _DISABLE)
- 245   2          {
- 246   3            /*Clear and Set uart0 IT priority */
- 247   3            IP &= ~0x10;
- 248   3            IP |= (UART_Priority << 4);
- 249   3            
- 250   3            IE |= UART0_INTERRUPT_ENABLE_BIT; /* Enable the UART0 IT */
- 251   3          }
- 252   2          else
- 253   2          {
- 254   3            IE &= (uint8_t)(~UART0_INTERRUPT_ENABLE_BIT); /* Disable the UART0 IT */
- 255   3          }
- 256   2        }
- 257   1        else if(UART1 == UARTx)
- 258   1        {
- 259   2          if (NewState != _DISABLE)
- 260   2          {
- 261   3            /*Clear and Set uart1 IT priority */
- 262   3            IP &= ~0x40;
- 263   3            IP |= (UART_Priority << 6);
- 264   3            
- 265   3            IE |= UART1_INTERRUPT_ENABLE_BIT; /* Enable the UART1 IT */
- 266   3          }
- 267   2          else
- 268   2          {
- 269   3            IE &= (uint8_t)(~UART1_INTERRUPT_ENABLE_BIT); /* Disable the UART1 IT */
- 270   3          }
- 271   2        }
- 272   1      }
- 273          
- 274          /**
- 275            * @brief  Returns the most recent received data by the USART peripheral.
- 276            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
- 277            * @retval The received data.
- 278            */
- 279          uint8_t UART_ReceiveData8(UART_TypeDef UARTx)
- 280          {
- 281   1        /*uint8_t returnData = 0;
- 282   1        if(UART0 == UARTx)
- 283   1        {
-C51 COMPILER V9.56.0.0   CMS8S003X_UART                                                    06/01/2018 18:01:59 PAGE 6   
+ 224          void USART_ClockInit()
+ 225          {
+ 226   1      
+ 227   1      }
+ 228          
+ 229          /**
+ 230            * @brief  Enable the USART peripheral.
+ 231            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
+ 232            * @param  NewState : The new state of the USART Communication.
+ 233            *         This parameter can be any of the @ref FunctionalState enumeration.
+ 234            * @retval None
+ 235            */
+ 236          void UART_Cmd(UART_TypeDef UARTx, FunctionalState NewState)
+ 237          {
+ 238   1      
+ 239   1      }
+*** WARNING C280 IN LINE 236 OF ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c: 'UARTx': unreferenced l
+             -ocal variable
+*** WARNING C280 IN LINE 236 OF ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c: 'NewState': unreference
+             -d local variable
+ 240          
+ 241          
+ 242          /**
+ 243            * @brief  Enables or disables the specified USART interrupts.
+ 244            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
+ 245            * @param  USART_IT specifies the USART interrupt sources to be enabled or disabled.
+ 246            *         This parameter can be one of the following values:
+ 247            *         - USART_IT_TXE:  Tansmit Data Register empty interrupt
+ 248            *         - USART_IT_TC:   Transmission complete interrupt
+ 249            *         - USART_IT_RXNE: Receive Data register not empty interrupt
+ 250            *         - USART_IT_OR: Overrun error interrupt
+ 251            *         - USART_IT_IDLE: Idle line detection interrupt
+ 252            *         - USART_IT_ERR:  Error interrupt
+ 253            * @param  NewState new state of the specified USART interrupts.
+ 254            *         This parameter can be: ENABLE or DISABLE.
+ 255            * @retval None
+ 256            */
+ 257          
+ 258          void UART_ITConfig(UART_TypeDef UARTx, UART_Priority_TypeDef UART_Priority, FunctionalState NewState)
+ 259          {
+ 260   1        if(UART0 == UARTx)
+ 261   1        {
+ 262   2          if (NewState != _DISABLE)
+ 263   2          {
+ 264   3            /*Clear and Set uart0 IT priority */
+ 265   3            IP &= ~0x10;
+ 266   3            IP |= (UART_Priority << 4);
+ 267   3            
+ 268   3            IE |= UART0_INTERRUPT_ENABLE_BIT; /* Enable the UART0 IT */
+ 269   3          }
+ 270   2          else
+ 271   2          {
+ 272   3            IE &= (uint8_t)(~UART0_INTERRUPT_ENABLE_BIT); /* Disable the UART0 IT */
+ 273   3          }
+ 274   2        }
+ 275   1        else if(UART1 == UARTx)
+ 276   1        {
+ 277   2          if (NewState != _DISABLE)
+ 278   2          {
+ 279   3            /*Clear and Set uart1 IT priority */
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 6   
 
- 284   1            returnData = SBUF0;
- 285   1        }
- 286   1        else if(UART1 == UARTx)
- 287   1        {
- 288   1            returnData = SBUF1;
- 289   1        }
- 290   1        
- 291   1        return returnData;*/
- 292   1        return ((UARTx == UART0)?(uint8_t)SBUF0:(uint8_t)SBUF1);
- 293   1      }
- 294          
- 295          
- 296          /**
- 297            * @brief  Returns the most recent received data by the USART peripheral.
- 298            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
- 299            * @retval The received data.
- 300            */
- 301          uint16_t UART_ReceiveData9(UART_TypeDef UARTx)
- 302          {
- 303   1        /*if(UART0 == UARTx)
- 304   1        {
- 305   1        
- 306   1        }
- 307   1        else if(UART1 == UARTx)
- 308   1        {
- 309   1        
- 310   1        }*/
- 311   1        return ((UARTx == UART0)?(uint8_t)SBUF0:(uint8_t)SBUF1);
- 312   1      }
+ 280   3            IP &= ~0x40;
+ 281   3            IP |= (UART_Priority << 6);
+ 282   3            
+ 283   3            IE |= UART1_INTERRUPT_ENABLE_BIT; /* Enable the UART1 IT */
+ 284   3          }
+ 285   2          else
+ 286   2          {
+ 287   3            IE &= (uint8_t)(~UART1_INTERRUPT_ENABLE_BIT); /* Disable the UART1 IT */
+ 288   3          }
+ 289   2        }
+ 290   1      }
+ 291          
+ 292          /**
+ 293            * @brief  Returns the most recent received data by the USART peripheral.
+ 294            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
+ 295            * @retval The received data.
+ 296            */
+ 297          uint8_t UART_ReceiveData8(UART_TypeDef UARTx)
+ 298          {
+ 299   1        /*uint8_t returnData = 0;
+ 300   1        if(UART0 == UARTx)
+ 301   1        {
+ 302   1            returnData = SBUF0;
+ 303   1        }
+ 304   1        else if(UART1 == UARTx)
+ 305   1        {
+ 306   1            returnData = SBUF1;
+ 307   1        }
+ 308   1        
+ 309   1        return returnData;*/
+ 310   1        return ((UARTx == UART0)?(uint8_t)SBUF0:(uint8_t)SBUF1);
+ 311   1      }
+ 312          
  313          
  314          /**
- 315            * @brief  Transmits 8 bit data through the USART peripheral.
- 316            * @param  Data: The data to transmit.
- 317            * @retval None
+ 315            * @brief  Returns the most recent received data by the USART peripheral.
+ 316            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
+ 317            * @retval The received data.
  318            */
- 319          void UART_SendData8(UART_TypeDef UARTx, uint8_t Data)
+ 319          uint16_t UART_ReceiveData9(UART_TypeDef UARTx)
  320          {
- 321   1        if(UART0 == UARTx)
+ 321   1        /*if(UART0 == UARTx)
  322   1        {
- 323   2            while(1 == ((SCON0 & 0x02)>>1));
- 324   2            SBUF0 = Data;
- 325   2            while(0 == ((SCON0 & 0x02)>>1));
- 326   2            SCON0 &= (~0x02);
- 327   2        }
- 328   1        else if(UART1 == UARTx)
- 329   1        {
- 330   2            while(1 == ((SCON1 & 0x02)>>1));
- 331   2            SBUF1 = Data;
- 332   2            while(0 == ((SCON1 & 0x02)>>1));
- 333   2            SCON1 &= (~0x02);
- 334   2        }
- 335   1      }
- 336          
- 337          /**
- 338            * @brief  Transmits 9 bit data through the USART peripheral.
- 339            * @param  USARTx: Select the USARTx peripheral.
- 340            * @param  Data : The data to transmit.
- 341            *         This parameter should be lower than 0x1FF.
- 342            * @retval None
- 343            */
- 344          void UART_SendData9(UART_TypeDef UARTx, uint16_t Data)
- 345          {
-C51 COMPILER V9.56.0.0   CMS8S003X_UART                                                    06/01/2018 18:01:59 PAGE 7   
+ 323   1        
+ 324   1        }
+ 325   1        else if(UART1 == UARTx)
+ 326   1        {
+ 327   1        
+ 328   1        }*/
+ 329   1        return ((UARTx == UART0)?(uint8_t)SBUF0:(uint8_t)SBUF1);
+ 330   1      }
+ 331          
+ 332          /**
+ 333            * @brief  Transmits 8 bit data through the USART peripheral.
+ 334            * @param  Data: The data to transmit.
+ 335            * @retval None
+ 336            */
+ 337          void UART_SendData8(UART_TypeDef UARTx, uint8_t Data)
+ 338          {
+ 339   1        if(UART0 == UARTx)
+ 340   1        {
+ 341   2            while(1 == ((SCON0 & 0x02)>>1));
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 7   
 
- 346   1        if(UART0 == UARTx)
+ 342   2            SBUF0 = Data;
+ 343   2            while(0 == ((SCON0 & 0x02)>>1));
+ 344   2            SCON0 &= (~0x02);
+ 345   2        }
+ 346   1        else if(UART1 == UARTx)
  347   1        {
- 348   2            SBUF0 = Data;
- 349   2        }
- 350   1        else if(UART1 == UARTx)
- 351   1        {
- 352   2            SBUF1 = Data;
- 353   2        }
- 354   1      }
- 355          
- 356          #if 0
+ 348   2            while(1 == ((SCON1 & 0x02)>>1));
+ 349   2            SBUF1 = Data;
+ 350   2            while(0 == ((SCON1 & 0x02)>>1));
+ 351   2            SCON1 &= (~0x02);
+ 352   2        }
+ 353   1      }
+ 354          
+ 355          /**
+ 356            * @brief  Transmits 9 bit data through the USART peripheral.
+ 357            * @param  USARTx: Select the USARTx peripheral.
+ 358            * @param  Data : The data to transmit.
+ 359            *         This parameter should be lower than 0x1FF.
+ 360            * @retval None
+ 361            */
+ 362          void UART_SendData9(UART_TypeDef UARTx, uint16_t Data)
+ 363          {
+ 364   1        if(UART0 == UARTx)
+ 365   1        {
+ 366   2            SBUF0 = Data;
+ 367   2        }
+ 368   1        else if(UART1 == UARTx)
+ 369   1        {
+ 370   2            SBUF1 = Data;
+ 371   2        }
+ 372   1      }
+ 373          
+ 374          #if 0
               /**
                 * @brief  Transmits break characters.
                 * @param  USARTx : where x can be 1 to select the specified USART peripheral.
@@ -424,6 +446,8 @@ line level    source
                 *         - 0 0000 Reserved
                 *         - 0 0001 divides the clock source by 2
                 *         - 0 0010 divides the clock source by 4
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 8   
+
                 *         - 0 0011 divides the clock source by 6
                 *         - ...........................................................
                 * @retval None
@@ -446,8 +470,6 @@ line level    source
               }
               
               /**
-C51 COMPILER V9.56.0.0   CMS8S003X_UART                                                    06/01/2018 18:01:59 PAGE 8   
-
                 * @brief  Checks whether the specified USART flag is set or not.
                 * @param  USARTx: Select the USARTx peripheral.
                 * @param  USART_FLAG specifies the flag to check.
@@ -488,6 +510,8 @@ line level    source
                 *       (USART_SendData8() or USART_SendData9()).
                 *
                 *     - SBK flag is cleared during the stop bit of break.
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 9   
+
                 *
                 * @retval None
                 */
@@ -496,99 +520,97 @@ line level    source
                 
               }
               #endif
- 456          
- 457          /**
- 458            * @brief  Checks whether the specified USART interrupt has occurred or not.
- 459            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
- 460            * @param  USART_IT: Specifies the USART interrupt pending bit to check.
- 461            *         This parameter can be one of the following values:
- 462            *         - USART_IT_TXE: Transmit Data Register empty interrupt
- 463            *         - USART_IT_TC: Transmission complete interrupt
- 464            *         - USART_IT_RXNE: Receive Data register not empty interrupt
- 465            *         - USART_IT_IDLE: Idle line detection interrupt
- 466            *         - USART_IT_OR: OverRun Error interrupt
- 467            *         - USART_IT_PE: Parity Error interrupt
- 468            *         - USART_IT_FE: Frame Error interrupt
- 469            *         - USART_IT_NF: Noise Flag Error interrupt
-C51 COMPILER V9.56.0.0   CMS8S003X_UART                                                    06/01/2018 18:01:59 PAGE 9   
-
- 470            * @retval ITStatus The new state of USART_IT (SET or RESET).
- 471            */
- 472          ITStatus UART_GetITStatus(UART_TypeDef UARTx, UART_IT_Status_TypeDef UART_IT)
- 473          {
- 474   1        ITStatus bitstatus = _RESET;
- 475   1        uint8_t UART_itStatus = 0x0;
- 476   1        
- 477   1        if(UART0 == UARTx)
- 478   1        {
- 479   2          UART_itStatus = SCON0 & UART_IT;
- 480   2        }
- 481   1        else if(UART1 == UARTx)
- 482   1        {
- 483   2          UART_itStatus = SCON1 & UART_IT;
- 484   2        }
- 485   1        
- 486   1        if (UART_itStatus != (uint8_t)_RESET )
- 487   1        {
- 488   2          bitstatus = _SET;
- 489   2        }
- 490   1        else
- 491   1        {
- 492   2          bitstatus = _RESET;
- 493   2        }
- 494   1      
- 495   1        /* Return the USART_IT status*/
- 496   1        return  bitstatus;
- 497   1      }
- 498          
- 499          /**
- 500            * @brief  Clears the USARTx’s interrupt pending bits.
- 501            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
- 502            * @param  USART_IT: specifies the interrupt pending bit to clear.
- 503            *         This parameter can be one of the following values:
- 504            *         USART_IT_RXNE: Receive Data register not empty interrupt.
- 505            *         USART_IT_TC:   Transmission complete interrupt.
- 506            *
- 507            * @note
- 508            *         - PE (Parity error), FE (Framing error), NE (Noise error),
- 509            *         OR (OverRun error) and IDLE (Idle line detected) pending bits are
- 510            *         cleared by software sequence: a read operation to USART_SR register
- 511            *         (USART_GetITStatus()) followed by a read operation to USART_DR
- 512            *         register (USART_ReceiveData8() or USART_ReceiveData9()).
- 513            *
- 514            *         - RXNE pending bit can be also cleared by a read to the USART_DR register
- 515            *         (USART_ReceiveData8() or USART_ReceiveData9()).
- 516            *
- 517            *         - TC (Transmit complet) pending bit can be also cleared by software
- 518            *         sequence: a read operation to USART_SR register (USART_GetITStatus())
- 519            *         followed by a write operation to USART_DR register (USART_SendData8()
- 520            *         or USART_SendData9()).
- 521            *
- 522            *         - TXE pending bit is cleared only by a write to the USART_DR register
- 523            *         (USART_SendData8() or USART_SendData9()).
+ 474          
+ 475          /**
+ 476            * @brief  Checks whether the specified USART interrupt has occurred or not.
+ 477            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
+ 478            * @param  USART_IT: Specifies the USART interrupt pending bit to check.
+ 479            *         This parameter can be one of the following values:
+ 480            *         - USART_IT_TXE: Transmit Data Register empty interrupt
+ 481            *         - USART_IT_TC: Transmission complete interrupt
+ 482            *         - USART_IT_RXNE: Receive Data register not empty interrupt
+ 483            *         - USART_IT_IDLE: Idle line detection interrupt
+ 484            *         - USART_IT_OR: OverRun Error interrupt
+ 485            *         - USART_IT_PE: Parity Error interrupt
+ 486            *         - USART_IT_FE: Frame Error interrupt
+ 487            *         - USART_IT_NF: Noise Flag Error interrupt
+ 488            * @retval ITStatus The new state of USART_IT (SET or RESET).
+ 489            */
+ 490          ITStatus UART_GetITStatus(UART_TypeDef UARTx, UART_IT_Status_TypeDef UART_IT)
+ 491          {
+ 492   1        ITStatus bitstatus = _RESET;
+ 493   1        uint8_t UART_itStatus = 0x0;
+ 494   1        
+ 495   1        if(UART0 == UARTx)
+ 496   1        {
+ 497   2          UART_itStatus = SCON0 & UART_IT;
+ 498   2        }
+ 499   1        else if(UART1 == UARTx)
+ 500   1        {
+ 501   2          UART_itStatus = SCON1 & UART_IT;
+ 502   2        }
+ 503   1        
+ 504   1        if (UART_itStatus != (uint8_t)_RESET )
+ 505   1        {
+ 506   2          bitstatus = _SET;
+ 507   2        }
+ 508   1        else
+ 509   1        {
+ 510   2          bitstatus = _RESET;
+ 511   2        }
+ 512   1      
+ 513   1        /* Return the USART_IT status*/
+ 514   1        return  bitstatus;
+ 515   1      }
+ 516          
+ 517          /**
+ 518            * @brief  Clears the USARTx’s interrupt pending bits.
+ 519            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
+ 520            * @param  USART_IT: specifies the interrupt pending bit to clear.
+ 521            *         This parameter can be one of the following values:
+ 522            *         USART_IT_RXNE: Receive Data register not empty interrupt.
+ 523            *         USART_IT_TC:   Transmission complete interrupt.
  524            *
- 525            * @retval None
- 526            */
- 527          void UART_ClearITPendingBit(UART_TypeDef UARTx, UART_IT_Status_TypeDef UART_IT)
- 528          {
- 529   1        if(UART0 == UARTx)
- 530   1        {
- 531   2          SCON0 = (~UART_IT);
-C51 COMPILER V9.56.0.0   CMS8S003X_UART                                                    06/01/2018 18:01:59 PAGE 10  
+ 525            * @note
+ 526            *         - PE (Parity error), FE (Framing error), NE (Noise error),
+ 527            *         OR (OverRun error) and IDLE (Idle line detected) pending bits are
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 10  
 
- 532   2        }
- 533   1        else if(UART1 == UARTx)
- 534   1        {
- 535   2          SCON1 = (~UART_IT);
- 536   2        }
- 537   1      }
- 538          
- 539          /**
- 540            * @brief  Retargets the C library printf function to the USART.
- 541            * @param  None
- 542            * @retval None
- 543            */
- 544          #if 0
+ 528            *         cleared by software sequence: a read operation to USART_SR register
+ 529            *         (USART_GetITStatus()) followed by a read operation to USART_DR
+ 530            *         register (USART_ReceiveData8() or USART_ReceiveData9()).
+ 531            *
+ 532            *         - RXNE pending bit can be also cleared by a read to the USART_DR register
+ 533            *         (USART_ReceiveData8() or USART_ReceiveData9()).
+ 534            *
+ 535            *         - TC (Transmit complet) pending bit can be also cleared by software
+ 536            *         sequence: a read operation to USART_SR register (USART_GetITStatus())
+ 537            *         followed by a write operation to USART_DR register (USART_SendData8()
+ 538            *         or USART_SendData9()).
+ 539            *
+ 540            *         - TXE pending bit is cleared only by a write to the USART_DR register
+ 541            *         (USART_SendData8() or USART_SendData9()).
+ 542            *
+ 543            * @retval None
+ 544            */
+ 545          void UART_ClearITPendingBit(UART_TypeDef UARTx, UART_IT_Status_TypeDef UART_IT)
+ 546          {
+ 547   1        if(UART0 == UARTx)
+ 548   1        {
+ 549   2          SCON0 = (~UART_IT);
+ 550   2        }
+ 551   1        else if(UART1 == UARTx)
+ 552   1        {
+ 553   2          SCON1 = (~UART_IT);
+ 554   2        }
+ 555   1      }
+ 556          
+ 557          /**
+ 558            * @brief  Retargets the C library printf function to the USART.
+ 559            * @param  None
+ 560            * @retval None
+ 561            */
+ 562          #if 0
               //PUTCHAR_PROTOTYPE
               //int fputc(int ch, FILE *f)
               int fputc(int ch, const char *f)
@@ -604,20 +626,22 @@ line level    source
                 return ch;
               }
               #endif
- 560          
- 561          /**
- 562            * @}
- 563            */
- 564          
- 565          /**
- 566            * @}
- 567            */
- 568          
- 569          /******************* (C) COPYRIGHT 2018 CMSemion *****END OF FILE****/
+ 578          
+ 579          /**
+ 580            * @}
+ 581            */
+ 582          
+ 583          /**
+ 584            * @}
+ 585            */
+ 586          
+ 587          /******************* (C) COPYRIGHT 2018 CMSemion *****END OF FILE****/
 
+
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/03/2018 20:34:55 PAGE 11  
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    636    ----
+   CODE SIZE        =    670    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

@@ -27,20 +27,23 @@
 #include "cms8s003x_tim01.h"
 #include "cms8s003x_tim2.h"
 #include "cms8s003x_uart.h"
+#include "cms8s003x_beep.h"
+#include "cms8s003x_adc.h"
 
 //#define TEST_SPI
 //#define TEST_GPIO
 //#define TEST_TIMER01
 //#define TEST_TIMER2
 //#define TEST_TIMER34
-#define TEST_UART
+//#define TEST_UART
 
 //#define TEST_ADC
 //#define TEST_IIC
-//#define TEST_PWM
+#define TEST_PWM
 //#define TEST_WDG
 //#define TEST_OP
 //#define TEST_COMP
+//#define TEST_BEEP
 
 
 #ifdef TEST_SPI
@@ -233,7 +236,81 @@ void test_uart_init()
 	//UART_SendData8(UART0, 0x12);
 	//printf("<<----UART0 test---->>");
 }
+#endif
 
+#ifdef TEST_BEEP
+void test_beep_init(void)
+{
+	GPIO_Init_TypeDef GPIO_InitStructure;
+	BEEP_Init_TypeDef BEEP_InitStructure;
+	
+	SYS_GPIO_Alternate_Config(GPIO_NUM_P24, P24_ALT_BEEP);
+	
+	GPIO_InitStructure.Mode 			= GPIO_ALT;
+	GPIO_InitStructure.Direction 	= GPIO_OUTPUT;
+	GPIO_InitStructure.Analog		 	= GPIO_Digital_Sel;
+	GPIO_InitStructure.OType 			= GPIO_Pushpull_Sel;
+	GPIO_InitStructure.Up 				= GPIO_Up_Disable;
+	GPIO_InitStructure.Down 			= GPIO_Down_Disable;
+	GPIO_InitStructure.Driver 		= GPIO_Driver_Weak;
+	GPIO_InitStructure.Slope 			= GPIO_Slope_Fast;
+	GPIO_InitStructure.Pin 				= GPIO_PIN_4;
+	GPIO_Init(GPIO_PORT_2, &GPIO_InitStructure);
+	
+	BEEP_InitStructure.BEEP_Prescaler1 = BEEP_SysClk_Prescaler_8;
+	BEEP_InitStructure.BEEP_Prescaler2 = 100;
+	
+	BEEP_Init(&BEEP_InitStructure); //BEEP Fre = SystemClock/2*BEEP_Prescaler1/BEEP_Prescaler2
+	BEEP_Cmd(_ENABLE);
+}
+#endif
+
+#ifdef TEST_ADC
+void test_adc_init(void)
+{
+	GPIO_Init_TypeDef GPIO_InitStructure;
+	ADC_Init_TypeDef ADC_InitStructure;
+	ADC_ExtTrigConfig_TypeDef ADC_ExtTrigConfigStructure;  
+	
+	SYS_GPIO_Alternate_Config(GPIO_NUM_P00, P00_ALT_AN0);
+	//SYS_GPIO_Alternate_Config(GPIO_NUM_P04, P04_ALT_ADET1);
+	
+	GPIO_InitStructure.Mode 			= GPIO_ALT;
+	GPIO_InitStructure.Direction 	= GPIO_INPUT;
+	GPIO_InitStructure.Analog		 	= GPIO_Analog_Sel;
+	GPIO_InitStructure.Pin 				= GPIO_PIN_0;
+	GPIO_Init(GPIO_PORT_0, &GPIO_InitStructure);
+	
+	GPIO_InitStructure.Mode 			= GPIO_PIN;
+	GPIO_InitStructure.Direction 	= GPIO_INPUT;
+	GPIO_InitStructure.Analog		 	= GPIO_Digital_Sel;
+	GPIO_InitStructure.Up 				= GPIO_Up_Enable;
+	GPIO_InitStructure.Down 			= GPIO_Down_Disable;
+	GPIO_InitStructure.Pin 				= GPIO_PIN_4; //Config P04 as ADET1
+	GPIO_Init(GPIO_PORT_0, &GPIO_InitStructure);
+	
+	//ADC config
+	ADC_InitStructure.Prescaler   	= ADC_Prescaler_2;
+	ADC_InitStructure.Channel     	= ADC_Channel_0;
+	ADC_InitStructure.ResultFormat 	= ADC_Format_Left_Align;
+	ADC_InitStructure.Brake       	= _DISABLE;
+	ADC_InitStructure.CompOut     	= ADC_CompOut_MoreThanComp;
+	ADC_InitStructure.CompValue   	= 0xffff;
+	
+	ADC_Init(&ADC_InitStructure);
+	
+	//ADC Ext trigger config
+	ADC_ExtTrigConfigStructure.ExtTrigEvent   = ADC_ExtEventSelection_ADCET;
+	ADC_ExtTrigConfigStructure.ExtTrigEdge    = ADC_ExtEdgeSelection_Falling;
+	ADC_ExtTrigConfigStructure.ExtTrigPort    = ADC_ExtPortSelection_ADCET0;
+	ADC_ExtTrigConfigStructure.ExtTrigDelay   = 0x0f; //10bit valid
+	
+	ADC_ExternalTrigConfig(&ADC_ExtTrigConfigStructure);
+	
+	//ADC Start/ ADC Ext trigger disable
+	ADC_ExtTrig_Cmd(_DISABLE);
+	ADC_Cmd(_ENABLE);
+}
 #endif
 
 void Delay_Time(int time)
@@ -285,6 +362,14 @@ void main(void)
 		//Uart_Test_Count++;
 		//if(Uart_Test_Count > 100) Uart_Test_Count = 0;
 	}
+#endif
+	
+#ifdef TEST_BEEP
+	test_beep_init();
+#endif
+	
+#ifdef TEST_ADC
+	test_adc_init();
 #endif
 
 	while(1);

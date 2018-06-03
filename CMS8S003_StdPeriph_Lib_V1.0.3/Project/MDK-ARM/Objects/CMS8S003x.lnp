@@ -10,6 +10,9 @@
 ".\Objects\cms8s003x_comp.obj",
 ".\Objects\cms8s003x_op.obj",
 ".\Objects\cms8s003x_tim34.obj",
+".\Objects\cms8s003x_beep.obj",
+".\Objects\cms8s003x_epwm.obj",
+".\Objects\cms8s003x_adc.obj",
 ".\Objects\main.obj" 
 TO ".\Objects\CMS8S003x" 
 

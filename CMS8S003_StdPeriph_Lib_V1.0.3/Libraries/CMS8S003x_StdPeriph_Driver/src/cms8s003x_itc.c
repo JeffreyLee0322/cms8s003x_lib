@@ -25,6 +25,7 @@
 #include "cms8s003x_tim2.h"
 #include "cms8s003x_gpio.h"
 #include "cms8s003x_uart.h"
+#include "cms8s003x_epwm.h"
 
 /** @addtogroup CMS8S003x_StdPeriph_Driver
   * @{
@@ -189,6 +190,38 @@ void uart1_int (void) interrupt 6
 	}
 }
 
+void pwm_int (void) interrupt 18
+{
+	if(EPWM_GetPeriodITStatus(EPWM0_PeriodIT))
+	{
+			EPWM_ClearPeriodITStatus(EPWM0_PeriodIT);
+	}
+	
+	if(EPWM_GetPeriodITStatus(EPWM1_PeriodIT))
+	{
+			EPWM_ClearPeriodITStatus(EPWM1_PeriodIT);
+	}
+	
+	if(EPWM_GetPeriodITStatus(EPWM2_PeriodIT))
+	{
+			EPWM_ClearPeriodITStatus(EPWM2_PeriodIT);
+	}
+	
+	if(EPWM_GetZeroITStatus(EPWM3_ZeroIT))
+	{
+			EPWM_ClearZeroITStatus(EPWM3_ZeroIT);
+	}
+	
+	if(EPWM_GetZeroITStatus(EPWM4_ZeroIT))
+	{
+			EPWM_ClearZeroITStatus(EPWM4_ZeroIT);
+	}
+	
+	if(EPWM_GetZeroITStatus(EPWM5_ZeroIT))
+	{
+			EPWM_ClearZeroITStatus(EPWM5_ZeroIT);
+	}
+}
 
 /**
   * @}
