@@ -24,7 +24,7 @@
 #define __CMS8S003x_ITC_H__
 
 /* Includes ------------------------------------------------------------------*/
-#include <CMS\CMS8S003.H>
+#include "cms8s003x.h"
 #include "cms8s003x_conf.h"
 
 

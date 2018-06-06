@@ -19,7 +19,7 @@
   */
 
 #include <stdio.h>
-#include <CMS\CMS8S003.H>
+#include "cms8s003x.h"
 #include "cms8s003x_spi.h"
 #include "cms8s003x_syscon.h"
 #include "cms8s003x_gpio.h"
@@ -29,17 +29,18 @@
 #include "cms8s003x_uart.h"
 #include "cms8s003x_beep.h"
 #include "cms8s003x_adc.h"
+#include "cms8s003x_iic.h"
 
 //#define TEST_SPI
 //#define TEST_GPIO
 //#define TEST_TIMER01
 //#define TEST_TIMER2
 //#define TEST_TIMER34
-//#define TEST_UART
+#define TEST_UART
 
 //#define TEST_ADC
 //#define TEST_IIC
-#define TEST_PWM
+//#define TEST_PWM
 //#define TEST_WDG
 //#define TEST_OP
 //#define TEST_COMP
@@ -225,8 +226,8 @@ void test_uart_init()
 	UART_InitStructure.IsReceive 					= _DISABLE;
 	UART_InitStructure.SendData9Bit 			= Data_9Bit_Is1;
 	UART_InitStructure.ReceiveData9Bit 		= Data_9Bit_Is1;
-	UART_InitStructure.UartBaudrateDouble = Baudrate_Double;//目前测试：这里必须是Double,结果和timer1计算值才相符合!!!
-	UART_InitStructure.UartClkSource 			= Timer4_Select;//Timer_SysClk_Select;
+	UART_InitStructure.UartBaudrateDouble = Baudrate_Double;
+	UART_InitStructure.UartClkSource 			= Timer1_Select;//Timer_SysClk_Select;
 	UART_InitStructure.UartBaurdrate 			= 9600;
 	
 	UART_Init(UART0, &UART_InitStructure);

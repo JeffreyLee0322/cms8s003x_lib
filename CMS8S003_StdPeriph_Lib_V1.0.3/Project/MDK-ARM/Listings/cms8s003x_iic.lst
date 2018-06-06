@@ -1,0 +1,129 @@
+C51 COMPILER V9.56.0.0   CMS8S003X_IIC                                                     06/06/2018 09:25:47 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE CMS8S003X_IIC
+OBJECT MODULE PLACED IN .\Objects\cms8s003x_iic.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_iic.c OMF2 OPTI
+                    -MIZE(8,SPEED) BROWSE INCDIR(..\..\Libraries\CMS8S003x_StdPeriph_Driver\inc) DEBUG PRINT(.\Listings\cms8s003x_iic.lst) TA
+                    -BS(2) OBJECT(.\Objects\cms8s003x_iic.obj)
+
+line level    source
+
+   1          /**
+   2            ******************************************************************************
+   3            * @file    cms8s003x_iic.c
+   4            * @author  LI WEI
+   5            * @version V1.0.3
+   6            * @date    04/24/2018
+   7            * @brief   This file provides all the IIC firmware functions.
+   8            ******************************************************************************
+   9            * @copy
+  10            *
+  11            * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+  12            * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
+  13            * TIME. AS A RESULT, CMSemicon SHALL NOT BE HELD LIABLE FOR ANY
+  14            * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
+  15            * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
+  16            * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  17            *
+  18            * <h2><center>&copy; COPYRIGHT 2018 CMSemicon</center></h2>
+  19            */
+  20          
+  21          /* Includes ------------------------------------------------------------------*/
+  22          #include "cms8s003x_iic.h"
+  23          
+  24          /** @addtogroup CMS8S003x_StdPeriph_Driver
+  25            * @{
+  26            */
+  27          
+  28          /* Private typedef -----------------------------------------------------------*/
+  29          /* Private define ------------------------------------------------------------*/
+  30          /* Private macro -------------------------------------------------------------*/
+  31          /* Private variables ---------------------------------------------------------*/
+  32          /* Private function prototypes -----------------------------------------------*/
+  33          /* Private functions ---------------------------------------------------------*/
+  34          /* Public functions ----------------------------------------------------------*/
+  35          
+  36          /**
+  37            * @addtogroup IIC_Public_Functions
+  38            * @{
+  39            */
+  40          
+  41          /**
+  42            * @brief  Deinitializes the IIC peripheral registers to their default
+  43            *         reset values.
+  44            * @param  None
+  45            * @retval None
+  46            */
+  47          void IIC_DeInit(void)
+  48          {
+  49   1      
+  50   1      }
+  51          
+  52          /**
+  53            * @brief  Initializes the IIC function according to the specified parameters.
+C51 COMPILER V9.56.0.0   CMS8S003X_IIC                                                     06/06/2018 09:25:47 PAGE 2   
+
+  54            * @note   The LS RC calibration must be performed before calling this function.
+  55            * @param  BEEP_Frequency Frequency selection.
+  56            *         This parameter can be one of the values of @ref BEEP_Frequency_TypeDef.
+  57            * @retval None
+  58            */
+  59          void IIC_Init(IIC_Init_TypeDef *IIC_Init)
+  60          {
+  61   1      
+  62   1      }
+*** WARNING C280 IN LINE 59 OF ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_iic.c: 'IIC_Init': unreferenced 
+             -local variable
+  63          
+  64          /**
+  65            * @brief  Enable or disable the IIC function.
+  66            * @note   Initialisation of IIC and LS RC calibration must be done before.
+  67            * @param  NewState Indicates the new state of the IIC function.
+  68            * @retval None
+  69            */
+  70          void IIC_Cmd(FunctionalState NewState)
+  71          {
+  72   1      
+  73   1      
+  74   1        if (NewState != DISABLE)
+  75   1        {
+  76   2          /* Enable the BEEP peripheral */
+  77   2          //BEEP->CSR2 |= BEEP_CSR2_BEEPEN;
+  78   2        }
+  79   1        else
+  80   1        {
+  81   2          /* Disable the BEEP peripheral */
+  82   2          //BEEP->CSR2 &= (uint8_t)(~BEEP_CSR2_BEEPEN);
+  83   2        }
+  84   1      }
+  85          
+  86          
+  87          
+  88          /**
+  89            * @}
+  90            */
+  91          
+  92          /**
+  93            * @}
+  94            */
+  95          
+  96          /******************* (C) COPYRIGHT 2018 CMSemicon *****END OF FILE****/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     11    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

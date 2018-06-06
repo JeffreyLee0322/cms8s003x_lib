@@ -25,7 +25,8 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include <CMS\CMS8S003.H>
+#include "cms8s003x.h"
+#include "cms8s003x_conf.h"
 
 /** @addtogroup CMS8S003x_StdPeriph_Driver
   * @{
@@ -37,8 +38,57 @@
 /** @addtogroup OP_Exported_Types
   * @{
   */
+typedef enum
+{
+  OP0 = (uint8_t)0x00,
+	OP1 = (uint8_t)0x01
+} OP_TypeDef;
 
+typedef enum
+{
+	OP_OutCH_Disable    = (uint8_t)0x00,
+	OP_OutCH_0			    = (uint8_t)0x01,
+	OP_OutCH_1			    = (uint8_t)0x01,
+} OP_OutCH_TypeDef;
 
+typedef enum
+{
+	OP_PositiveCH_0						= (uint8_t)0x00,
+	OP_PositiveCH_1						= (uint8_t)0x00,
+	OP_PositiveCH_Disable			= (uint8_t)0x01,
+} OP_PositiveCH_TypeDef;
+
+typedef enum
+{
+	OP_NegativeCH_0						= (uint8_t)0x00,
+	OP_NegativeCH_1						= (uint8_t)0x00,
+	OP_NegativeCH_Disable			= (uint8_t)0x01,
+} OP_NegativeCH_TypeDef;
+
+typedef enum
+{
+	OP_RegulationMode_In_Positive    = (uint8_t)0x00,
+	OP_RegulationMode_In_Negative    = (uint8_t)0x01,
+} OP_RegulationMode_TypeDef;
+
+typedef enum
+{
+	OP_OffsetVoltageMode_Config			= (uint8_t)0x00,
+	OP_OffsetVoltageMode_OPnADJ			= (uint8_t)0xAA,
+} OP_OffsetVoltageMode_TypeDef;
+
+typedef struct OP_Def
+{
+	FunctionalState 									OP_EN:1;
+	FunctionalState 									OP_Regulation:1;
+	FunctionalState 									OP_Filtration:1;
+	OP_OutCH_TypeDef 									OP_OutCH:1;
+	OP_PositiveCH_TypeDef 						OP_PositiveCH:2;
+	OP_NegativeCH_TypeDef 						OP_NegativeCH:2;
+	OP_RegulationMode_TypeDef 				OP_RegulationMode:1;
+	uint8_t 													OP_OffsetVoltage:5;
+	OP_OffsetVoltageMode_TypeDef 			OP_OffsetVoltageMode;
+} OP_Init_TypeDef;
 /**
   * @}
   */
@@ -47,10 +97,10 @@
 /* Exported macros -----------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 
-/** @addtogroup COMP_Private_Macros
+/** @addtogroup OP_Private_Macros
   * @{
   */
-
+ 
 /**
   * @brief Macro used by the assert function to check the different functions parameters.
   */
@@ -60,29 +110,14 @@
   */
 
 /* Exported functions --------------------------------------------------------*/
-/** @addtogroup COMP_Exported_Functions
+/** @addtogroup OP_Exported_Functions
   * @{
   */
 
 void OP_DeInit(void);
-#if 0
-void COMP_Init(COMP_InvertingInput_Typedef COMP_InvertingInput,
-               COMP_OutputSelect_Typedef COMP_OutputSelect, COMP_Speed_TypeDef COMP_Speed);
-void COMP_VrefintToCOMP1Connect(FunctionalState NewState);
-void COMP_EdgeConfig(COMP_Selection_TypeDef COMP_Selection, COMP_Edge_TypeDef COMP_Edge);
-COMP_OutputLevel_TypeDef COMP_GetOutputLevel(COMP_Selection_TypeDef COMP_Selection);
-void COMP_WindowCmd(FunctionalState NewState);
-void COMP_ITConfig(COMP_Selection_TypeDef COMP_Selection, FunctionalState NewState);
-void COMP_TriggerConfig(COMP_TriggerGroup_TypeDef COMP_TriggerGroup,
-                        COMP_TriggerPin_TypeDef COMP_TriggerPin,
-                        FunctionalState NewState);
-void COMP_VrefintOutputCmd(FunctionalState NewState);
-void COMP_SchmittTriggerCmd(FunctionalState NewState);
-FlagStatus COMP_GetFlagStatus(COMP_Selection_TypeDef COMP_Selection);
-void COMP_ClearFlag(COMP_Selection_TypeDef COMP_Selection);
-ITStatus COMP_GetITStatus(COMP_Selection_TypeDef COMP_Selection);
-void COMP_ClearITPendingBit(COMP_Selection_TypeDef COMP_Selection);
-#endif
+void OP_Init(OP_TypeDef OPn, OP_Init_TypeDef *OP_Init);
+uint8_t getOPResult(OP_TypeDef OPn); 
+
 /**
   * @}
   */

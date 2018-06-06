@@ -13,6 +13,7 @@
 ".\Objects\cms8s003x_beep.obj",
 ".\Objects\cms8s003x_epwm.obj",
 ".\Objects\cms8s003x_adc.obj",
+".\Objects\cms8s003x_iic.obj",
 ".\Objects\main.obj" 
 TO ".\Objects\CMS8S003x" 
 

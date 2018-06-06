@@ -85,7 +85,7 @@ void EPWM_Init(EPWM_Init_TypeDef *EPWM_Init)
 	/* Set EPWM45 clock prescaler */
 	PWM45PSC &= 0x00;
 	PWM45PSC = ((uint8_t)EPWM_Init->GroupPrescaler.EPWM45_Prescaler);
-	
+	#if 0
 	while(i < 6)
 	{
 		if(((EPWM_Init->EPWMChannel) >> i) & 0x01)
@@ -114,7 +114,7 @@ void EPWM_Init(EPWM_Init_TypeDef *EPWM_Init)
 		}
 		i++;
 	}
-	
+	#endif PWM0PL
 	/* Set data reload control */
 	PWMLOADEN &= 0x00;
 	PWMLOADEN = ((uint8_t)EPWM_Init->DataReload);

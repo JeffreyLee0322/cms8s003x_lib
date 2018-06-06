@@ -25,7 +25,7 @@
 
 
 /* Includes ------------------------------------------------------------------*/
-#include <CMS\CMS8S003.H>
+#include "cms8s003x.h"
 
 /** @addtogroup CMS8S003x_StdPeriph_Driver
   * @{

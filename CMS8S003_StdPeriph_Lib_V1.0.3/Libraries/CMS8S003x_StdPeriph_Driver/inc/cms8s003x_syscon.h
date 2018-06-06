@@ -1,6 +1,6 @@
 #ifndef _CMS8S003X_H
 #define _CMS8S003X_H
-#include <CMS\CMS8S003.H>
+#include "cms8s003x.h"
 #include "cms8s003x_conf.h"
 
 //P00

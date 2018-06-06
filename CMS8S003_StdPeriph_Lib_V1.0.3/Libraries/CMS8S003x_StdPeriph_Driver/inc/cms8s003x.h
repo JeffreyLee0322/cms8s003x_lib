@@ -413,7 +413,7 @@ sfr16	MADR	= 0xFC;		// {MADRL,MADRH}
 /*-------------------------------------------------------------------------*/
 /*	XSFR */
 /*-------------------------------------------------------------------------*/
-#define P0CFG *(volatile unsigned char xdata *) 0xF000
+#define P0CFG  0xF000
 #define P00CFG *(volatile unsigned char xdata *) 0xF000
 #define P01CFG *(volatile unsigned char xdata *) 0xF001
 #define P02CFG *(volatile unsigned char xdata *) 0xF002
@@ -430,7 +430,7 @@ sfr16	MADR	= 0xFC;		// {MADRL,MADRH}
 #define P0DR	*(volatile unsigned char xdata *) 0xF00C
 #define P0SR	*(volatile unsigned char xdata *) 0xF00D
 
-#define P1CFG *(volatile unsigned char xdata *) 0xF010
+#define P1CFG  0xF010
 #define P10CFG *(volatile unsigned char xdata *) 0xF010
 #define P11CFG *(volatile unsigned char xdata *) 0xF011
 #define P12CFG *(volatile unsigned char xdata *) 0xF012
@@ -447,7 +447,7 @@ sfr16	MADR	= 0xFC;		// {MADRL,MADRH}
 #define P1DR	*(volatile unsigned char xdata *) 0xF01C
 #define P1SR	*(volatile unsigned char xdata *) 0xF01D
 
-#define P2CFG *(volatile unsigned char xdata *) 0xF020
+#define P2CFG  0xF020
 #define P20CFG *(volatile unsigned char xdata *) 0xF020
 #define P21CFG *(volatile unsigned char xdata *) 0xF021
 #define P22CFG *(volatile unsigned char xdata *) 0xF022
@@ -464,7 +464,7 @@ sfr16	MADR	= 0xFC;		// {MADRL,MADRH}
 #define P2DR	*(volatile unsigned char xdata *) 0xF02C
 #define P2SR	*(volatile unsigned char xdata *) 0xF02D	
 
-#define P3CFG *(volatile unsigned char xdata *) 0xF030
+#define P3CFG  0xF030
 #define P30CFG *(volatile unsigned char xdata *) 0xF030
 #define P31CFG *(volatile unsigned char xdata *) 0xF031
 #define P32CFG *(volatile unsigned char xdata *) 0xF032
@@ -537,7 +537,7 @@ sfr16	MADR	= 0xFC;		// {MADRL,MADRH}
 #define PWMCNTCLR	*(volatile unsigned char xdata *) 0xF128  
 #define PWMLOADEN	*(volatile unsigned char xdata *) 0xF129  
 
-#define PWMDIVBASE	*(volatile unsigned char xdata *)	 0xF12A  
+#define PWMDIVBASE	 0xF12A  
 #define PWM0DIV		*(volatile unsigned char xdata *) 0xF12A  
 #define PWM1DIV		*(volatile unsigned char xdata *) 0xF12B  
 #define PWM2DIV		*(volatile unsigned char xdata *) 0xF12C  
@@ -545,6 +545,8 @@ sfr16	MADR	= 0xFC;		// {MADRL,MADRH}
 #define PWM4DIV		*(volatile unsigned char xdata *) 0xF12E  
 #define PWM5DIV		*(volatile unsigned char xdata *) 0xF12F  
 
+#define PWMPLBASE	0xF130  
+#define PWMPHBASE	0xF131
 #define PWM0PL		*(volatile unsigned char xdata *) 0xF130  
 #define PWM0PH		*(volatile unsigned char xdata *) 0xF131 
 #define PWM1PL		*(volatile unsigned char xdata *) 0xF132 
@@ -558,6 +560,8 @@ sfr16	MADR	= 0xFC;		// {MADRL,MADRH}
 #define PWM5PL		*(volatile unsigned char xdata *) 0xF13A 
 #define PWM5PH		*(volatile unsigned char xdata *) 0xF13B 
 
+#define PWMDLBASE	0xF140  
+#define PWMDHBASE	0xF141
 #define PWM0DL		*(volatile unsigned char xdata *) 0xF140  
 #define PWM0DH		*(volatile unsigned char xdata *) 0xF141 
 #define PWM1DL		*(volatile unsigned char xdata *) 0xF142 
@@ -571,8 +575,8 @@ sfr16	MADR	= 0xFC;		// {MADRL,MADRH}
 #define PWM5DL		*(volatile unsigned char xdata *) 0xF14A 
 #define PWM5DH		*(volatile unsigned char xdata *) 0xF14B   
 
-#define PWMDDLBASE *(volatile unsigned char xdata *)		0xF150  
-#define PWMDDHBASE *(volatile unsigned char xdata *)		0xF151 
+#define PWMDDLBASE 		0xF150  
+#define PWMDDHBASE 		0xF151 
 #define PWM0DDL		*(volatile unsigned char xdata *) 0xF150  
 #define PWM0DDH		*(volatile unsigned char xdata *) 0xF151 
 #define PWM1DDL		*(volatile unsigned char xdata *) 0xF152 
@@ -605,8 +609,8 @@ sfr16	MADR	= 0xFC;		// {MADRL,MADRH}
 #define PWMUIF		*(volatile unsigned char xdata *) 0xF16E   
 #define PWMDIF		*(volatile unsigned char xdata *) 0xF16F
 
-#define PWMPLBASE	*(volatile unsigned char xdata *)		0xF130
-#define PWMPHBASE	*(volatile unsigned char xdata *)		0xF131
+#define PWMPLBASE		0xF130
+#define PWMPHBASE		0xF131
 #define PWMP0L		*(volatile unsigned char xdata *) 0xF130
 #define PWMP0H		*(volatile unsigned char xdata *) 0xF131
 #define PWMP1L		*(volatile unsigned char xdata *) 0xF132
@@ -620,8 +624,8 @@ sfr16	MADR	= 0xFC;		// {MADRL,MADRH}
 #define PWMP5L		*(volatile unsigned char xdata *) 0xF13a
 #define PWMP5H		*(volatile unsigned char xdata *) 0xF13b
 	
-#define PWMDLBASE	*(volatile unsigned char xdata *)	0xF140 
-#define PWMDHBASE	*(volatile unsigned char xdata *)	0xF141 
+#define PWMDLBASE	0xF140 
+#define PWMDHBASE	0xF141 
 #define PWMD0L		*(volatile unsigned char xdata *) 0xF140  
 #define PWMD0H		*(volatile unsigned char xdata *) 0xF141 
 #define PWMD1L		*(volatile unsigned char xdata *) 0xF142 
