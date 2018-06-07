@@ -176,8 +176,6 @@ FlagStatus COMP_GetFlagStatus(COMP_Selection_TypeDef COMP_Selection)
 {
   FlagStatus bitstatus = RESET;
 
- 
-
   /* return the comparator event flag status */
   return (FlagStatus)(bitstatus);
 }
@@ -204,7 +202,6 @@ ITStatus COMP_GetITStatus(COMP_Selection_TypeDef COMP_Selection)
   ITStatus bitstatus = RESET;
   uint8_t itstatus = 0x00, itenable = 0x00;
 
- 
 
   /* Return the COMP interrupt status */
   return (ITStatus) bitstatus;
