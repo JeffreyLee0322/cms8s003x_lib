@@ -100,7 +100,7 @@ typedef struct OP_Def
 /** @addtogroup OP_Private_Macros
   * @{
   */
- 
+#define OP_ENABLE_BIT  ((uint8_t)0x08)
 /**
   * @brief Macro used by the assert function to check the different functions parameters.
   */
@@ -114,8 +114,9 @@ typedef struct OP_Def
   * @{
   */
 
-void OP_DeInit(void);
+void OP_DeInit(OP_TypeDef OPn);
 void OP_Init(OP_TypeDef OPn, OP_Init_TypeDef *OP_Init);
+void OP_Cmd(OP_TypeDef OPn, FunctionalState NewState);
 uint8_t getOPResult(OP_TypeDef OPn); 
 
 /**

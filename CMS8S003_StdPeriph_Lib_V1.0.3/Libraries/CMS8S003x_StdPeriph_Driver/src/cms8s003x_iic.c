@@ -70,7 +70,6 @@ void IIC_Init(IIC_Init_TypeDef *IIC_Init)
 void IIC_Cmd(FunctionalState NewState)
 {
 
-
   if (NewState != DISABLE)
   {
     /* Enable the BEEP peripheral */
@@ -81,6 +80,27 @@ void IIC_Cmd(FunctionalState NewState)
     /* Disable the BEEP peripheral */
     //BEEP->CSR2 &= (uint8_t)(~BEEP_CSR2_BEEPEN);
   }
+}
+
+void IIC_ITConfig(void)
+{
+
+}
+
+uint8_t IIC_MasterGetSendBuf(void)
+{
+	uint8_t sendData = 0;
+	sendData = I2CMBUF;
+	
+	return sendData;
+}
+
+uint8_t IIC_MasterGetReceiveBuf(void)
+{
+	uint8_t receiveData = 0;
+	receiveData = I2CMBUF;
+	
+	return sendData;
 }
 
 

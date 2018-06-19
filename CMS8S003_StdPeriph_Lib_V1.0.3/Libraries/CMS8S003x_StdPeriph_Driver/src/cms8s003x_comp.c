@@ -42,11 +42,34 @@
   * @param  None.
   * @retval None.
   */
-void COMP_DeInit(void)
+void COMP_DeInit(COMP_TypeDef COMPn)
 {
-
+	if(COMP0 == COMPn)
+	{
+			C0CON0 &= 0x00;
+			C0CON1 &= 0x00;
+			C0CON1 |= 0x20;
+			C0CON2 &= 0x00;
+			CNVRCON &= 0x00;
+			CNFBCON &= 0x00;
+			CNIE &= 0x00;
+			CNIF &= 0x00;
+			C0ADJE &= 0x00;
+	}
+	else if(COMP1 == COMPn)
+	{
+			C1CON0 &= 0x00;
+			C1CON1 &= 0x00;
+			C1CON1 |= 0x20;
+			C1CON2 &= 0x00;
+			CNVRCON &= 0x00;
+			CNFBCON &= 0x00;
+			CNIE &= 0x00;
+			CNIF &= 0x00;
+			C1ADJE &= 0x00;
+	}
 }
-#if 0
+
 /**
   * @brief  Initializes the comparator inverting input, output and speed.
   * @note   This function configures only COMP2.
@@ -58,60 +81,72 @@ void COMP_DeInit(void)
   *         @ref COMP_Speed_TypeDef enumeration.
   * @retval None.
   */
-void COMP_Init(COMP_InvertingInput_Typedef COMP_InvertingInput,
-               COMP_OutputSelect_Typedef COMP_OutputSelect, COMP_Speed_TypeDef COMP_Speed)
+void COMP_Init(COMP_TypeDef COMPn,COMP_Init_TypeDef *COMP_Init)
 {
- 
+	COMP_DeInit(COMPn);
+	
+	if(COMP0 == COMPn)
+	{
+			C0CON0 = ((((uint8_t)COMP_Init->COMP_RegulationMode) << 6) | (((uint8_t)COMP_Init->COMP_NegativeGND) << 5) | ((uint8_t)(COMP_Init->COMP_NegativeCH) << 2) | ((uint8_t)(COMP_Init->COMP_PositiveCH)));
+			C0CON1 = (((uint8_t)(COMP_Init->COMP_RegulationModeIn) << 6) | ((uint8_t)(COMP_Init->COMP_OffsetVoltage)));
+			C0CON2 = (((uint8_t)(COMP_Init->COMP_OutputPolarity) << 5) | ((uint8_t)(COMP_Init->COMP_OutputFilter) << 4) | ((uint8_t)(COMP_Init->COMP_OutputFilterTime)));
+			CNVRCON = (((uint8_t)(COMP_Init->COMP_NegativeVref) << 4) | ((uint8_t)(COMP_Init->COMP_NegativeVDDK)));
+			CNFBCON = (((uint8_t)(COMP_Init->COMPn_PWMBrake.COMP0_PWMBrake) << 2) | ((uint8_t)(COMP_Init->COMPn_PWMBrakeEdge.COMP0_PWMBrakeEdge)));
+			C0ADJE = ((uint8_t)(COMP_Init->COMP_OffsetVoltageMode));
+	}
+	else if(COMP1 == COMPn)
+	{
+			C1CON0 = ((((uint8_t)COMP_Init->COMP_RegulationMode) << 6) | (((uint8_t)COMP_Init->COMP_NegativeGND) << 5) | ((uint8_t)(COMP_Init->COMP_NegativeCH) << 2) | ((uint8_t)(COMP_Init->COMP_PositiveCH)));
+			C1CON1 = (((uint8_t)(COMP_Init->COMP_RegulationModeIn) << 6) | ((uint8_t)(COMP_Init->COMP_OffsetVoltage)));
+			C1CON2 = (((uint8_t)(COMP_Init->COMP_OutputPolarity) << 5) | ((uint8_t)(COMP_Init->COMP_OutputFilter) << 4) | ((uint8_t)(COMP_Init->COMP_OutputFilterTime)));
+			CNVRCON = (((uint8_t)(COMP_Init->COMP_NegativeVref) << 4) | ((uint8_t)(COMP_Init->COMP_NegativeVDDK)));
+			CNFBCON = (((uint8_t)(COMP_Init->COMPn_PWMBrake.COMP1_PWMBrake) << 3) | ((uint8_t)(COMP_Init->COMPn_PWMBrakeEdge.COMP1_PWMBrakeEdge) << 1));
+			C1ADJE = ((uint8_t)(COMP_Init->COMP_OffsetVoltageMode));
+	}
 }
 
-/**
-  * @brief  Enables or disables connection between VREFINT and COMP1 inverting input.
-  * @param  NewState new state of the VREFINT connection to COMP1 inverting input.
-  *         This parameter can be ENABLE or DISABLE.
-  * @retval None
-  */
-void COMP_VrefintToCOMP1Connect(FunctionalState NewState)
+void COMP_Cmd(COMP_TypeDef COMPn, FunctionalState NewState)
 {
-  
+	
+	if (NewState != _DISABLE)
+	{
+			/* COMP Enable */
+			if(COMP0 == COMPn)
+			{
+					C0CON0 |= (uint8_t)COMP_ENABLE_BIT;
+			}
+			else if(COMP1 == COMPn)
+			{
+					C0CON1 |= (uint8_t)COMP_ENABLE_BIT;
+			}
+	}
+	else
+	{
+			/* COMP Disable */
+			if(COMP0 == COMPn)
+			{
+					C0CON0 |= (uint8_t)(~COMP_ENABLE_BIT);
+			}
+			else if(COMP1 == COMPn)
+			{
+					C0CON1 |= (uint8_t)(~COMP_ENABLE_BIT);
+			}
+	}
 }
 
-/**
-  * @brief  Configures the COMP edge detection.
-  * @param  COMP_Selection : selects the comparator and can be any of the
-  *         @ref COMP_Selection_TypeDef enum.
-  * @param  COMP_Edge : can be any of the @ref COMP_Edge_TypeDef enumeration
-  * @retval None.
-  */
-void COMP_EdgeConfig(COMP_Selection_TypeDef COMP_Selection, COMP_Edge_TypeDef COMP_Edge)
+uint8_t COMP_GetResult(COMP_TypeDef COMPn)
 {
- 
-}
-
-/**
-  * @brief  Returns the output level of the comparator.
-  * @param  COMP_Selection : selects the comparator and can be any of the
-  *         @ref COMP_Selection_TypeDef enum.
-  * @retval Returns the comparator output level and can be any of the
-  *         @ref COMP_OutputLevel_TypeDef enum.
-  */
-COMP_OutputLevel_TypeDef COMP_GetOutputLevel(COMP_Selection_TypeDef COMP_Selection)
-{
-  uint8_t compout;
-
-
-  /* Return the comparator output level */
-  return (COMP_OutputLevel_TypeDef)(compout);
-}
-
-/**
-  * @brief  Enables or disables the window mode.
-  * @param  NewState new state of the window mode.
-  *         This parameter can be ENABLE or DISABLE.
-  * @retval None
-  */
-void COMP_WindowCmd(FunctionalState NewState)
-{
- 
+	uint8_t COMP_Out = 0;
+	if(COMP0 == COMPn)
+	{
+			COMP_Out = ((C0CON1 & 0x80) >> 7);
+	}
+	else if(COMP1 == COMPn)
+	{
+			COMP_Out = ((C1CON1 & 0x80) >> 7);
+	}
+	
+	return COMP_Out;
 }
 
 /**
@@ -122,49 +157,34 @@ void COMP_WindowCmd(FunctionalState NewState)
   *         This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
-void COMP_ITConfig(COMP_Selection_TypeDef COMP_Selection, FunctionalState NewState)
+void COMP_ITConfig(COMP_TypeDef COMPn, FunctionalState NewState)
 {
- 
+	if (NewState != _DISABLE)
+  {
+    /* Enable the OP */
+		if(COMP0 == COMPn)
+		{
+				CNIE &= (uint8_t)(~COMP0_IT_DISABLE_BIT);
+		}
+		else if(COMP1 == COMPn)
+		{
+				CNIE &= (uint8_t)(~COMP1_IT_DISABLE_BIT);
+		}
+  }
+  else
+  {
+    /* Disable the OP */
+		if(COMP0 == COMPn)
+		{
+				CNIE |= (uint8_t)(COMP0_IT_DISABLE_BIT);
+		}
+		else if(COMP1 == COMPn)
+		{
+				CNIE |= (uint8_t)(COMP0_IT_DISABLE_BIT);
+		}
+  }
 }
 
-/**
-  * @brief  Enables or disables trigger on the specified input/output group.
-  * @param  COMP_TriggerGroup : specifies the input/output group
-  *         This parameter can be a value @ref COMP_TriggerGroup_TypeDef
-  * @param  COMP_TriggerPin : specifies the pin(s) within the input/output group
-  *         This parameter can be a value @ref COMP_TriggerPin_TypeDef
-  * @param  NewState : enable or disable the trigger on the selected pin(s)
-  *         This parameter can be: ENABLE or DISABLE.
-  * @retval None
-  */
-void COMP_TriggerConfig(COMP_TriggerGroup_TypeDef COMP_TriggerGroup,
-                        COMP_TriggerPin_TypeDef COMP_TriggerPin,
-                        FunctionalState NewState)
-{
-
-}
-
-/**
-  * @brief  Enables or disables the output of the internal reference voltage.
-  * @param  NewState : new state of the Vrefint output.
-  *         This parameter can be: ENABLE or DISABLE.
-  * @retval None
-  */
-void COMP_VrefintOutputCmd(FunctionalState NewState)
-{
- 
-}
-
-/**
-  * @brief  Enables or disables the schmitt trigger.
-  * @param  NewState : new state of the schmitt trigger.
-  *         This parameter can be: ENABLE or DISABLE.
-  * @retval None
-  */
-void COMP_SchmittTriggerCmd(FunctionalState NewState)
-{
- 
-}
 
 /**
   * @brief  Checks whether the comparator flag is set or not.
@@ -172,9 +192,24 @@ void COMP_SchmittTriggerCmd(FunctionalState NewState)
   *         @ref COMP_Selection_TypeDef enum.
   * @retval The new state of COMPx event flag (SET or RESET).
   */
-FlagStatus COMP_GetFlagStatus(COMP_Selection_TypeDef COMP_Selection)
+FlagStatus COMP_GetFlagStatus(COMP_TypeDef COMPn)
 {
-  FlagStatus bitstatus = RESET;
+  FlagStatus bitstatus = _RESET;
+	
+	if(COMP0 == COMPn)
+	{
+			if((CNIF & COMP0_IT_Flag) != _RESET)
+			{
+				bitstatus = _SET;
+			}
+	}
+	else if(COMP1 == COMPn)
+	{
+			if((CNIF & COMP1_IT_Flag) != _RESET)
+			{
+				bitstatus = _SET;
+			}
+	}
 
   /* return the comparator event flag status */
   return (FlagStatus)(bitstatus);
@@ -186,9 +221,16 @@ FlagStatus COMP_GetFlagStatus(COMP_Selection_TypeDef COMP_Selection)
   *         @ref COMP_Selection_TypeDef enum.
   * @retval None.
   */
-void COMP_ClearFlag(COMP_Selection_TypeDef COMP_Selection)
+void COMP_ClearFlag(COMP_TypeDef COMPn)
 {
- 
+	if(COMP0 == COMPn)
+	{
+			CNIF &= COMP0_IT_Flag;
+	}
+	else if(COMP1 == COMPn)
+	{
+			CNIF &= COMP1_IT_Flag;
+	}
 }
 
 /**
@@ -197,11 +239,24 @@ void COMP_ClearFlag(COMP_Selection_TypeDef COMP_Selection)
   *         @ref COMP_Selection_TypeDef enum.
   * @retval ITStatus : The state of the COMPx event flag (SET or RESET).
   */
-ITStatus COMP_GetITStatus(COMP_Selection_TypeDef COMP_Selection)
+ITStatus COMP_GetITStatus(COMP_TypeDef COMPn)
 {
-  ITStatus bitstatus = RESET;
-  uint8_t itstatus = 0x00, itenable = 0x00;
-
+  ITStatus bitstatus = _RESET;
+	
+	if(COMP0 == COMPn)
+	{
+			if((CNIF & COMP0_IT_Flag) != _RESET)
+			{
+				bitstatus = _SET;
+			}
+	}
+	else if(COMP1 == COMPn)
+	{
+			if((CNIF & COMP1_IT_Flag) != _RESET)
+			{
+				bitstatus = _SET;
+			}
+	}
 
   /* Return the COMP interrupt status */
   return (ITStatus) bitstatus;
@@ -213,11 +268,18 @@ ITStatus COMP_GetITStatus(COMP_Selection_TypeDef COMP_Selection)
   *         @ref COMP_Selection_TypeDef enum.
   * @retval None
   */
-void COMP_ClearITPendingBit(COMP_Selection_TypeDef COMP_Selection)
+void COMP_ClearITPendingBit(COMP_TypeDef COMPn)
 {
-
+	if(COMP0 == COMPn)
+	{
+			CNIF &= COMP0_IT_Flag;
+	}
+	else if(COMP1 == COMPn)
+	{
+			CNIF &= COMP1_IT_Flag;
+	}
 }
-#endif
+
 /**
   * @}
   */

@@ -79,23 +79,53 @@ void OP_DeInit(OP_TypeDef OPn)
   */
 void OP_Init(OP_TypeDef OPn, OP_Init_TypeDef *OP_Init)
 {
+	OP_DeInit(OPn);
+	
 	if(OP0 == OPn)
 	{
-			OP0CON0 = (((uint8_t)OP_Init->OP_EN << 7) | ((uint8_t)OP_Init->OP_Regulation << 6) | ((uint8_t)OP_Init->OP_Filtration << 5) | ((uint8_t)OP_Init->OP_OutCH << 4) ((uint8_t)OP_Init->OP_PositiveCH << 2) | ((uint8_t)OP_Init->OP_NegativeCH));
+			OP0CON0 = (((uint8_t)OP_Init->OP_EN << 7) | ((uint8_t)OP_Init->OP_Regulation << 6) | ((uint8_t)OP_Init->OP_Filtration << 5) | ((uint8_t)OP_Init->OP_OutCH << 4) | ((uint8_t)OP_Init->OP_PositiveCH << 2) | ((uint8_t)OP_Init->OP_NegativeCH));
 			OP0CON1 = (((uint8_t)OP_Init->OP_RegulationMode << 6) | ((uint8_t)OP_Init->OP_OffsetVoltage));
 			OP0ADJE = ((uint8_t)OP_Init->OP_OffsetVoltageMode);
 	}
 	else if(OP1 == OPn)
 	{
-			OP1CON0 = (((uint8_t)OP_Init->OP_EN << 7) | ((uint8_t)OP_Init->OP_Regulation << 6) | ((uint8_t)OP_Init->OP_Filtration << 5) | ((uint8_t)OP_Init->OP_OutCH << 4) ((uint8_t)OP_Init->OP_PositiveCH << 2) | ((uint8_t)OP_Init->OP_NegativeCH));
+			OP1CON0 = (((uint8_t)OP_Init->OP_EN << 7) | ((uint8_t)OP_Init->OP_Regulation << 6) | ((uint8_t)OP_Init->OP_Filtration << 5) | ((uint8_t)OP_Init->OP_OutCH << 4) | ((uint8_t)OP_Init->OP_PositiveCH << 2) | ((uint8_t)OP_Init->OP_NegativeCH));
 			OP1CON1 = (((uint8_t)OP_Init->OP_RegulationMode << 6) | ((uint8_t)OP_Init->OP_OffsetVoltage));
 			OP1ADJE = ((uint8_t)OP_Init->OP_OffsetVoltageMode);
 	}
 }
 
+void OP_Cmd(OP_TypeDef OPn, FunctionalState NewState)
+{
+	if (NewState != _DISABLE)
+  {
+    /* Enable the OP */
+		if(OP0 == OPn)
+		{
+				OP0CON0 |= (uint8_t)OP_ENABLE_BIT;
+		}
+		else if(OP1 == OPn)
+		{
+				OP1CON0 |= (uint8_t)OP_ENABLE_BIT;
+		}
+  }
+  else
+  {
+    /* Disable the OP */
+		if(OP0 == OPn)
+		{
+				OP0CON0 |= (uint8_t)(~OP_ENABLE_BIT);
+		}
+		else if(OP1 == OPn)
+		{
+				OP1CON0 |= (uint8_t)(~OP_ENABLE_BIT);
+		}
+  }
+}
+
 uint8_t getOPResult(OP_TypeDef OPn)
 {
-	uint8 OP_OUT = 0;
+	uint8_t OP_OUT = 0;
 	if(OP0 == OPn)
 	{
 			OP_OUT = ((OP0CON1 & 0x80) >> 7);

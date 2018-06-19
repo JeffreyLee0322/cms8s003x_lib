@@ -23,7 +23,7 @@
 #define __CMS8S003x_CONF_H
 
 /* Includes ------------------------------------------------------------------*/
-#include <CMS\CMS8S003.H>
+#include <cms8s003x.h>
 
 typedef enum{_FALSE = 0, _TRUE = !FALSE} _bool;
 
