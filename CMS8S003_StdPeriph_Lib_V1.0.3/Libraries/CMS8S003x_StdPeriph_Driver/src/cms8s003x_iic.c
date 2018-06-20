@@ -46,7 +46,12 @@
   */
 void IIC_DeInit(void)
 {
-
+	I2CMTP &= 0x00;  //Master mode period register deinit
+	I2CMCR &= 0x00;  //Master mode control register deinit
+	I2CMSR &= 0x00;
+	I2CMSR |= 0x20;  //Master mode state register deinit
+	I2CMSA &= 0x00;  //Master mode slave address register deinit
+	I2CMBUF &= 0x00;  //Master mode send/receive register deinit
 }
 
 /**
@@ -58,7 +63,11 @@ void IIC_DeInit(void)
   */
 void IIC_Init(IIC_Init_TypeDef *IIC_Init)
 {
-
+	/* Master mode period register Set */
+	I2CMTP = (uint8_t)IIC_Init->IIC_Frequency;
+	
+	/* Master  */
+	
 }
 
 /**
@@ -80,6 +89,18 @@ void IIC_Cmd(FunctionalState NewState)
     /* Disable the BEEP peripheral */
     //BEEP->CSR2 &= (uint8_t)(~BEEP_CSR2_BEEPEN);
   }
+}
+
+void I2C_SendData(uint8_t Data)
+{
+	I2CMBUF = Data;
+}
+
+uint8_t I2C_ReceiveData(void)
+{
+	uint8_t receiveData = 0;
+	receiveData = I2CMBUF;
+	return receiveData;
 }
 
 void IIC_ITConfig(void)

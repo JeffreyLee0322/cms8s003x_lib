@@ -38,6 +38,13 @@
 /** @addtogroup IIC_Exported_Types
   * @{
   */
+/** @defgroup IIC_Mode
+  */
+typedef enum
+{
+	IIC_Mode_Master    		= 	(uint8_t)0x00,  /* IIC master mode */
+	IIC_Mode_Slave    		= 	(uint8_t)0x01		/* IIC slave mode */
+} IIC_Mode_TypeDef;
 
 /** @defgroup IIC_HighSpeedTimer
   */
@@ -154,8 +161,11 @@ typedef enum
 
 typedef struct IIC_InitDef
 {
+	uint8_t                   IIC_Frequency;
 	IIC_HighSpeed_TypeDef 		IIC_HighSpeed:1;
-	IIC_Ack_TypeDef 					IIC_Ack:1;
+	uint8_t                   IIC_SlaveAddress;
+	IIC_Direction_TypeDef     IIC_Direction;
+	IIC_MasterMode_TypeDef    IIC_MasterMode;
 	
 } IIC_Init_TypeDef;
 
@@ -196,6 +206,9 @@ typedef struct IIC_InitDef
 void IIC_DeInit(void);
 void IIC_Init(IIC_Init_TypeDef *IIC_Init);
 void IIC_Cmd(FunctionalState NewState);
+
+void I2C_SendData(uint8_t Data);
+uint8_t I2C_ReceiveData(void);
 
 void IIC_ITConfig(void);
 uint8_t IIC_MasterGetSendBuf(void);
