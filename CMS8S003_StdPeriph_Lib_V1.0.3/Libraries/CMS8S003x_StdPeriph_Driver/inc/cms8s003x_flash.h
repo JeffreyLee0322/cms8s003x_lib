@@ -81,8 +81,8 @@ typedef enum
 /** @addtogroup FLASH_Private_Macros
   * @{
   */
-
-
+#define FLASH_ERROR_BIT    								(uint8_t)0x20
+#define FLASH_OPERATION_FINISHED_BIT      (uint8_t)0x01;
 /**
   * @}
   */
@@ -93,19 +93,11 @@ typedef enum
   */
 void FLASH_DeInit(void);
 
-void FLASH_ProgramByte(uint32_t Address, uint8_t Data);
+void FLASH_ProgramByte(FLASH_Zone_TypeDef Flash_Zone, uint32_t Address, uint8_t Data);
 
-void FLASH_ProgramWord(uint32_t Address, uint32_t Data);
-uint8_t FLASH_ReadByte(uint32_t Address);
-void FLASH_ProgramOptionByte(uint16_t Address, uint8_t Data);
-void FLASH_EraseOptionByte(uint16_t Address);
-
-
-FlagStatus FLASH_GetFlagStatus(FLASH_FLAG_TypeDef FLASH_FLAG);
-
-void FLASH_ProgramBlock(uint16_t BlockNum, FLASH_MemType_TypeDef FLASH_MemType,
-                        FLASH_ProgramMode_TypeDef FLASH_ProgMode, uint8_t *Buffer);
-void FLASH_EraseBlock(uint16_t BlockNum, FLASH_MemType_TypeDef FLASH_MemType);
+void FLASH_ProgramWord(FLASH_Zone_TypeDef Flash_Zone, uint32_t Address, uint32_t Data);
+uint8_t FLASH_ReadByte(FLASH_Zone_TypeDef Flash_Zone, uint32_t Address);
+void FLASH_EraseBlock(FLASH_Zone_TypeDef Flash_Zone, uint32_t Address);
 
 
 /**

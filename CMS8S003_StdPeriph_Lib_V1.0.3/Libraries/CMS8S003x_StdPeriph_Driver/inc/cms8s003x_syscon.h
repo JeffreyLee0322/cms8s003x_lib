@@ -179,6 +179,7 @@ typedef enum
 
 void SYS_GPIO_Alternate_Config(GPIO_NUM num, uint8_t gpio_alt_func);
 void MCU_ITConfig(FunctionalState NewState);
-
+void MCU_SoftwareReset(void);
+uint8_t MCU_GetResetFlag(void);//Power on reset flag
 #endif
 

@@ -3,60 +3,72 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ¦ÌVision V5.24.2.86
-Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: Je US, MS, LIC=ICIBS-LNNNM-PPBZM-X09K3-SY4SK-FMVBS
+IDE-Version: ¦ÌVision V5.25.3.0
+Copyright (C) 2018 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Jeffrey Lee, CMS, LIC=21NII-TUFH8-PJM6P-M0216-9VMYU-K714N
  
 Tool Versions:
-Toolchain:       MDK51 Professional  Version: 9.57.0.0
-Toolchain Path:  d:\Keil_v5\C51\BIN
-C Compiler:      C51.exe V9.57.0.0
+Toolchain:       PK51 Prof. Developers Kit  Version: 9.59.0.0
+Toolchain Path:  D:\Install software\keil5\C51\BIN
+C Compiler:      C51.exe V9.59.0.0
 Assembler:       A51.exe V8.2.7.0
-Linker/Locator:  LX51.exe V4.66.87.0
+Linker/Locator:  LX51.exe V4.66.93.0
 Library Manager: LIBX51.exe V4.30.1.0
-Hex Converter:   OHX51.exe V1.46.0.0
+Hex Converter:   OHX51.exe V1.47.0.0
 CPU DLL:         CMS51.DLL V1.00
-Dialog DLL:      DP51.DLL V2.64.0.0
+Dialog DLL:      DP51.DLL V2.66.0.0
 Target DLL:      CMS51.dll V1.00
 Dialog DLL:      TP51.DLL V2.60.0.0
  
 <h2>Project:</h2>
-E:\CMS_Project\51 MCU\cms8s003-git\cms8s003x_lib\cms8s003x_lib\CMS8S003_StdPeriph_Lib_V1.0.3\Project\MDK-ARM\CMS8S003x.uvproj
-Project File Date:  06/07/2018
+F:\Project_dev\cms8s003x_lib\cms8s003x_lib\CMS8S003_StdPeriph_Lib_V1.0.3\Project\MDK-ARM\CMS8S003x.uvproj
+Project File Date:  06/26/2018
 
 <h2>Output:</h2>
 Build target 'CMSemicon'
+assembling STARTUP.A51...
+compiling cms8s003x_spi.c...
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_spi.c(242): warning C280: 'SPI_IT': unreferenced local variable
+compiling cms8s003x_itc.c...
+compiling cms8s003x_gpio.c...
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_gpio.c(46): warning C280: 'GPIOx': unreferenced local variable
+compiling cms8s003x_syscon.c...
+compiling cms8s003x_tim01.c...
+compiling cms8s003x_clk.c...
+compiling cms8s003x_tim2.c...
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_tim2.c(134): warning C280: 'NewState': unreferenced local variable
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_tim2.c(166): warning C173: missing return-expression
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_tim2.c(163): warning C280: 'TIM2_FLAG': unreferenced local variable
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_tim2.c(168): warning C280: 'TIM2_FLAG': unreferenced local variable
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_tim2.c(166): warning C290: missing return value
+compiling cms8s003x_uart.c...
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c(51): warning C280: 'UARTx': unreferenced local variable
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c(186): warning C280: 'UARTx': unreferenced local variable
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c(186): warning C280: 'NewState': unreferenced local variable
+compiling cms8s003x_comp.c...
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_comp.c(85): warning C235: parameter 2: different types
+compiling cms8s003x_op.c...
+compiling cms8s003x_tim34.c...
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_tim34.c(88): warning C280: 'TIM4_InitDef': unreferenced local variable
+compiling cms8s003x_beep.c...
+compiling cms8s003x_epwm.c...
+compiling cms8s003x_adc.c...
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_adc.c(234): warning C280: 'ADC_Flag': unreferenced local variable
 compiling cms8s003x_iic.c...
-..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_iic.c(282): warning C280: 'IIC_ITPendingBit': unreferenced local variable
-linking...
-LX51 LINKER/LOCATER V4.66.87.0 - SN: T1PMC-BVQ3TC
-COPYRIGHT ARM Germany GmbH 1995 - 2017
-@.\Objects\CMS8S0~1.LNP ".\Objects\STARTUP.obj",
-".\Objects\cms8s003x_spi.obj",
-".\Objects\cms8s003x_itc.obj",
-".\Objects\cms8s003x_gpio.obj",
-".\Objects\cms8s003x_syscon.obj",
-".\Objects\cms8s003x_tim01.obj",
-".\Objects\cms8s003x_clk.obj",
-".\Objects\cms8s003x_tim2.obj",
-".\Objects\cms8s003x_uart.obj",
-".\Objects\cms8s003x_comp.obj",
-".\Objects\cms8s003x_op.obj",
-".\Objects\cms8s003x_tim34.obj",
-".\Objects\cms8s003x_beep.obj",
-".\Objects\cms8s003x_epwm.obj",
-".\Objects\cms8s003x_adc.obj",
-".\Objects\cms8s003x_iic.obj",
-".\Objects\main.obj" 
-TO ".\Objects\CMS8S003x" 
-PRINT(".\Listings\CMS8S003x.map") REMOVEUNUSED 
-******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 1CF1H BYTE (361%) *
-******************************************************************************
-Program Size: data=52.0 xdata=0 const=0 code=2219
-*** ERROR L257: UNKNOWN
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_iic.c(279): warning C280: 'IIC_ITPendingBit': unreferenced local variable
+compiling cms8s003x_flash.c...
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_flash.c(85): error C141: syntax error near ';', expected ','
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_flash.c(85): error C141: syntax error near ')', expected '__asm'
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_flash.c(124): error C141: syntax error near ';', expected ','
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_flash.c(124): error C141: syntax error near ')', expected '__asm'
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_flash.c(146): error C141: syntax error near ';', expected ','
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_flash.c(146): error C141: syntax error near ')', expected '__asm'
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_flash.c(171): error C141: syntax error near ';', expected ','
+..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_flash.c(171): error C141: syntax error near ')', expected '__asm'
+compiling main.c...
+..\src\main.c(321): warning C280: 'GPIO_InitStructure': unreferenced local variable
 Target not created.
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

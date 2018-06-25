@@ -80,4 +80,17 @@ void MCU_ITConfig(FunctionalState NewState)
   }
 }
 
+void MCU_SoftwareReset(void)
+{
+	/* Exe software reset */
+	WDCON = 0x80;
+}
+
+uint8_t MCU_GetResetFlag(void)
+{
+	if(WDCON & 0x40)
+		return 1;
+	else return 0;
+}
+
 

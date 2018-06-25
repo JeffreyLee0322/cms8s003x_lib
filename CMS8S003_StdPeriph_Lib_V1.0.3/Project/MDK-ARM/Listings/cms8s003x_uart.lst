@@ -1,11 +1,11 @@
-C51 COMPILER V9.57.0.0   CMS8S003X_UART                                                    06/09/2018 10:47:15 PAGE 1   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/26/2018 01:57:46 PAGE 1   
 
 
-C51 COMPILER V9.57.0.0, COMPILATION OF MODULE CMS8S003X_UART
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE CMS8S003X_UART
 OBJECT MODULE PLACED IN .\Objects\cms8s003x_uart.obj
-COMPILER INVOKED BY: d:\Keil_v5\C51\BIN\C51.EXE ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c OMF2 OPT
-                    -IMIZE(8,SPEED) BROWSE INCDIR(..\..\Libraries\CMS8S003x_StdPeriph_Driver\inc) DEBUG PRINT(.\Listings\cms8s003x_uart.lst) 
-                    -TABS(2) OBJECT(.\Objects\cms8s003x_uart.obj)
+COMPILER INVOKED BY: D:\Install software\keil5\C51\BIN\C51.EXE ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_
+                    -uart.c OMF2 OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\Libraries\CMS8S003x_StdPeriph_Driver\inc) DEBUG PRINT(.\Listings\cms8s
+                    -003x_uart.lst) TABS(2) OBJECT(.\Objects\cms8s003x_uart.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   51          void USART_DeInit(UART_TypeDef UARTx)
   52          {
   53   1      
-C51 COMPILER V9.57.0.0   CMS8S003X_UART                                                    06/09/2018 10:47:15 PAGE 2   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/26/2018 01:57:46 PAGE 2   
 
   54   1      }
 *** WARNING C280 IN LINE 51 OF ..\..\Libraries\CMS8S003x_StdPeriph_Driver\src\cms8s003x_uart.c: 'UARTx': unreferenced lo
@@ -126,7 +126,7 @@ line level    source
  107   4              /* Timer4 T34MOD Clear and Set */
  108   4              T34MOD &= 0x0f;
  109   4              T34MOD |= 0x60; //Timer4 clock select:sys/4, Mode2: 8bit auto reload
-C51 COMPILER V9.57.0.0   CMS8S003X_UART                                                    06/09/2018 10:47:15 PAGE 3   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/26/2018 01:57:46 PAGE 3   
 
  110   4              TL4 = 256 - SystemClock * (UART_InitDef->UartBaudrateDouble + 1) / 32 / 4 / UART_InitDef->UartBaurdrat
              -e;
@@ -190,7 +190,7 @@ line level    source
  161            * @brief  Initializes the USART Clock according to the specified parameters.
  162            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
  163            * @param  USART_Clock : This parameter can be any of the @ref USART_Clock_TypeDef
-C51 COMPILER V9.57.0.0   CMS8S003X_UART                                                    06/09/2018 10:47:15 PAGE 4   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/26/2018 01:57:46 PAGE 4   
 
  164            *         enumeration.
  165            * @param  USART_CPOL : This parameter can be any of the @ref USART_CPOL_TypeDef
@@ -254,7 +254,7 @@ line level    source
  219   3          }
  220   2          else
  221   2          {
-C51 COMPILER V9.57.0.0   CMS8S003X_UART                                                    06/09/2018 10:47:15 PAGE 5   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/26/2018 01:57:46 PAGE 5   
 
  222   3            IE &= (uint8_t)(~UART0_INTERRUPT_ENABLE_BIT); /* Disable the UART0 IT */
  223   3          }
@@ -318,7 +318,7 @@ line level    source
  281          
  282          /**
  283            * @brief  Transmits 8 bit data through the USART peripheral.
-C51 COMPILER V9.57.0.0   CMS8S003X_UART                                                    06/09/2018 10:47:15 PAGE 6   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/26/2018 01:57:46 PAGE 6   
 
  284            * @param  Data: The data to transmit.
  285            * @retval None
@@ -382,7 +382,7 @@ line level    source
                 *         The clock source is diveded by the value given in the register (8 bits)
                 *         - 0000 0000 Reserved
                 *         - 0000 0001 divides the clock source by 1
-C51 COMPILER V9.57.0.0   CMS8S003X_UART                                                    06/09/2018 10:47:15 PAGE 7   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/26/2018 01:57:46 PAGE 7   
 
                 *         - 0000 0010 divides the clock source by 2
                 *         - ...........................................................
@@ -446,7 +446,7 @@ line level    source
                 *     - RXNE flag can be also cleared by a read to the USART_DR register
                 *       (USART_ReceiveData8()or USART_ReceiveData9()).
                 *
-C51 COMPILER V9.57.0.0   CMS8S003X_UART                                                    06/09/2018 10:47:15 PAGE 8   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/26/2018 01:57:46 PAGE 8   
 
                 *     - TC flag can be also cleared by software sequence: a read operation to USART_SR
                 *       register (USART_GetFlagStatus()) followed by a write operation to USART_DR
@@ -510,7 +510,7 @@ line level    source
  467          /**
  468            * @brief  Clears the USARTx’s interrupt pending bits.
  469            * @param  USARTx : where x can be 1 to select the specified USART peripheral.
-C51 COMPILER V9.57.0.0   CMS8S003X_UART                                                    06/09/2018 10:47:15 PAGE 9   
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/26/2018 01:57:46 PAGE 9   
 
  470            * @param  USART_IT: specifies the interrupt pending bit to clear.
  471            *         This parameter can be one of the following values:
@@ -574,7 +574,7 @@ line level    source
  529          /**
  530            * @}
  531            */
-C51 COMPILER V9.57.0.0   CMS8S003X_UART                                                    06/09/2018 10:47:15 PAGE 10  
+C51 COMPILER V9.59.0.0   CMS8S003X_UART                                                    06/26/2018 01:57:46 PAGE 10  
 
  532          
  533          /**
@@ -585,7 +585,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    736    ----
+   CODE SIZE        =    753    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

@@ -27,6 +27,7 @@
 #include "cms8s003x_uart.h"
 #include "cms8s003x_epwm.h"
 #include "cms8s003x_iic.h"
+#include "cms8s003x_wdg.h"
 
 /** @addtogroup CMS8S003x_StdPeriph_Driver
   * @{
@@ -240,6 +241,19 @@ void iic_int()	interrupt 21
 				IIC_Stop();
 			}
 	 }
+}
+
+void wdg_int()  interrupt 20
+{
+	if(WDG_GetITStatus(WDG_Flag_Overflow))
+	{
+		WDG_ClearITPendingBit(WDG_Flag_Overflow);
+	}
+	
+	if(WDG_GetITStatus(WDG_Flag_Reset))
+	{
+		WDG_ClearITPendingBit(WDG_Flag_Reset);
+	}
 }
 
 /**
