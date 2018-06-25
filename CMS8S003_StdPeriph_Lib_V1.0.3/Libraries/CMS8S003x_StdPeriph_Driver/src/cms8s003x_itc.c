@@ -26,6 +26,7 @@
 #include "cms8s003x_gpio.h"
 #include "cms8s003x_uart.h"
 #include "cms8s003x_epwm.h"
+#include "cms8s003x_iic.h"
 
 /** @addtogroup CMS8S003x_StdPeriph_Driver
   * @{
@@ -39,6 +40,7 @@ uint32_t timer0Count = 0;
 uint32_t timer1Count = 0;
 
 uint16_t readCount_TIM0 = 0, readCount_TIM1 = 0;
+uint8_t IIC_SendTimes = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -225,18 +227,17 @@ void pwm_int (void) interrupt 18
 
 void iic_int()	interrupt 21
 {
-    /*-------IIC_MasterSend的中断服务函数--------*/
-	 if(EIF2&0x40)                      //中断标志位
-	 {	
-			if(I2CMCR&0x80)                 //I2C主控模式下的中断标志位-发送/接受数据完成    I2CMCR 与 I2CMSR地址共用
+	 if(IIC_GetITStatus(IIC_IT))  //Whether generate iic interrupt or not  
+	 {
+			if(_SET == IIC_GetFlagStatus(IIC_Flag_Master_IT))
 			{
-			 I2CMCR = 0;                    //写0清除		
-			 if(times <5)                   //假设5个数据需要发送
-			 Master_SendData(Master_Send[times]);  //添加新的数据
-			 times++;
-			 Master_Command(Send_Send);            //发送操作 
-			 if(times >= 5)
-				 Master_Command(Send_STOP);          //停止操作
+				IIC_SendTimes++;
+				
+				if(IIC_SendTimes < 5)
+				{
+					IIC_MasterSendData(0x55);
+				}
+				IIC_Stop();
 			}
 	 }
 }

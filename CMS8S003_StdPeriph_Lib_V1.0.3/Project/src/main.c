@@ -36,10 +36,10 @@
 //#define TEST_TIMER01
 //#define TEST_TIMER2
 //#define TEST_TIMER34
-#define TEST_UART
+//#define TEST_UART
 
 //#define TEST_ADC
-//#define TEST_IIC
+#define TEST_IIC
 //#define TEST_PWM
 //#define TEST_WDG
 //#define TEST_OP
@@ -314,6 +314,32 @@ void test_adc_init(void)
 }
 #endif
 
+#ifdef TEST_IIC
+void test_iic_init()
+{
+	uint8_t times = 0;
+	GPIO_Init_TypeDef GPIO_InitStructure;
+	IIC_Init_TypeDef IIC_InitStructure;
+	
+	IIC_InitStructure.IIC_Mode = IIC_Mode_Master;
+	IIC_InitStructure.IIC_Frequency = 0x05;
+	IIC_InitStructure.IIC_HighSpeed = IIC_HighSpeed_Disable;
+	IIC_InitStructure.IIC_SlaveAddress = 0;
+	IIC_InitStructure.IIC_Direction = IIC_Direction_Transmitter;
+	IIC_InitStructure.IIC_ACK = IIC_Ack_Disable;
+	
+	/*IIC_InitStructure.IIC_Mode = IIC_Mode_Slave;
+	IIC_InitStructure.IIC_OwnAddress = 0;
+	IIC_InitStructure.IIC_Reset = IIC_Reset;*/
+	
+	IIC_Init(&IIC_InitStructure);
+	//IIC_ITConfig(IIC_Priority_High, _ENABLE);
+	//MCU_ITConfig(_ENABLE);
+	
+	IIC_Start();
+}
+#endif
+
 void Delay_Time(int time)
 {
 	while(time> 0)
@@ -371,6 +397,14 @@ void main(void)
 	
 #ifdef TEST_ADC
 	test_adc_init();
+#endif
+	
+#ifdef TEST_IIC
+	test_iic_init();
+	while(1)
+	{
+		
+	}
 #endif
 
 	while(1);

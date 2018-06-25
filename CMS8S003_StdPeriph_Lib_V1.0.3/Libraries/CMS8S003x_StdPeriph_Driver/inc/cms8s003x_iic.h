@@ -116,15 +116,7 @@ typedef enum
   IIC_Direction_Receiver    	= (uint8_t)0x01   /* Reception direction */
 } IIC_Direction_TypeDef;
 
-
-typedef enum 
-{
-  IIC_SysClk_Prescaler_8 		= (uint8_t)0x00,  /*!< Beep system clock prescaler: Fsys/8 */
-  IIC_SysClk_Prescaler_16 	= (uint8_t)0x01,  /*!< Beep system clock prescaler: Fsys/16 */
-  IIC_SysClk_Prescaler_32 	= (uint8_t)0x02,  /*!< Beep system clock prescaler: Fsys/32 */
-	IIC_SysClk_Prescaler_64 	= (uint8_t)0x03   /*!< Beep system clock prescaler: Fsys/64 */
-} IIC_Prescaler_TypeDef;
-
+#if 0
 typedef enum
 {
 	IIC_Idle_StartAndSend									= 	(uint8_t)0x03,   	//配置IIC模式为START后跟SEND  
@@ -144,7 +136,7 @@ typedef enum
 	IIC_Send_RepeatStartSendAndStop       = 	(uint8_t)0x07,    //配置IIC模式为重复START后跟SEND和STOP
 	IIC_Send_RepeatStartReceive_ACK       = 	(uint8_t)0x0B,    //配置IIC模式为重复START后跟RECEIVE - 主机保持接收
 	IIC_Send_ForbiddenSequence            = 	(uint8_t)0x0F,    //配置IIC模式为禁止组合
-	
+
 	IIC_Receive_NoACK                     = 	(uint8_t)0x01,    //配置IIC模式为采用应答的RECEIVE操作 - 主机保持接收
 	IIC_Receive_STOP                      = 	(uint8_t)0x04,		//配置IIC位STOP
 	IIC_Receive_ReceiveAndStop            = 	(uint8_t)0x05,  	//配置IIC模式为RECEIVE后跟STOP
@@ -156,17 +148,41 @@ typedef enum
 	IIC_Receive_RepeatStartSend           = 	(uint8_t)0x03,		//配置IIC模式为重复START后跟SNED - 主机保持在发送模式
 	IIC_Receive_RepeatStartSendStop       = 	(uint8_t)0x07			//配置IIC模式为重复START 后跟SEND 和 STOP
 } IIC_MasterMode_TypeDef;
+#endif
+/**
+	* IIC Slave mode config
+	*/
+typedef enum
+{
+	IIC_Reset         = 	(uint8_t)0x80,
+	IIC_Reset_None    = 	(uint8_t)0x00
+} IIC_Reset_TypeDef;
 
+typedef enum
+{
+	IIC_Priority_High     = 	(uint8_t)0x40,
+	IIC_Priority_Low     	= 	(uint8_t)0x00
+} IIC_ITPriority_TypeDef;
 
+typedef enum
+{
+	IIC_IT                = 	(uint8_t)0x40,
+} IIC_ITStatus_TypeDef;
 
 typedef struct IIC_InitDef
 {
+	/* IIC Master Mode Register */
+	IIC_Mode_TypeDef          IIC_Mode;
 	uint8_t                   IIC_Frequency;
 	IIC_HighSpeed_TypeDef 		IIC_HighSpeed:1;
 	uint8_t                   IIC_SlaveAddress;
-	IIC_Direction_TypeDef     IIC_Direction;
-	IIC_MasterMode_TypeDef    IIC_MasterMode;
-	
+	IIC_Direction_TypeDef     IIC_Direction:1;
+	IIC_Ack_TypeDef						IIC_ACK:1;
+
+	/* IIC Slave Mode Register */
+	uint8_t                   IIC_OwnAddress;
+	IIC_Reset_TypeDef         IIC_Reset;
+
 } IIC_Init_TypeDef;
 
 /**
@@ -184,10 +200,13 @@ typedef struct IIC_InitDef
 /* Exported macros -----------------------------------------------------------*/
 /* Private macros ------------------------------------------------------------*/
 
-/** @addtogroup BEEP_Private_Macros
+/** @addtogroup IIC_Private_Macros
   * @{
   */
-#define IIC_ENABLE_BIT (uint8_t)0x80
+#define IIC_ENABLE_BIT 						(uint8_t)0x80
+#define IIC_SLAVE_MODE_ENABLE   	(uint8_t)0x01
+#define IIC_SLAVE_RESET_ENABLE   	(uint8_t)0x80
+#define IIC_IT_ENABLE_BIT         (uint8_t)0x40
 /**
   * @brief Macro used by the assert function to check the different functions parameters.
   */
@@ -202,17 +221,29 @@ typedef struct IIC_InitDef
 /** @addtogroup IIC_Exported_Functions
   * @{
   */
-
-void IIC_DeInit(void);
+/* IIC Master Mode Functions */
 void IIC_Init(IIC_Init_TypeDef *IIC_Init);
 void IIC_Cmd(FunctionalState NewState);
-
-void I2C_SendData(uint8_t Data);
-uint8_t I2C_ReceiveData(void);
-
-void IIC_ITConfig(void);
+void IIC_MasterSendData(uint8_t Data);
+uint8_t IIC_MasterReceiveData(void);
+void IIC_Start(void);
+void IIC_Stop(void);
+void IIC_AckConfig(IIC_Ack_TypeDef Ack);
 uint8_t IIC_MasterGetSendBuf(void);
 uint8_t IIC_MasterGetReceiveBuf(void);
+
+/* IIC Slave Mode Functions */
+void IIC_SlaveCmd(FunctionalState NewState);
+void IIC_SlaveReset(void);
+void IIC_SlaveSendData(uint8_t Data);
+uint8_t IIC_SlaveReceiveData(void);
+
+/* IIC Interrupt Functions */
+void IIC_ITConfig(IIC_ITPriority_TypeDef ITPriority, FunctionalState NewState);
+FlagStatus IIC_GetFlagStatus(IIC_Flag_TypeDef IIC_Flag);
+void IIC_ClearFlag(IIC_Flag_TypeDef IIC_FLAG);
+ITStatus IIC_GetITStatus(IIC_ITStatus_TypeDef IIC_ITPendingBit);
+void IIC_ClearITPendingBit(IIC_ITStatus_TypeDef IIC_ITPendingBit);
 /**
   * @}
   */
